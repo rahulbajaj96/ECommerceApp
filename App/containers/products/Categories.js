@@ -5,21 +5,37 @@ import Style from "../../utils/Style";
 import AppComponent from "../../components/AppComponent";
 import Toolbar from "../../components/Toolbar";
 import { SearchBar } from "../../components/SearchBar";
-import { Make_A_List } from "../../components/Products";
-
+import { Make_A_List, ModalView } from "../../components/Products";
 class Categories extends Component {
-    state = { searchValue: '' }
+    state = { searchValue: '', modalVisibility: false, currentSelectedItem: '' }
 
 
     handleListItemCicked = (item) => {
         const { navigation } = this.props
 
-        console.log('item clicked', item)
         navigation.navigate('SubCategories')
     }
+    openModal = (item) => {
+        console.log('item clicked', item)
+        this.setState({ modalVisibility: true, currentSelectedItem: 'Category ' })
+    }
+    onAddPopUp = () => {
+        const { navigation } = this.props
 
+        navigation.navigate('AddCategory', { id: 0, title: 'Add Category', data: {} })
+    }
+    onEditPressed = () => {
+        const { navigation } = this.props
+
+        navigation.navigate('AddCategory', { id: 2, title: 'Edit Category', data: {} })
+        this.setState({ modalVisibility: false })
+
+    }
+    onDeletePressed = () => {
+
+    }
     render() {
-        const { searchValue } = this.state
+        const { searchValue, modalVisibility, currentSelectedItem } = this.state
         return (
             <AppComponent>
                 <Toolbar title={'Categories'} />
@@ -35,7 +51,37 @@ class Categories extends Component {
                         items={[1, 2, 3, 4, 5, 6]}
                         extraData={this.state}
                         onItemClicked={(item) => this.handleListItemCicked(item)}
-                        onAddPopUp={() => console.log('AddpopUpClicked')}
+                        onAddPopUp={() => this.onAddPopUp()}
+                        crudValue={1}
+                        dotsClick={(item) => this.openModal(item)}
+
+                    />
+                    {/* <Modal
+                        isVisible={modalVisibility}
+                        onBackdropPress={() => this.setState({ modalVisibility: false })}
+                    >
+                        <View style={{ flex: 0.4, backgroundColor: '#fff', borderRadius: 20, paddingHorizontal: 10 }}>
+                            <View style={{ flex: 0.1 }} />
+                            <Text style={Style.Products.categories.categoriesModal.modalHeading}>Category Name</Text>
+                            <TouchableOpacity style={Style.Products.categories.categoriesModal.modalItemView}>
+                                <Text style={{ fontSize: 18, color: '#000', marginRight: 15 }}>Edit</Text>
+                                <Image source={Images.edit} style={{ height: 20, width: 20 }} />
+
+                            </TouchableOpacity>
+                            <TouchableOpacity style={Style.Products.categories.categoriesModal.modalItemView}>
+                                <Text style={{ fontSize: 18, color: '#000', marginRight: 5 }}>Delete</Text>
+                                <Image source={Images.trash} style={{ height: 25, width: 25 }} />
+
+                            </TouchableOpacity>
+
+                        </View>
+                    </Modal> */}
+                    <ModalView
+                        isVisible={modalVisibility}
+                        onBackdropPress={() => this.setState({ modalVisibility: false })}
+                        onEditPressed={() => this.onEditPressed()}
+                        onDeletePressed={() => console.log('onDeletePressed')}
+                        modalTitle={currentSelectedItem}
 
                     />
                     {/* <View style={Style.Products.categories.categoriesListView}>

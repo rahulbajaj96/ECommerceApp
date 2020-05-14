@@ -29,14 +29,48 @@ class AddProduct extends React.Component {
         multipleSelection: [{ color_selected: '', size_Selected: '', number_of_Pieces: '' },],
         images_aaray: [],
         modalVisibility: false,
-        selectedImage: '',
-        selectedIndex: 0
+        selectedImage: 'https://via.placeholder.com/600/66b7d2',
+        selectedIndex: 0,
+        title: '',
+        Category: 'Select a Category',
+        SubCategory: 'Select a SubCategory'
     }
 
     componentDidMount() {
 
+        console.log(this.props.route.params)
+        this.setPropData(this.props.route.params)
 
 
+    }
+    setPropData = (propData) => {
+        if (propData.id == 2) {
+            const { multipleSelection } = this.state
+
+            for (let i = 0; i < multipleSelection.length; i++) {
+                multipleSelection[i].color_selected = 'red',
+                multipleSelection[i].number_of_Pieces = '5',
+                    multipleSelection[i].size_Selected = 'Large'
+            }
+            this.setState({
+                Category: 'Clothes',
+                SubCategory: 'jeans',
+                title: propData.title,
+                productName: 'qwerty',
+                articlenum: '123456',
+                purchasePrice: '500',
+                sellingPrice: '1000',
+                multipleSelection
+            })
+
+        }
+        else {
+            this.setState({
+
+                title: propData.title,
+
+            })
+        }
     }
 
     /**
@@ -148,7 +182,7 @@ class AddProduct extends React.Component {
     }
     openModal() {
         console.log('images', this.state.images_aaray)
-        const { images_aaray } = this.state
+        // const { images_aaray } = this.state
         this.setState({ modalVisibility: true, selectedImage: images_aaray[0] })
     }
     renderPictures = (item) => {
@@ -161,10 +195,11 @@ class AddProduct extends React.Component {
         )
     }
     render() {
-        const { productName, articlenum, purchasePrice, sellingPrice, multipleSelection, modalVisibility, selectedImage, selectedIndex, } = this.state
+        const { productName, articlenum, purchasePrice, sellingPrice, multipleSelection, modalVisibility, selectedImage, selectedIndex, title, Category, SubCategory } = this.state
+        const { navigation } = this.props
         return (
             <AppComponent >
-                <Toolbar title={'Add Product'} right={1} />
+                <Toolbar title={title} right={1} back={true} navigation={navigation} />
                 <ScrollView style={[Style.CommonStyles.fullFlex], { paddingHorizontal: '2%', paddingTop: '2%' }}>
 
                     <View style={Style.Products.AddProduct.ImagePickerView}>
@@ -194,16 +229,7 @@ class AddProduct extends React.Component {
                                 </TouchableOpacity>
                             </View>
                             <View style={{ flex: 0.6, justifyContent: 'center', paddingHorizontal: 10 }}>
-                                {/* {
-                                    images_aaray.length == 0 ?
-                                        <View style={[{ flex: 1 }, Style.CommonStyles.centerStyle]}>
-                                            <Text style={Style.Products.AddProduct.ImageModal.defaultText}>No images to view .Please add one </Text>
-                                        </View>
-                                        :
-                                        <Image source={{ uri: selectedImage }} style={{ flex: 0.8, }} />
 
-
-                                } */}
                                 <Image source={{ uri: selectedImage }} style={{ flex: 0.8, }} />
 
 
@@ -230,13 +256,13 @@ class AddProduct extends React.Component {
                     </Modal>
                     <DropDown
                         options={[1, 2, 3, 4, 5]}
-                        defaultValue='Select a Category'
-                        onSelect={(index, value) => console.log('indexssss', index, value)}
+                        defaultValue={Category}
+                        onSelect={(index, value) => this.setState({ Category: value })}
                     />
                     <DropDown
                         options={[1, 2, 3, 4, 5]}
-                        defaultValue='Select a SubCategory'
-                        onSelect={(index, value) => console.log('indexssss', index, value)}
+                        defaultValue={SubCategory}
+                        onSelect={(index, value) => this.setState({ SubCategory: value })}
                     />
                     <ProductInput
                         label='Product Name'
@@ -271,12 +297,12 @@ class AddProduct extends React.Component {
 
                                 <DropDown
                                     options={colors}
-                                    defaultValue='Select a Color'
+                                    defaultValue={particularSet.color_selected != '' ? particularSet.color_selected : 'Select a Color'}
                                     onSelect={(index, value) => this.changePaticularColor(index, value, i)}
                                 />
                                 <DropDown
                                     options={sizes}
-                                    defaultValue='Select a Size'
+                                    defaultValue={particularSet.size_Selected != '' ? particularSet.size_Selected : 'Select a Size'}
                                     onSelect={(index, value) => this.changePaticularSize(index, value, i)}
                                 />
 

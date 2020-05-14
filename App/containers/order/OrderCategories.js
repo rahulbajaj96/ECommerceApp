@@ -22,9 +22,11 @@ class OrderCategories extends Component {
 
     render() {
         const { searchValue } = this.state
+        const { navigation } = this.props
+
         return (
             <AppComponent>
-                <Toolbar title={'Categories'} />
+                <Toolbar title={'Categories'} back={true} navigation={navigation} />
                 <View style={{ flex: 1, backgroundColor: '#fff', }}>
 
                     <SearchBar
@@ -37,6 +39,7 @@ class OrderCategories extends Component {
                         items={[1, 2, 3, 4, 5, 6]}
                         extraData={this.state}
                         onItemClicked={(item) => this.handleListItemCicked(item)}
+                        addPopUp={false}
                         onAddPopUp={() => console.log('AddpopUpClicked')}
 
                     />

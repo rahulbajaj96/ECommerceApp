@@ -166,20 +166,14 @@ class ProductDetail extends React.Component {
         const { color_current_Value, size_initialValue, colors_Left_button_enabled, colors_Right_button_enabled, size_left_button_enabled, size_right_button_enabled } = this.state
         return (
             <AppComponent>
-                <Toolbar title='Product Detail' />
+                <Toolbar title='Product Detail' back={true} navigation={navigation} />
 
                 <View style={{ flex: 1, }}>
 
                     <ScrollView style={{ flex: 1, paddingHorizontal: 10 }} >
 
                         <View style={{ paddingVertical: 10, borderWidth: 0, }}>
-                            {/* <FlatList
-                                data={[1, 2, 3, 4]}
-                                extraData={this.state}
-                                keyExtractor={(index, item) => index.toString()}
-                                horizontal={true}
-                                renderItem={item => this.renderProductImage(item)}
-                            /> */}
+                            
                             <AppIntroSlider
                                 data={images_aaray}
                                 renderItem={item => this.renderProductImage(item)}
@@ -188,10 +182,10 @@ class ProductDetail extends React.Component {
                             />
                         </View>
                         <Text style={Style.Products.ProductDetail.PropertiesStyle}>Category: Clothes/Jeans</Text>
-                        <View style={Style.CommonStyles.borderStyle}/>
+                        <View style={Style.CommonStyles.borderStyle} />
                         <Text style={Style.Products.ProductDetail.articleNum}>Article Number : <Text style={{ color: Colors.theme_color }}>1234567</Text></Text>
                         <Text style={Style.Products.ProductDetail.articleNum}>Product Name : <Text style={{ color: Colors.theme_color }}>Top1</Text></Text>
-                        <View style={Style.CommonStyles.borderStyle}/>
+                        <View style={Style.CommonStyles.borderStyle} />
 
 
 
@@ -216,7 +210,7 @@ class ProductDetail extends React.Component {
                                 <Image source={Images.right_aarow} style={{ height: 20, width: 20, }} />
                             </TouchableOpacity>
                         </View>
-                        <View style={Style.CommonStyles.borderStyle}/>
+                        <View style={Style.CommonStyles.borderStyle} />
 
                         <Text style={Style.Products.ProductDetail.PropertiesStyle}>Sizes Available </Text>
 
@@ -238,9 +232,9 @@ class ProductDetail extends React.Component {
                                 <Image source={Images.right_aarow} style={{ height: 20, width: 20, }} />
                             </TouchableOpacity>
                         </View>
-                        <View style={Style.CommonStyles.borderStyle}/>
+                        <View style={Style.CommonStyles.borderStyle} />
 
-                        <Text style={[Style.Products.ProductDetail.PropertiesStyle,{fontSize:18}]}>Pieces Available :<Text style={{ color: Colors.theme_color }}>1234567</Text></Text>
+                        <Text style={[Style.Products.ProductDetail.PropertiesStyle, { fontSize: 18 }]}>Pieces Available :<Text style={{ color: Colors.theme_color }}>1234567</Text></Text>
 
 
                     </ScrollView>

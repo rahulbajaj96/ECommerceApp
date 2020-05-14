@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, Image, TouchableOpacity, FlatList, TextInput, ScrollView ,Alert} from 'react-native';
+import { Text, View, Image, TouchableOpacity, FlatList, TextInput, ScrollView, Alert } from 'react-native';
 import AppComponent from '../../components/AppComponent';
 import Toolbar from '../../components/Toolbar';
 import Colors from '../../utils/Colors';
@@ -161,8 +161,7 @@ class OrderProductDetail extends React.Component {
         this.setState({ size_initialSelected: value })
     }
 
-    AddtoCart()
-    {
+    AddtoCart() {
         Alert.alert(
             '',
             'This product has been addes to cart.Do you want to add more?',
@@ -171,12 +170,15 @@ class OrderProductDetail extends React.Component {
                 {
                     text: 'No', onPress: () =>
 
-                    console.log('Cancel Pressed')
+                        console.log('Cancel Pressed')
 
                 },
             ],
             { cancelable: false }
         )
+    }
+    doneButton = () => {
+        this.props.navigation.navigate('Cart');
     }
     render() {
         const { navigation } = this.props
@@ -190,7 +192,7 @@ class OrderProductDetail extends React.Component {
                     <ScrollView style={{ flex: 1, paddingHorizontal: 10 }} >
 
                         <View style={{ paddingVertical: 10, borderWidth: 0, }}>
-                            
+
                             <AppIntroSlider
                                 data={images_aaray}
                                 renderItem={item => this.renderProductImage(item)}
@@ -267,15 +269,17 @@ class OrderProductDetail extends React.Component {
                                 <Image style={{ height: 22, width: 22, marginHorizontal: 5 }} source={Images.add} />
                             </TouchableOpacity>
                         </View>
-                        <Text style={[Style.Products.ProductDetail.PropertiesStyle, { fontSize: 18,marginTop:10 }]}>Total Cost :<Text style={{ color: Colors.theme_color }}>
+                        <Text style={[Style.Products.ProductDetail.PropertiesStyle, { fontSize: 18, marginTop: 10 }]}>Total Cost :<Text style={{ color: Colors.theme_color }}>
                             $5000</Text></Text>
                         <View style={{ height: 50, width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 10 }}>
                             <TouchableOpacity style={[{ height: '100%', width: '45%', borderRadius: 50, backgroundColor: Colors.theme_color }, Style.CommonStyles.centerStyle]}
-                            onPress={() => this.AddtoCart()}
+                                onPress={() => this.AddtoCart()}
                             >
                                 <Text style={{ color: '#fff', fontSize: 16 }}>Continue</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={[{ height: '100%', width: '45%', borderRadius: 50, backgroundColor: Colors.theme_color }, Style.CommonStyles.centerStyle]}>
+                            <TouchableOpacity style={[{ height: '100%', width: '45%', borderRadius: 50, backgroundColor: Colors.theme_color }, Style.CommonStyles.centerStyle]}
+                                onPress={() => this.doneButton()}
+                            >
                                 <Text style={{ color: '#fff', fontSize: 16 }}>Done</Text>
                             </TouchableOpacity>
 

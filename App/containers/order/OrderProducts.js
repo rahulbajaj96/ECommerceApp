@@ -12,7 +12,7 @@ class OrderProducts extends Component {
         const { navigation } = this.props
 
         console.log('item clicked', item)
-        // navigation.navigate('OrderProducts');
+        navigation.navigate('OrderProductDetail');
     }
 
 
@@ -36,6 +36,8 @@ class OrderProducts extends Component {
                         extraData={this.state}
                         onItemClicked={(item) => this.handleListItemCicked(item)}
                         onAddPopUp={() => console.log('AddpopUpClicked')}
+                        addPopUp={false}
+
 
                     />
 

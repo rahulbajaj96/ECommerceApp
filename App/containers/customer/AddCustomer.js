@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { Text, View, TouchableOpacity, Image, ScrollView, } from 'react-native'
 import AppComponent from '../../components/AppComponent'
 import Toolbar from '../../components/Toolbar'
-import Style from '../../utils/Style'
+import Style from '../../utils/Style';
+import { useNavigation } from '@react-navigation/native';
 import { ProductInput, DropDown } from '../../components/Products'
 import Images from '../../utils/Image';
 import ImagePicker from 'react-native-image-picker';
 import { AANHEFArray } from '../../constants/AppConstants'
 
-function AddCustomer() {
+function AddCustomer(props) {
     const [first_name, setfirst_name] = useState('')
     const [last_name, setlast_name] = useState('')
     const [company_name, setcompany_name] = useState('')
@@ -19,14 +20,38 @@ function AddCustomer() {
     const [PostalCode, setPostalCode] = useState('')
     const [Street, setStreet] = useState('')
     const [ImageUri, setImageUri] = useState('')
-    const [AANHEF, setAANHEF] = useState()
+    const [AANHEF, setAANHEF] = useState('AANHEF')
     const [ImageUploaded, setImageUploaded] = useState(false)
+    const navigation = useNavigation();
+
+    const [title, settitle] = useState('')
+
 
 
     useEffect(() => {
-
+        console.log('props', props.route.params)
+        setPropData(props.route.params)
     }, []);
 
+    function setPropData(propData) {
+        settitle(propData.title)
+        if (propData.id == 2) {
+            setEditCustomerData(propData)
+        }
+
+    }
+    function setEditCustomerData() {
+        setPostalCode('01');
+        setfirst_name('Rahul')
+        setlast_name('Bajaj');
+        setcompany_name('Work from Home');
+        setKVKNum('12346789');
+        setemail('qwerty@iop.com')
+        setphone('98745563210');
+        setStreet('ABC def #90');
+        setcity('Patiala');
+        setAANHEF('Mrs.')
+    }
     function goToImagePicker() {
 
         console.log('open image Picker')
@@ -65,7 +90,7 @@ function AddCustomer() {
 
     return (
         <AppComponent>
-            <Toolbar title='Add Customer' right={1} />
+            <Toolbar title={title} right={1} back={true} navigation={navigation} />
             <ScrollView style={[Style.CommonStyles.fullFlex, { paddingHorizontal: '5%', paddingVertical: '5%' }]}>
 
                 <View style={[Style.Customers.AddCustomer.Customer_image_view_main]}>
@@ -82,7 +107,7 @@ function AddCustomer() {
                 </View>
                 <DropDown
                     options={AANHEFArray}
-                    defaultValue='AANHEF'
+                    defaultValue={AANHEF}
                     onSelect={(index, value) => setAANHEF(value)}
                 />
                 {/* <ProductInput

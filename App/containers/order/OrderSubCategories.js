@@ -34,6 +34,7 @@ class OrderSubCategories extends Component {
                         extraData={this.state}
                         onItemClicked={(item) => this.handleListItemCicked(item)}
                         onAddPopUp={() => console.log('AddpopUpClicked')}
+                        addPopUp={false}
 
                     />
 

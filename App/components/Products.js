@@ -4,6 +4,8 @@ import Style from '../utils/Style';
 import Colors from '../utils/Colors';
 import Images from '../utils/Image';
 import ModalDropdown from 'react-native-modal-dropdown';
+import Modal from "react-native-modal";
+
 import { Text, Image, TouchableOpacity, View, TextInput, ScrollView, FlatList } from 'react-native'
 
 export const ProductInput = (props) => {
@@ -53,12 +55,25 @@ export const Make_A_List = (props) => {
 
                 </View>
                 <View style={{ flex: 0.7, justifyContent: 'center' }}>
-                    <Text style={{ fontSize: 16, color: '#000', marginLeft: 5 }}>Category Name </Text>
+                    <Text style={{ fontSize: 16, color: '#000', marginLeft: 5 }}>Product Name </Text>
 
                 </View>
-                <View style={[{ flex: 0.1, }, Style.CommonStyles.centerStyle]}>
-                    <Image source={Images.right_aarow} style={{ height: 20, width: 20, }} />
-                </View>
+                {
+                    props.crudValue == 1
+                        ?
+                        <TouchableOpacity style={[{ flex: 0.1, }, Style.CommonStyles.centerStyle]}
+                            onPress={() => props.dotsClick(items)}
+                        >
+                            <Image source={Images.dots} style={{ height: 30, width: 30, }} />
+                        </TouchableOpacity>
+                        :
+                        <View style={[{ flex: 0.1, }, Style.CommonStyles.centerStyle]}>
+                            <Image source={Images.right_aarow} style={{ height: 15, width: 15, }} />
+                        </View>
+
+                }
+
+
             </TouchableOpacity>
         )
 
@@ -73,10 +88,48 @@ export const Make_A_List = (props) => {
                 renderItem={item => renderProducts(item)}
                 {...props}
             />
+            {
+                props.addPopUp == false
+                    ?
+                    null
+                    :
+                    <TouchableOpacity style={Style.Products.categories.AddPopUp} onPress={() => props.onAddPopUp()}>
+                        <Image source={Images.add_pop_up} style={Style.Products.categories.addPopUpImage} />
+                    </TouchableOpacity>
+            }
 
-            <TouchableOpacity style={Style.Products.categories.AddPopUp} onPress={() => props.onAddPopUp()}>
-                <Image source={Images.add_pop_up} style={Style.Products.categories.addPopUpImage} />
-            </TouchableOpacity>
+
         </View>
+    )
+}
+
+
+export const ModalView = (props) => {
+    return (
+        <Modal
+            // isVisible={modalVisibility}
+            {...props}
+        // onBackdropPress={() => this.setState({ modalVisibility: false })}
+        >
+            <View style={{ flex: 0.4, backgroundColor: '#fff', borderRadius: 20, paddingHorizontal: 10 }}>
+                <View style={{ flex: 0.1 }} />
+                <Text style={Style.Products.categories.categoriesModal.modalHeading}>{props.modalTitle}</Text>
+                <TouchableOpacity style={Style.Products.categories.categoriesModal.modalItemView}
+                    onPress={() => props.onEditPressed()}
+                >
+                    <Text style={{ fontSize: 18, color: '#000', marginRight: 15 }}>Edit</Text>
+                    <Image source={Images.edit} style={{ height: 20, width: 20 }} />
+
+                </TouchableOpacity>
+                <TouchableOpacity style={Style.Products.categories.categoriesModal.modalItemView}
+                    onPress={() => props.onDeletePressed()}
+                >
+                    <Text style={{ fontSize: 18, color: '#000', marginRight: 5 }}>Delete</Text>
+                    <Image source={Images.trash} style={{ height: 25, width: 25 }} />
+
+                </TouchableOpacity>
+
+            </View>
+        </Modal>
     )
 }

@@ -14,6 +14,12 @@ const Images = {
     add: require('../app_assests/Images/AppMain/Add.png'),
     delete: require('../app_assests/Images/AppMain/Delete.png'),
     sort: require('../app_assests/Images/AppMain/sort.png'),
+    right_white_arrow: require('../app_assests/Images/AppMain/right_white_arrow.png'),
+    trash: require('../app_assests/Images/AppMain/trash.png'),
+    dots: require('../app_assests/Images/AppMain/dots.png'),
+    edit: require('../app_assests/Images/AppMain/edit.png'),
+    eye: require('../app_assests/Images/AppMain/eye.png'),
+    employee: require('../app_assests/Images/AppMain/Manage.png'),
 
     //tab_Images
     order_black: require('../app_assests/Images/TabImages/black_order.png'),
@@ -23,7 +29,13 @@ const Images = {
     customer_black: require('../app_assests/Images/TabImages/black_customer.png'),
     customer_white: require('../app_assests/Images/TabImages/white_customer.png'),
     more_black: require('../app_assests/Images/TabImages/more_black.png'),
-    more_white: require('../app_assests/Images/TabImages/more_white.png')
+    more_white: require('../app_assests/Images/TabImages/more_white.png'),
+
+    //more
+    privacy_policy: require('../app_assests/Images/More/privacy_policy.png'),
+    about_us: require('../app_assests/Images/More/about_us.png'),
+    cart: require('../app_assests/Images/More/cart.png'),
+    logout: require('../app_assests/Images/More/logout.png'),
 }
 
 export default Images;

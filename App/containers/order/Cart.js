@@ -21,13 +21,29 @@ class Cart extends React.Component {
     }
     renderCartItems = (item) => {
         return (
-            <View style={{ flex: 1, marginVertical: 10, marginHorizontal: 5, borderWidth: 1, paddingVertical: 10, paddingHorizontal: 5 }}>
-                <Text style={{ fontSize: 16, color: '#000', marginVertical: 2 }}>Product Name</Text>
+            <View style={{ flex: 1, marginVertical: 2, marginHorizontal: 5, borderBottomWidth: 0.2, paddingVertical: 10, paddingHorizontal: 5, flexDirection: 'row' }}>
+
+                <View style={[{ flex: 0.30, }, Style.CommonStyles.centerStyle]}>
+                    <Image style={{ height: '80%', width: '100%', }} source={{ uri: images_aaray[0] }} />
+                </View>
+                <View style={{ flex: 0.7, paddingHorizontal: 10 }}>
+                    <Text style={Style.Cart.ProductName}>Product Name</Text>
+                    <Text style={Style.Cart.ProductDetail}>(Category/SubCategory)</Text>
+                    <Text style={Style.Cart.articlenumber}>Article Number :123456</Text>
+                    <Text style={Style.Cart.ProductDetail}>Quantity:6</Text>
+                    <Text style={Style.Cart.ProductDetail}>Color:Red</Text>
+
+                    <Text style={Style.Cart.ProductDetail}>Size:XS</Text>
+
+                    <Text style={Style.Cart.price}>Price:600</Text>
+                </View>
+                {/* <Text style={{ fontSize: 16, color: '#000', marginVertical: 2 }}>Product Name</Text>
                 <Text style={{ fontSize: 10, color: '#000', }}>(Category/SubCategory)</Text>
                 <Text style={{ fontSize: 16, color: '#000', marginVertical: 2 }}>Article Number :123456</Text>
                 <Text style={{ fontSize: 12, color: '#000', marginVertical: 2 }}>Quantity:6</Text>
-                <View style={{ flexDirection: 'row',marginVertical: 10 }}>
-                    <Text style={{ fontSize: 12, color: '#000',}}>Colors: </Text>
+                <Text style={{ fontSize: 16, color: '#000', marginVertical: 2, marginVertical: 10 }}>Price:600</Text> */}
+                {/* <View style={{ flexDirection: 'row', marginVertical: 10 }}>
+                    <Text style={{ fontSize: 12, color: '#000', }}>Colors: </Text>
                     {
                         color_codes.map((colors, i) =>
                             (
@@ -36,7 +52,7 @@ class Cart extends React.Component {
                     }
 
                 </View>
-                <View style={{ flexDirection: 'row',marginVertical:10 }}>
+                <View style={{ flexDirection: 'row', marginVertical: 10 }}>
                     <Text style={{ fontSize: 12, color: '#000', marginVertical: 2 }}>Sizes: </Text>
 
                     {
@@ -45,18 +61,20 @@ class Cart extends React.Component {
                                 <Text style={{ marginHorizontal: 3, color: '#000', fontSize: 12, }}>{size}{i == (sizes.length - 1) ? '' : ','}</Text>
                             ))
                     }
-                </View>
+                </View> */}
 
-                <Text style={{ fontSize: 12, color: '#000', marginVertical: 2, marginVertical: 10 }}>Price:600</Text>
+                {/* <Text style={{ fontSize: 12, color: '#000', marginVertical: 2, marginVertical: 10 }}>Price:600</Text>
 
                 <AppIntroSlider
                     data={images_aaray}
                     renderItem={itemss => this.renderProductImage(itemss)}
                     showNextButton={false}
                     showDoneButton={false}
-                />
-                <TouchableOpacity style={[{ position: 'absolute', right: 0, top: 0, height: 40, width: 40, }, Style.CommonStyles.centerStyle]}>
-                    <Image source={Images.delete} style={{ height: 30, width: 30 }} />
+                /> */}
+                <TouchableOpacity style={[{ position: 'absolute', right: 0, top: 0, height: 40, width: 40, }, Style.CommonStyles.centerStyle]}
+                    onPress={() => this.props.navigation.navigate('Bill_Checkout')}
+                >
+                    <Image source={Images.delete} style={{ height: 15, width: 15 }} />
                 </TouchableOpacity>
 
 
@@ -66,16 +84,21 @@ class Cart extends React.Component {
     }
 
     render() {
+        const { navigation } = this.props
         return (
             <AppComponent>
-                <Toolbar title='Cart' />
+                <Toolbar title='Cart' right={1} back={true} navigation={navigation} />
                 <View style={{ flex: 1 }}>
                     <FlatList
                         data={[1, 2, 3, 4, 5]}
+                        style={{ flex: 0.75 }}
                         renderItem={item => this.renderCartItems(item)}
                         extraData={this.state}
                         keyExtractor={(item, index) => index.toString()}
                     />
+
+
+
 
                 </View>
             </AppComponent>
