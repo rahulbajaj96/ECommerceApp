@@ -6,6 +6,7 @@ import Style from '../../utils/Style'
 import Images from '../../utils/Image'
 import { MoreItems } from '../../components/MoreComponents'
 import { useNavigation } from '@react-navigation/native';
+import { remove_from_AsyncStorage } from '../../Services/StorageService'
 
 function MoreOptions(props) {
     const navigation = useNavigation();
@@ -15,7 +16,13 @@ function MoreOptions(props) {
             '',
             'Are you sure want to Logout?',
             [
-                { text: 'Yes', onPress: () => console.log('Yes Pressed'), style: 'cancel' },
+                {
+                    text: 'Yes', onPress: () => {
+                        remove_from_AsyncStorage('@Auth_Token');
+                        remove_from_AsyncStorage('@login_auth_response');
+                        navigation.navigate('Login');
+                    }, style: 'cancel'
+                },
                 {
                     text: 'No', onPress: () =>
 

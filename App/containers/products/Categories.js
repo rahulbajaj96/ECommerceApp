@@ -6,8 +6,16 @@ import AppComponent from "../../components/AppComponent";
 import Toolbar from "../../components/Toolbar";
 import { SearchBar } from "../../components/SearchBar";
 import { Make_A_List, ModalView } from "../../components/Products";
+import { get_From_AsyncStorage } from "../../Services/StorageService";
+import { Login_Auth_Token } from "../../helpers/InputValidations";
 class Categories extends Component {
     state = { searchValue: '', modalVisibility: false, currentSelectedItem: '' }
+
+
+    componentDidMount() {
+       
+        console.log('token',Login_Auth_Token)
+    }
 
 
     handleListItemCicked = (item) => {

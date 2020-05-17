@@ -12,7 +12,7 @@ const Toolbar = (props) => {
     return (
         <LinearGradient style={Style.Toolbar.toolbarView} colors={['#2e1786', '#5453C7']} start={{ x: 0.1, y: 0.1 }} end={{ x: 1, y: 1 }}>
 
-            <View style={{ flex: 0.2 ,justifyContent:'center',paddingLeft:8}}>
+            <View style={{ flex: 0.2, justifyContent: 'center', paddingLeft: 8 }}>
                 {
                     props.back ?
                         <TouchableOpacity style={[{ width: 30, height: 30 }, Style.CommonStyles.centerStyle]} onPress={() => props.navigation.goBack()}>
@@ -27,15 +27,15 @@ const Toolbar = (props) => {
                 <Text style={{ color: '#fff', fontSize: 20, }}>{props.title}</Text>
 
             </View>
-            <View style={[{ flex: 0.2 },Style.CommonStyles.centerStyle]}>
+            <View style={[{ flex: 0.2 }, Style.CommonStyles.centerStyle]}>
                 {
                     props.right == 1
-                    ?
-                    <TouchableOpacity style={{padding:10}}>
-                        <Text style={Style.Toolbar.SaveButtonText}>SAVE</Text>
-                    </TouchableOpacity>
-                    :
-                    null
+                        ?
+                        <TouchableOpacity style={{ padding: 10 }} onPress={() => props.onSavePress()} >
+                            <Text style={Style.Toolbar.SaveButtonText}>SAVE</Text>
+                        </TouchableOpacity>
+                        :
+                        null
 
                 }
             </View>

@@ -10,7 +10,7 @@ import { Text, Image, TouchableOpacity, View, TextInput, ScrollView, FlatList } 
 
 export const ProductInput = (props) => {
     return (
-        <Item floatingLabel style={Style.Products.AddProduct.itemStyle}>
+        <Item stackedLabel style={Style.Products.AddProduct.itemStyle}>
             <Label style={Style.Products.AddProduct.InputLabelStyle}>{props.label}</Label>
             <Input
                 style={Style.Products.AddProduct.inputStyle}

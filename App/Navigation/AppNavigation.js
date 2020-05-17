@@ -2,12 +2,14 @@ import * as React from 'react';
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from '@react-navigation/stack';
-import Screen from "../containers/Screens";
+import { Provider } from 'react-redux';
+
 import Login from "../containers/auth/Login";
 
 import { TabNavigator } from './TabNavigation';
 import AddEmployee from '../containers/employees/AddEmployee';
 import Employee from '../containers/employees/Employee';
+import store from '../store/Store';
 
 
 
@@ -16,6 +18,7 @@ const Stack = createStackNavigator();
 function AppNavigation() {
 
     return (
+        <Provider store={store}>
         <NavigationContainer>
             <Stack.Navigator initialRouteName='OrderProductDetail' headerMode='none'>
                 <Stack.Screen name='Login' component={Login} />
@@ -30,6 +33,7 @@ function AppNavigation() {
 
             </Stack.Navigator>
         </NavigationContainer>
+        </Provider>
     )
 }
 export default AppNavigation;

@@ -7,8 +7,14 @@ import { useNavigation } from '@react-navigation/native';
 import { ProductInput, DropDown } from '../../components/Products'
 import Images from '../../utils/Image';
 import ImagePicker from 'react-native-image-picker';
-import { AANHEFArray } from '../../constants/AppConstants'
-
+import { AANHEFArray, Email_VALIDATION_MESSAGE, } from '../../constants/AppConstants'
+import { EmptyValidation, Get_Message, EmailValidation } from '../../helpers/InputValidations';
+import Toast from 'react-native-simple-toast';
+import { useDispatch, useSelector } from "react-redux";
+import Spinner from 'react-native-loading-spinner-overlay'
+import { ApiCallPost } from '../../Services/ApiServices';
+import { BASE_URL, API_URL } from '../../config';
+import { SPINNER_ON, SPINNER_OFF } from '../../constants/ReduxConstants';
 function AddCustomer(props) {
     const [first_name, setfirst_name] = useState('')
     const [last_name, setlast_name] = useState('')
@@ -20,21 +26,30 @@ function AddCustomer(props) {
     const [PostalCode, setPostalCode] = useState('')
     const [Street, setStreet] = useState('')
     const [ImageUri, setImageUri] = useState('')
-    const [AANHEF, setAANHEF] = useState('AANHEF')
+    const [AANHEF, setAANHEF] = useState('')
     const [ImageUploaded, setImageUploaded] = useState(false)
     const navigation = useNavigation();
-
+    const [ID, setID] = useState(0)
+    const [Address, setAddress] = useState('')
     const [title, settitle] = useState('')
 
+    const dispatch = useDispatch();
+    const { spinner } = useSelector(state => ({
+        spinner: state.spinnerReducer.SpinnerVisibility,
+
+    }));
 
 
     useEffect(() => {
         console.log('props', props.route.params)
+        console.disableYellowBox = true;
+
         setPropData(props.route.params)
     }, []);
 
     function setPropData(propData) {
         settitle(propData.title)
+        setID(propData.id)
         if (propData.id == 2) {
             setEditCustomerData(propData)
         }
@@ -88,10 +103,108 @@ function AddCustomer(props) {
 
     }
 
+    async function handleSaveCustomer() {
+        if (!EmptyValidation(AANHEF)) {
+            Toast.show(Get_Message("AANHEF"));
+            return;
+        }
+
+        if (!EmptyValidation(first_name)) {
+            Toast.show(Get_Message("First Name"));
+            return;
+        }
+        if (!EmptyValidation(last_name)) {
+            Toast.show(Get_Message("Last Name"));
+            return;
+        }
+        if (!EmptyValidation(company_name)) {
+            Toast.show(Get_Message("Comapany Name"));
+            return;
+        }
+        if (!EmptyValidation(KVKNum)) {
+            Toast.show(Get_Message("KVK Number"));
+            return;
+        }
+        if (!EmptyValidation(email)) {
+            Toast.show(Get_Message("Email"));
+            return;
+        }
+        if (!EmailValidation(email)) {
+            Toast.show(Email_VALIDATION_MESSAGE);
+            return;
+        }
+        if (!EmptyValidation(phone)) {
+            Toast.show(Get_Message("Phone no."));
+            return;
+        }
+        if (!EmptyValidation(email)) {
+            Toast.show(Get_Message("Email"));
+            return;
+        }
+        if (!EmptyValidation(city)) {
+            Toast.show(Get_Message("City"));
+            return;
+        }
+        if (!EmptyValidation(PostalCode)) {
+            Toast.show(Get_Message("Postal code"));
+            return;
+        }
+        else {
+
+
+
+            let formdata = new FormData();
+            formdata.append('first_name', first_name);
+            formdata.append('last_name', last_name);
+            formdata.append('email', email);
+            formdata.append('company_name', company_name);
+            formdata.append('kvk_number', KVKNum);
+            formdata.append('telephone', phone);
+            formdata.append('address', Address);
+            formdata.append('postal_code', PostalCode);
+            formdata.append('city', city);
+            formdata.append('street_house_no', Street)
+            formdata.append('prefixing_type', AANHEF);
+            console.log('formdata of Add zcustomer Api ', formdata)
+
+            if (ID == 1) {
+                console.log('handle Add Customer', `${BASE_URL}${API_URL.Add_Customer}`);
+
+
+                dispatch({ type: SPINNER_ON })
+              
+                var response = await ApiCallPost(`${BASE_URL}${API_URL.Add_Customer}`, formdata);
+                console.log('response of Add Customer Api', JSON.stringify(response))
+
+                dispatch({ type: SPINNER_OFF })
+
+                if (response != false)
+                    if (response.status == 1) {
+
+                        Toast.show(response.message)
+                        navigation.navigate('Customer');
+
+                    }
+                    else {
+                        Toast.show(response.message)
+                    }
+            }
+            else {
+                console.log('handleEdit Customer')
+            }
+
+
+            // console.log('formdata of Add Customer is ', JSON.stringify(formdata));
+
+        }
+    }
+
+
     return (
         <AppComponent>
-            <Toolbar title={title} right={1} back={true} navigation={navigation} />
+            <Toolbar title={title} right={1} back={true} navigation={navigation} onSavePress={() => handleSaveCustomer()} />
             <ScrollView style={[Style.CommonStyles.fullFlex, { paddingHorizontal: '5%', paddingVertical: '5%' }]}>
+                <Spinner visible={spinner} />
 
                 <View style={[Style.Customers.AddCustomer.Customer_image_view_main]}>
                     <View style={[Style.Customers.AddCustomer.Customer_image_view, Style.CommonStyles.centerStyle]}>
@@ -107,7 +220,7 @@ function AddCustomer(props) {
                 </View>
                 <DropDown
                     options={AANHEFArray}
-                    defaultValue={AANHEF}
+                    defaultValue={AANHEF == '' ? 'AANHEF' : AANHEF}
                     onSelect={(index, value) => setAANHEF(value)}
                 />
                 {/* <ProductInput
@@ -137,6 +250,7 @@ function AddCustomer(props) {
                 <ProductInput
                     label='KVK number'
                     value={KVKNum}
+                    keyboardType='number-pad'
                     onChangeText={KVKNum => setKVKNum(KVKNum)} />
 
                 <ProductInput
@@ -164,6 +278,10 @@ function AddCustomer(props) {
 
                 <Text style={{ color: '#000', fontSize: 16, marginTop: 20, fontWeight: 'bold', }}>Address</Text>
                 <ProductInput
+                    label='Address'
+                    value={Address}
+                    onChangeText={Address => setAddress(Address)} />
+                <ProductInput
                     label='Street and HouseNo.'
                     value={Street}
                     onChangeText={street => setStreet(street)} />
@@ -178,7 +296,6 @@ function AddCustomer(props) {
                         <ProductInput
                             label='Postal Code'
                             value={PostalCode}
-                            keyboardType='number-pad'
                             onChangeText={PostalCode => setPostalCode(PostalCode)} />
                     </View>
                 </View>

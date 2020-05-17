@@ -7,6 +7,10 @@ import Style from '../../utils/Style';
 import Modal from "react-native-modal";
 import Images from '../../utils/Image'
 import { ModalView } from '../../components/Products'
+import { connect } from "react-redux";
+import { getCustomerList } from '../../actions/customeractions'
+import Colors from '../../utils/Colors'
+
 
 class Customer extends React.Component {
     state = {
@@ -14,18 +18,37 @@ class Customer extends React.Component {
         sortingOrder: 0,
         sortingArray: [{ name: 'Date', value: 0 }, { name: 'Price', value: 1 }, { name: 'Company Name', value: 2 }],
         modalEditDelete: false,
-        currentSelectedItem: ''
+        currentSelectedItem: '',
+        customerList: []
     }
+    componentDidMount() {
+        this.get_Customer_List();
+
+    }
+    async get_Customer_List() {
+
+        await this.props.get_customer_list();
+        const { customerReducer } = this.props
+        console.log('customer reducer', customerReducer)
+        this.setState({ customerList: customerReducer.customer_list_response.status == 1 ? customerReducer.customer_list : [] })
+
+
+    }
+
     renderOrderList = (item) => {
+        console.log('items', item)
+        const { prefixing_type, profile_pic, first_name, email, company_name, kvk_number, last_name } = item.item.customer_id
         return (
             <View style={Style.Orders.orderListItemView}>
                 <View style={[{ flex: 0.2, borderWidth: 0 }, Style.CommonStyles.centerStyle]}>
-                    <Image source={Images.customer_black} style={{ height: 40, width: 40, }} />
+                    <Image source={profile_pic != null ? { uri: profile_pic } : Images.customer_black} style={{ height: 50, width: 50,borderRadius:0 }} resizeMode='contain' />
                 </View>
-                <View style={{ flex: 0.6, paddingHorizontal: 10 }}>
-                    <Text style={{ marginVertical: 2, fontSize: 14, color: '#000' }}>Mr./Mrs./Miss Customer</Text>
-                    <Text style={{ marginVertical: 2, fontSize: 14, color: '#000' }}>Company Name</Text>
-                    <Text style={{ marginVertical: 2, fontSize: 14, color: '#000' }}>KVK Number</Text>
+                <View style={{ flex: 0.6, paddingHorizontal: 10, marginVertical: 5 }}>
+                    <Text style={{ marginVertical: 2, fontSize: 14, color: '#000' }}>Name: <Text style={{ color: Colors.theme_color }}> {prefixing_type} {first_name} {last_name}</Text></Text>
+                    <Text style={{ marginVertical: 2, fontSize: 14, color: '#000' }}>Company: <Text style={{ color: Colors.theme_color }}>{company_name}</Text></Text>
+                    <Text style={{ marginVertical: 2, fontSize: 14, color: '#000' }}>KVK : <Text style={{ color: Colors.theme_color }}> {kvk_number}</Text></Text>
+                    <Text style={{ marginVertical: 2, fontSize: 12, color: Colors.theme_color }}>{email}</Text>
+
                     {/* <Text style={{ marginVertical: 5, fontSize: 14, color: '#000' }}>Company Name</Text>
 
                     <Text style={{ marginVertical: 5, fontSize: 14, color: '#000' }}>Email</Text>
@@ -78,12 +101,13 @@ class Customer extends React.Component {
         navigation.navigate('AddCustomer', { id: 1, title: 'Add Customer', data: {} });
     }
     render() {
-        const { searchedValue, modalVisibilty, sortingArray, sortingOrder, modalEditDelete, currentSelectedItem } = this.state
+        const { searchedValue, modalVisibilty, sortingArray, sortingOrder, modalEditDelete, currentSelectedItem, customerList } = this.state
         return (
             <AppComponent>
                 <Toolbar title='Customers' />
                 <SearchBar
                     value={searchedValue}
+                    editable={customerList.length != 0 ? true : false}
                     onChangeText={searchedValue => this.setState({ searchedValue })}
                 />
                 <Modal isVisible={modalVisibilty}
@@ -95,6 +119,7 @@ class Customer extends React.Component {
                             <Text style={Style.Orders.SortingModal.SortByText}>Sort by :</Text>
 
                         </View>
+
                         <FlatList
                             data={sortingArray}
                             extraData={this.state}
@@ -115,12 +140,18 @@ class Customer extends React.Component {
                     </TouchableOpacity>
                 </View>
                 <View style={{ flex: 0.8, }}>
-                    <FlatList
-                        data={[1, 2, 3, 4, 5]}
-                        renderItem={item => this.renderOrderList(item)}
-                        extraData={this.state}
-                        keyExtractor={(item, index) => index.toString()}
-                    />
+                    {
+                        customerList.length != 0 ?
+                            <FlatList
+                                data={customerList}
+                                renderItem={item => this.renderOrderList(item)}
+                                extraData={this.state}
+                                keyExtractor={(item, index) => index.toString()}
+                            />
+
+                            :
+                            null
+                    }
 
                 </View>
                 <ModalView
@@ -136,4 +167,14 @@ class Customer extends React.Component {
         )
     }
 }
-export default Customer;
+const mapStateToProps = (state) => {
+    console.log('Customer', state)
+    return state;
+}
+const mapDispatchToProps = (dispatch) => {
+    return {
+        get_customer_list: () => dispatch(getCustomerList())
+    }
+
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Customer);
