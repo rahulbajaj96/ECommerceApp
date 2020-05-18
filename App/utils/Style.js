@@ -5,7 +5,7 @@ export default {
     CommonStyles: {
         fullFlex: { flex: 1 },
         centerStyle: { alignItems: 'center', justifyContent: 'center' },
-        SafeAreaStyle: { height: STATUSBAR_HEIGHT, },
+        SafeAreaStyle: { height: STATUSBAR_HEIGHT, backgroundColor:Colors.theme_color},
         borderStyle: { borderWidth: 1, borderColor: Colors.black, opacity: 0.1, },
         paddingBottomStyle: { height: 30 }
 

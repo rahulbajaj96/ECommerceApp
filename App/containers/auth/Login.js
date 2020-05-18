@@ -7,6 +7,7 @@ import Images from "../../utils/Image";
 import Toast from 'react-native-simple-toast';
 import { get_From_AsyncStorage, save_To_AsyncStorage } from "../../Services/StorageService";
 import { ApiCallGet, ApiCallPost } from '../../Services/ApiServices';
+import AppComponent from '../../components/AppComponent'
 import { EmptyValidation, Get_Message, EmailValidation, SaveToken } from "../../helpers/InputValidations";
 import { Email_VALIDATION_MESSAGE, BASE_URL } from "../../constants/AppConstants";
 import { connect } from "react-redux";
@@ -163,7 +164,7 @@ class Login extends Component {
         console.log('Spinner', this.props.spinnerReducer)
 
         return (
-            <View style={Style.CommonStyles.fullFlex}>
+            <AppComponent>
 
                 <LinearGradient colors={['#2e1786', '#5453C7']} style={[{ flex: 0.5, }, Style.CommonStyles.centerStyle]} start={{ x: 1, y: 0.1 }} end={{ x: 1, y: 1 }}>
                     <View style={[Style.LoginStyles.GradientImageStyle, Style.CommonStyles.centerStyle]}>
@@ -267,7 +268,7 @@ class Login extends Component {
 
 
 
-            </View>
+            </AppComponent>
         )
     }
 }
