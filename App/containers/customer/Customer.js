@@ -10,6 +10,8 @@ import { ModalView } from '../../components/Products'
 import { connect } from "react-redux";
 import { getCustomerList } from '../../actions/customeractions'
 import Colors from '../../utils/Colors'
+import { ApiCallPost } from '../../Services/ApiServices'
+import { BASE_URL, API_URL } from '../../config'
 
 
 class Customer extends React.Component {
@@ -22,7 +24,16 @@ class Customer extends React.Component {
         customerList: []
     }
     componentDidMount() {
-        this.get_Customer_List();
+        console.log('reload prop', this.props.reload)
+        const { navigation } = this.props
+        navigation.addListener('focus', () => {
+            // The screen is focused
+            console.log('when screen is focused');
+            // Call any action
+            this.get_Customer_List();
+
+        });
+        // this.get_Customer_List();
 
     }
     async get_Customer_List() {
@@ -36,12 +47,11 @@ class Customer extends React.Component {
     }
 
     renderOrderList = (item) => {
-        console.log('items', item)
         const { prefixing_type, profile_pic, first_name, email, company_name, kvk_number, last_name } = item.item.customer_id
         return (
             <View style={Style.Orders.orderListItemView}>
                 <View style={[{ flex: 0.2, borderWidth: 0 }, Style.CommonStyles.centerStyle]}>
-                    <Image source={profile_pic != null ? { uri: profile_pic } : Images.customer_black} style={{ height: 50, width: 50,borderRadius:0 }} resizeMode='contain' />
+                    <Image source={profile_pic != null ? { uri: profile_pic } : Images.customer_black} style={{ height: 50, width: 50, borderRadius: 0 }} resizeMode='contain' />
                 </View>
                 <View style={{ flex: 0.6, paddingHorizontal: 10, marginVertical: 5 }}>
                     <Text style={{ marginVertical: 2, fontSize: 14, color: '#000' }}>Name: <Text style={{ color: Colors.theme_color }}> {prefixing_type} {first_name} {last_name}</Text></Text>
@@ -60,7 +70,7 @@ class Customer extends React.Component {
                 <View style={[{ flex: 0.2, paddingVertical: 10, borderWidth: 0 }, Style.CommonStyles.centerStyle]}>
                     {/* <Text style={{ marginVertical: 5, fontSize: 14, color: '#000' }}>Phone</Text> */}
                     <TouchableOpacity style={[{ flex: 0.1, borderWidth: 0 }, Style.CommonStyles.centerStyle]}
-                        onPress={() => this.openEditDelete(item)}
+                        onPress={() => this.openEditDelete(item.item.customer_id)}
                     >
                         <Image source={Images.dots} style={{ height: 30, width: 30, }} />
                     </TouchableOpacity>
@@ -87,14 +97,38 @@ class Customer extends React.Component {
     }
     onEditPressed = () => {
         const { navigation } = this.props
+        const { currentSelectedItem } = this.state
 
-        navigation.navigate('AddCustomer', { id: 2, title: 'Edit Customer', data: {} })
+        navigation.navigate('AddCustomer', { id: 2, title: 'Edit Customer', data: currentSelectedItem })
         this.setState({ modalEditDelete: false })
 
 
     }
-    openEditDelete = () => {
-        this.setState({ modalEditDelete: true, currentSelectedItem: 'Current Customer' })
+    componentWillUnmount() {
+        const { navigation } = this.props
+
+        console.log('componenet gone ')
+        navigation.removeListener('focus');
+    }
+    async onDeletePressed() {
+        const { currentSelectedItem } = this.state
+        console.log('id to be deleted', currentSelectedItem.id)
+        let formdata = new FormData();
+        formdata.append('customer_id', currentSelectedItem.id);
+
+        let response = await ApiCallPost(`${BASE_URL}${API_URL.Delete_Customer}`, formdata);
+        console.log('Person Deleted', response);
+        if (response != false) {
+            if (response.status == 1) {
+                console.log('Person Deleted', response);
+                this.setState({ modalEditDelete: false })
+                this.get_Customer_List();
+            }
+        }
+
+    }
+    openEditDelete = (item) => {
+        this.setState({ modalEditDelete: true, currentSelectedItem: item })
     }
     navigateToAddCustomer = () => {
         const { navigation } = this.props
@@ -158,8 +192,8 @@ class Customer extends React.Component {
                     isVisible={modalEditDelete}
                     onBackdropPress={() => this.setState({ modalEditDelete: false })}
                     onEditPressed={() => this.onEditPressed()}
-                    onDeletePressed={() => console.log('onDeletePressed')}
-                    modalTitle={currentSelectedItem}
+                    onDeletePressed={() => this.onDeletePressed()}
+                    modalTitle={`${currentSelectedItem.first_name} ${currentSelectedItem.last_name}`}
 
                 />
 

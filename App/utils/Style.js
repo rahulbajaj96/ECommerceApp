@@ -88,7 +88,8 @@ export default {
     Customers: {
         AddCustomer: {
             Customer_image_view_main: { height: DEVICE_WIDTH * 0.4, width: DEVICE_WIDTH * 0.9, justifyContent: 'center', alignItems: 'center', borderWidth: 0 },
-            Customer_image_view: { height: DEVICE_WIDTH * 0.34, width: DEVICE_WIDTH * 0.34, borderRadius: DEVICE_WIDTH * 0.17, borderWidth: 1, }
+            Customer_image_view: { height: DEVICE_WIDTH * 0.34, width: DEVICE_WIDTH * 0.34, borderRadius: DEVICE_WIDTH * 0.17, borderWidth: 1, },
+            Customer_imageStyle:{ height:'100%',width:'100%' ,borderRadius:DEVICE_WIDTH * 0.17,}
         },
 
     },

@@ -5,4 +5,6 @@ export const API_URL = {
     //Customer Section
     Add_Customer: 'addCustomer',
     Customer_list: 'customerList',
+    Delete_Customer: 'deleteCustomer',
+    Edit_Customer: 'updateCustomer'
 }

@@ -15,6 +15,7 @@ import Spinner from 'react-native-loading-spinner-overlay'
 import { ApiCallPost } from '../../Services/ApiServices';
 import { BASE_URL, API_URL } from '../../config';
 import { SPINNER_ON, SPINNER_OFF } from '../../constants/ReduxConstants';
+import { getCustomerList } from '../../actions/customeractions';
 function AddCustomer(props) {
     const [first_name, setfirst_name] = useState('')
     const [last_name, setlast_name] = useState('')
@@ -32,6 +33,7 @@ function AddCustomer(props) {
     const [ID, setID] = useState(0)
     const [Address, setAddress] = useState('')
     const [title, settitle] = useState('')
+    const [Customer_id, setCustomer_id] = useState('')
 
     const dispatch = useDispatch();
     const { spinner } = useSelector(state => ({
@@ -51,21 +53,24 @@ function AddCustomer(props) {
         settitle(propData.title)
         setID(propData.id)
         if (propData.id == 2) {
-            setEditCustomerData(propData)
+            setEditCustomerData(propData.data)
         }
 
     }
-    function setEditCustomerData() {
-        setPostalCode('01');
-        setfirst_name('Rahul')
-        setlast_name('Bajaj');
-        setcompany_name('Work from Home');
-        setKVKNum('12346789');
-        setemail('qwerty@iop.com')
-        setphone('98745563210');
-        setStreet('ABC def #90');
-        setcity('Patiala');
-        setAANHEF('Mrs.')
+    function setEditCustomerData(propData) {
+        console.log('propData', propData)
+        setPostalCode(propData.postal_code);
+        setfirst_name(propData.first_name)
+        setlast_name(propData.last_name);
+        setcompany_name(propData.company_name);
+        setKVKNum(propData.kvk_number);
+        setemail(propData.email)
+        setphone(propData.telephone);
+        setStreet(propData.street_house_no);
+        setcity(propData.city);
+        setAddress(propData.address)
+        setAANHEF(propData.prefixing_type)
+        setCustomer_id(propData.id)
     }
     function goToImagePicker() {
 
@@ -165,14 +170,14 @@ function AddCustomer(props) {
             formdata.append('city', city);
             formdata.append('street_house_no', Street)
             formdata.append('prefixing_type', AANHEF);
-            console.log('formdata of Add zcustomer Api ', formdata)
+
 
             if (ID == 1) {
                 console.log('handle Add Customer', `${BASE_URL}${API_URL.Add_Customer}`);
-
+                console.log('formdata of Add zcustomer Api ', formdata)
 
                 dispatch({ type: SPINNER_ON })
-              
+
                 var response = await ApiCallPost(`${BASE_URL}${API_URL.Add_Customer}`, formdata);
                 console.log('response of Add Customer Api', JSON.stringify(response))
 
@@ -182,7 +187,9 @@ function AddCustomer(props) {
                     if (response.status == 1) {
 
                         Toast.show(response.message)
-                        navigation.navigate('Customer');
+                        // navigation.popToTop()
+                        navigation.navigate('Customer', { reload: true });
+                        dispatch(getCustomerList())
 
                     }
                     else {
@@ -191,6 +198,26 @@ function AddCustomer(props) {
             }
             else {
                 console.log('handleEdit Customer')
+                formdata.append('customer_id', Customer_id);
+                console.log('formdata of Edit Customer', formdata)
+                dispatch({ type: SPINNER_ON })
+
+                var responseEdit = await ApiCallPost(`${BASE_URL}${API_URL.Edit_Customer}`, formdata);
+                console.log('response of Edit Customer Api', JSON.stringify(responseEdit))
+                dispatch({ type: SPINNER_OFF })
+                if (responseEdit != false)
+                    if (responseEdit.status == 1) {
+
+                        Toast.show(responseEdit.message)
+                        // navigation.popToTop()
+                        navigation.navigate('Customer', { reload: true });
+                        dispatch(getCustomerList())
+
+                    }
+                    else {
+                        Toast.show(responseEdit.message)
+                    }
+
             }
 
 
@@ -208,11 +235,11 @@ function AddCustomer(props) {
 
                 <View style={[Style.Customers.AddCustomer.Customer_image_view_main]}>
                     <View style={[Style.Customers.AddCustomer.Customer_image_view, Style.CommonStyles.centerStyle]}>
-                        <Image source={ImageUploaded ? { uri: ImageUri } : Images.appIcon} style={{ flex: 1 }} resizeMode='contain' />
-                        <TouchableOpacity style={[{ height: 40, width: 40, position: 'absolute', right: -10, bottom: -5, borderWidth: 0 }, Style.CommonStyles.centerStyle]}
+                        <Image source={ImageUploaded ? { uri: ImageUri } : Images.appIcon} style={Style.Customers.AddCustomer.Customer_imageStyle} />
+                        <TouchableOpacity style={[{ height: 40, width: 40, position: 'absolute', right: -10, bottom: -5, borderWidth: 0, backgroundColor: '#F2F2F2' }, Style.CommonStyles.centerStyle]}
                             onPress={() => goToImagePicker()}
                         >
-                            <Image style={{ height: 35, width: 35, }} source={Images.add_pop_up} />
+                            <Image style={{ height: 40, width: 40, }} source={Images.add_pop_up} />
                         </TouchableOpacity>
 
 
