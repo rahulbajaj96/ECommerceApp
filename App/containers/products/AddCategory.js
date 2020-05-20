@@ -5,9 +5,18 @@ import Toolbar from '../../components/Toolbar';
 import { useNavigation } from '@react-navigation/native';
 import { Textarea } from 'native-base';
 import Style from '../../utils/Style';
+import Spinner from 'react-native-loading-spinner-overlay'
+
 import Colors from '../../utils/Colors';
 import ImagePicker from 'react-native-image-picker';
 import Images from '../../utils/Image';
+import Toast from 'react-native-simple-toast';
+import { useDispatch, useSelector } from "react-redux";
+
+import { EmptyValidation, Get_Message } from '../../helpers/InputValidations';
+import { ApiCallPost } from '../../Services/ApiServices';
+import { BASE_URL, API_URL } from '../../config';
+import { SPINNER_ON, SPINNER_OFF } from '../../constants/ReduxConstants';
 
 function AddCategory(props) {
     const [Category_name, setCategory_name] = useState("")
@@ -19,7 +28,17 @@ function AddCategory(props) {
     const [CategoryDescription, setCategoryDescription] = useState('');
     const [SubCategoryEnabled, setSubCategoryEnabled] = useState(false)
     const [parentName, setparentName] = useState('')
+    const [PhotoPath, setPhotoPath] = useState('')
+    const [PAGE_ID, setPAGE_ID] = useState(0)
+    const [Category_ID, setCategory_ID] = useState('')
+    const [Subcategory_ID, setSubcategory_ID] = useState('')
 
+
+    const dispatch = useDispatch();
+    const { spinner } = useSelector(state => ({
+        spinner: state.spinnerReducer.SpinnerVisibility,
+
+    }));
     useEffect(() => {
         console.log('props', props.route.params)
         setPropData(props.route.params)
@@ -38,6 +57,7 @@ function AddCategory(props) {
 
         const { data, title, id } = propData
         settitle(title);
+        setPAGE_ID(id);
         if (id == 0 || id == 2) {
             setplaceholder('Category')
             if (id == 2) {
@@ -56,11 +76,13 @@ function AddCategory(props) {
 
     }
     function setCategoryData(data) {
+        console.log('data', data)
 
-        setcategory_image('https://via.placeholder.com/600/66b7d2');
-        setimage_picked(true)
-        setCategory_name('Clothes')
-        setCategoryDescription('My Clothes are lit');
+        setcategory_image(data.image);
+        setimage_picked(data.image != '' ? true : false)
+        setCategory_name(data.name)
+        setCategoryDescription(data.description);
+        setCategory_ID(data.id)
 
 
 
@@ -96,8 +118,12 @@ function AddCategory(props) {
             } else if (response.customButton) {
                 console.log('User tapped custom button: ', response.customButton);
             } else {
-                console.log('uri', response.uri)
+                console.log('uri', response)
                 const source = { uri: response.uri };
+                setPhotoPath({
+                    name: 'ABC',
+                    type: response.type, uri: response.uri
+                })
                 setcategory_image(response.uri);
                 setimage_picked(true)
 
@@ -109,9 +135,73 @@ function AddCategory(props) {
         });
 
     }
+    async function handleSaveCategory() {
+        if (!EmptyValidation(Category_name)) {
+            Toast.show(Get_Message('Category name'));
+            return;
+        }
+        if (!EmptyValidation(CategoryDescription)) {
+            Toast.show(Get_Message('Category description'));
+            return;
+        }
+        else {
+            let formdata = new FormData();
+            formdata.append('name', Category_name);
+            formdata.append('description', CategoryDescription);
+
+            if (PAGE_ID == 0) {
+                formdata.append('image', PhotoPath);
+                console.log('Add Category Api Call')
+                console.log('formdata of Add Ctaegory ', formdata);
+                dispatch({ type: SPINNER_ON })
+                var response = await ApiCallPost(`${BASE_URL}${API_URL.AddCategory}`, formdata);
+                console.log('response Add Category', response);
+                if (response != false) {
+                    if (response.status == 1) {
+                        Toast.show(response.message)
+                        // navigation.popToTop()
+                        navigation.navigate('Categories');
+                    }
+                    else {
+                        Toast.show(response.message)
+                    }
+                    dispatch({ type: SPINNER_OFF })
+
+                }
+            }
+            else if (PAGE_ID == 2) {
+                formdata.append('category_id', Category_ID);
+                console.log('Edit Category Api Call')
+                console.log('formdata of Edit Ctaegory ', formdata);
+                var response = await ApiCallPost(`${BASE_URL}${API_URL.Edit_category}`, formdata);
+                console.log('response Edit Category', response);
+                if (response != false) {
+                    if (response.status == 1) {
+                        Toast.show(response.message)
+                        // navigation.popToTop()
+                        navigation.navigate('Categories');
+                    }
+                    else {
+                        Toast.show(response.message)
+                    }
+                    dispatch({ type: SPINNER_OFF })
+
+                }
+            }
+            else if (PAGE_ID == 1) {
+                console.log('Add SubCategory Api Call')
+            }
+            else if (PAGE_ID == 3) {
+                console.log('Edit SubCategory Api Call')
+            }
+
+        }
+
+    }
     return (
         <AppComponent>
-            <Toolbar title={title} back={true} navigation={navigation} right={1} />
+            <Toolbar title={title} back={true} navigation={navigation} right={1} onSavePress={() => handleSaveCategory()} />
+            <Spinner visible={spinner} />
             <View style={[Style.CommonStyles.fullFlex,]}>
                 <ScrollView style={{ paddingHorizontal: '5%' }}>
 

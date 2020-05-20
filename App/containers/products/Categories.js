@@ -1,22 +1,39 @@
 import { Text, View, FlatList, Image, TouchableOpacity } from "react-native";
 import React, { Component } from "react";
 
-import Style from "../../utils/Style";
 import AppComponent from "../../components/AppComponent";
 import Toolbar from "../../components/Toolbar";
 import { SearchBar } from "../../components/SearchBar";
 import { Make_A_List, ModalView } from "../../components/Products";
-import { get_From_AsyncStorage } from "../../Services/StorageService";
 import { Login_Auth_Token } from "../../helpers/InputValidations";
+import { getCategoriesList } from "../../actions/categoriesactions";
+import { connect } from "react-redux";
+import { API_URL, BASE_URL } from "../../config";
+import { ApiCallPost } from "../../Services/ApiServices";
+
 class Categories extends Component {
-    state = { searchValue: '', modalVisibility: false, currentSelectedItem: '' }
+    state = { searchValue: '', modalVisibility: false, currentSelectedItem: '', categoryList: [] }
 
 
     componentDidMount() {
-       
-        console.log('token',Login_Auth_Token)
-    }
 
+        const { navigation } = this.props
+        navigation.addListener('focus', () => {
+            // The screen is focused
+            console.log('when screen is focused');
+            // Call any action
+            this.get_Categories();
+
+        });
+    }
+    async get_Categories() {
+        await this.props.getCategories();
+        const { categoriesReducer } = this.props
+        // console.log('reducer data', categoriesReducer);
+        if (categoriesReducer.category_list_response.status == 1) {
+            this.setState({ categoryList: categoriesReducer.category_list })
+        }
+    }
 
     handleListItemCicked = (item) => {
         const { navigation } = this.props
@@ -25,25 +42,45 @@ class Categories extends Component {
     }
     openModal = (item) => {
         console.log('item clicked', item)
-        this.setState({ modalVisibility: true, currentSelectedItem: 'Category ' })
+        this.setState({ modalVisibility: true, currentSelectedItem: item.item })
     }
     onAddPopUp = () => {
         const { navigation } = this.props
-
         navigation.navigate('AddCategory', { id: 0, title: 'Add Category', data: {} })
     }
     onEditPressed = () => {
         const { navigation } = this.props
-
-        navigation.navigate('AddCategory', { id: 2, title: 'Edit Category', data: {} })
+        const { currentSelectedItem } = this.state
+        navigation.navigate('AddCategory', { id: 2, title: 'Edit Category', data: currentSelectedItem })
         this.setState({ modalVisibility: false })
 
     }
-    onDeletePressed = () => {
+    componentWillUnmount() {
+        const { navigation } = this.props
+
+        console.log('componenet gone ')
+        navigation.removeListener('focus');
+    }
+    async onDeletePressed() {
+        const { currentSelectedItem } = this.state
+        console.log('id to be deleted', currentSelectedItem.id)
+        let formdata = new FormData();
+        formdata.append('category_id', currentSelectedItem.id);
+
+        let response = await ApiCallPost(`${BASE_URL}${API_URL.Delete_Category}`, formdata);
+        console.log('Category Deleted', response);
+        if (response != false) {
+            if (response.status == 1) {
+                console.log('Person Deleted', response);
+                this.setState({ modalVisibility: false })
+                this.get_Categories();
+            }
+        }
 
     }
     render() {
-        const { searchValue, modalVisibility, currentSelectedItem } = this.state
+        const { searchValue, modalVisibility, currentSelectedItem, categoryList } = this.state
+        const { spinnerReducer } = this.props
         return (
             <AppComponent>
                 <Toolbar title={'Categories'} />
@@ -56,12 +93,13 @@ class Categories extends Component {
                     />
 
                     <Make_A_List
-                        items={[1, 2, 3, 4, 5, 6]}
+                        items={categoryList}
                         extraData={this.state}
                         onItemClicked={(item) => this.handleListItemCicked(item)}
                         onAddPopUp={() => this.onAddPopUp()}
                         crudValue={1}
                         dotsClick={(item) => this.openModal(item)}
+                        api={true}
 
                     />
                     {/* <Modal
@@ -88,8 +126,8 @@ class Categories extends Component {
                         isVisible={modalVisibility}
                         onBackdropPress={() => this.setState({ modalVisibility: false })}
                         onEditPressed={() => this.onEditPressed()}
-                        onDeletePressed={() => console.log('onDeletePressed')}
-                        modalTitle={currentSelectedItem}
+                        onDeletePressed={() => this.onDeletePressed()}
+                        modalTitle={currentSelectedItem.name}
 
                     />
                     {/* <View style={Style.Products.categories.categoriesListView}>
@@ -112,5 +150,13 @@ class Categories extends Component {
         )
     }
 }
-export default Categories;
+const mapStateToProps = (state) => {
+    return state;
+}
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getCategories: () => dispatch(getCategoriesList())
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Categories);
 //da2244

@@ -45,17 +45,34 @@ export const Make_A_List = (props) => {
 
     function renderProducts(items) {
         // const { navigation } = this.props
+        console.log('items', items);
+        var data = props.api ? items.item : ''
 
         return (
             <TouchableOpacity style={Style.Products.categories.categoryItemView}
                 onPress={() => props.onItemClicked(items)}
             >
                 <View style={[{ flex: 0.2, }, Style.CommonStyles.centerStyle]}>
-                    <Image source={Images.appIcon} style={{ height: 50, width: 50, }} />
+                    {
+                        props.api
+                            ?
+                            <Image source={data.image != '' ? { uri: data.image } : Images.appIcon} style={{ height: 50, width: 50, }} />
+
+                            :
+                            <Image source={Images.appIcon} style={{ height: 50, width: 50, }} />
+
+                    }
 
                 </View>
                 <View style={{ flex: 0.7, justifyContent: 'center' }}>
-                    <Text style={{ fontSize: 16, color: '#000', marginLeft: 5 }}>Product Name </Text>
+                    {
+                        props.api
+                            ?
+                            <Text style={{ fontSize: 16, color: '#000', marginLeft: 5 }}>{data.name}</Text>
+                            :
+                            <Text style={{ fontSize: 16, color: '#000', marginLeft: 5 }}>Product Name </Text>
+
+                    }
 
                 </View>
                 {
