@@ -14,4 +14,10 @@ export const API_URL = {
     Edit_category: 'category/update',
     Delete_Category: 'category/destroy',
 
+    //SubCategory
+    SubCategory_List: 'subcategory/list',
+    AddSubCategory: 'subcategory/store',
+    Edit_SubCategory: 'subcategory/update',
+    Delet_SubCategory: 'subcategory/destroy'
+
 }

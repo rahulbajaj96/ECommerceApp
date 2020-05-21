@@ -36,9 +36,10 @@ class Categories extends Component {
     }
 
     handleListItemCicked = (item) => {
+        console.log('Category item clicked', item.item.id)
         const { navigation } = this.props
 
-        navigation.navigate('SubCategories')
+        navigation.navigate('SubCategories', { category_id: item.item })
     }
     openModal = (item) => {
         console.log('item clicked', item)

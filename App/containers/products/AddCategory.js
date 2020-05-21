@@ -66,7 +66,13 @@ function AddCategory(props) {
         }
         else if (id == 1 || id == 3) {
             setplaceholder('Subcategory')
-            setparentName('Clothes');
+            if (id == 1) {
+                setparentName(data.name);
+                setCategory_ID(data.id)
+            }
+
+            // console.log('propData', data)
+
             setSubCategoryEnabled(true);
             if (id == 3)
                 setSubcategoryData(data)
@@ -88,13 +94,16 @@ function AddCategory(props) {
 
     }
     function setSubcategoryData(data) {
+        console.log('Edit Prop data', data)
 
-        setcategory_image('https://via.placeholder.com/600/66b7d2');
+        setcategory_image(data.image);
         setimage_picked(true)
-        setCategory_name('Jeans')
-        setCategoryDescription('My Clothes are lit');
-        setparentName('Clothes');
+        setCategory_name(data.name)
+        setCategoryDescription(data.description);
+        setparentName(data.category_detail.name);
         setSubCategoryEnabled(true);
+        setCategory_ID(data.category_id);
+        setSubcategory_ID(data.id)
 
 
 
@@ -190,9 +199,47 @@ function AddCategory(props) {
             }
             else if (PAGE_ID == 1) {
                 console.log('Add SubCategory Api Call')
+                formdata.append('image', PhotoPath);
+                formdata.append('category_id', Category_ID);
+                console.log('formdata of Save SubCategory Api,', formdata)
+                console.log(' props.route.params.data', props.route.params.data)
+                var response = await ApiCallPost(`${BASE_URL}${API_URL.AddSubCategory}`, formdata);
+                console.log('response', response)
+                if (response != false) {
+                    if (response.status == 1) {
+                        Toast.show(response.message)
+                        // navigation.popToTop()
+                        navigation.navigate('SubCategories', { category_id: props.route.params.data })
+                    }
+                    else {
+                        Toast.show(response.message)
+                    }
+                    dispatch({ type: SPINNER_OFF })
+
+                }
+
             }
             else if (PAGE_ID == 3) {
                 console.log('Edit SubCategory Api Call')
+                // formdata.append('image', PhotoPath);
+                formdata.append('category_id', Category_ID);
+                formdata.append('subcategory_id', Subcategory_ID);
+                console.log('formData of Edit SubCategory ', formdata);
+                var response = await ApiCallPost(`${BASE_URL}${API_URL.Edit_SubCategory}`, formdata);
+                console.log('response', response)
+                if (response != false) {
+                    if (response.status == 1) {
+                        Toast.show(response.message)
+                        // navigation.popToTop()
+                        navigation.navigate('SubCategories', { category_id: props.route.params.data })
+                    }
+                    else {
+                        Toast.show(response.message)
+                    }
+                    dispatch({ type: SPINNER_OFF })
+
+                }
+
             }
 
         }

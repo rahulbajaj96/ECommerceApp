@@ -8,4 +8,5 @@ export const CUSTOMER_LIST_SUCCESS = 'get_customer_success';
 export const CUSTOMER_LIST_FAILURE = 'get_customer_failure';
 export const CATEGORIES_LIST_SUCCESS = 'get_Categories_Success';
 export const CATEGORIES_LIST_FAILURE = 'get_Categories_Failure';
-
+export const SUB_CATEGORIES_LIST_SUCCESS = 'get_SubCategories_Success';
+export const SUB_CATEGORIES_LIST_FAILURE = 'get_SubCategories_Failure';
