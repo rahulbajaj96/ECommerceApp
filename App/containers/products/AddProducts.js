@@ -49,7 +49,7 @@ class AddProduct extends React.Component {
 
             for (let i = 0; i < multipleSelection.length; i++) {
                 multipleSelection[i].color_selected = 'red',
-                multipleSelection[i].number_of_Pieces = '5',
+                    multipleSelection[i].number_of_Pieces = '5',
                     multipleSelection[i].size_Selected = 'Large'
             }
             this.setState({
@@ -194,12 +194,29 @@ class AddProduct extends React.Component {
             </TouchableOpacity>
         )
     }
+    handleSaveProduct = () => {
+        const { productName, articlenum, purchasePrice, sellingPrice, Category, SubCategory, multipleSelection } = this.state
+
+
+
+        let formData = new FormData();
+        formData.append("name", productName);
+        formData.append("category_id", productName);
+        formData.append("subcategory_id", productName);
+        formData.append("article_no", articlenum);
+        formData.append("purchase_price", purchasePrice);
+        formData.append("sale_price", sellingPrice);
+
+        formData.append("variations", productName);
+        console.log('formData od Add Product ', JSON.stringify(formData));
+
+    }
     render() {
         const { productName, articlenum, purchasePrice, sellingPrice, multipleSelection, modalVisibility, selectedImage, selectedIndex, title, Category, SubCategory } = this.state
         const { navigation } = this.props
         return (
             <AppComponent >
-                <Toolbar title={title} right={1} back={true} navigation={navigation} />
+                <Toolbar title={title} right={1} back={true} navigation={navigation} onSavePress={() => this.handleSaveProduct()} />
                 <ScrollView style={[Style.CommonStyles.fullFlex], { paddingHorizontal: '2%', paddingTop: '2%' }}>
 
                     <View style={Style.Products.AddProduct.ImagePickerView}>

@@ -34,6 +34,7 @@ function AddCustomer(props) {
     const [Address, setAddress] = useState('')
     const [title, settitle] = useState('')
     const [Customer_id, setCustomer_id] = useState('')
+    const [photoPath, setphotoPath] = useState('')
 
     const dispatch = useDispatch();
     const { spinner } = useSelector(state => ({
@@ -93,7 +94,10 @@ function AddCustomer(props) {
                 console.log('User tapped custom button: ', response.customButton);
             } else {
                 const source = { uri: response.uri };
-
+                setphotoPath({
+                    name: 'ABC',
+                    type: response.type, uri: response.uri
+                })
                 setImageUploaded(true);
                 setImageUri(response.uri);
 
@@ -109,6 +113,11 @@ function AddCustomer(props) {
     }
 
     async function handleSaveCustomer() {
+        if(!EmptyValidation(ImageUri))
+        {
+            Toast.show("Please select a Customer pic");
+            return;
+        }
         if (!EmptyValidation(AANHEF)) {
             Toast.show(Get_Message("AANHEF"));
             return;
@@ -170,6 +179,7 @@ function AddCustomer(props) {
             formdata.append('city', city);
             formdata.append('street_house_no', Street)
             formdata.append('prefixing_type', AANHEF);
+            formdata.append('profile_pic', photoPath)
 
 
             if (ID == 1) {

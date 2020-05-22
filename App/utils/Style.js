@@ -5,9 +5,10 @@ export default {
     CommonStyles: {
         fullFlex: { flex: 1 },
         centerStyle: { alignItems: 'center', justifyContent: 'center' },
-        SafeAreaStyle: { height: STATUSBAR_HEIGHT, backgroundColor:Colors.theme_color},
+        SafeAreaStyle: { height: STATUSBAR_HEIGHT, backgroundColor: Colors.theme_color },
         borderStyle: { borderWidth: 1, borderColor: Colors.black, opacity: 0.1, },
-        paddingBottomStyle: { height: 30 }
+        paddingBottomStyle: { height: 30 },
+        EmptyListTag: { color: Colors.theme_color, fontSize: 22,marginHorizontal:'15%',textAlign:'center' }
 
     },
     LoginStyles: {
@@ -89,7 +90,7 @@ export default {
         AddCustomer: {
             Customer_image_view_main: { height: DEVICE_WIDTH * 0.4, width: DEVICE_WIDTH * 0.9, justifyContent: 'center', alignItems: 'center', borderWidth: 0 },
             Customer_image_view: { height: DEVICE_WIDTH * 0.34, width: DEVICE_WIDTH * 0.34, borderRadius: DEVICE_WIDTH * 0.17, borderWidth: 1, },
-            Customer_imageStyle:{ height:'100%',width:'100%' ,borderRadius:DEVICE_WIDTH * 0.17,}
+            Customer_imageStyle: { height: '100%', width: '100%', borderRadius: DEVICE_WIDTH * 0.17, }
         },
 
     },
@@ -102,17 +103,17 @@ export default {
             sortItemTextColor: { color: Colors.black, fontSize: 14, },
             radioButton: { borderWidth: 1, borderColor: '#000', height: 20, width: 20, borderRadius: 10, backgroundColor: Colors.theme_color }
         },
-        viewBill:{fontSize: 14,color:Colors.theme_color,},
+        viewBill: { fontSize: 14, color: Colors.theme_color, },
         orderListItemView: { flex: 1, flexDirection: 'row', marginVertical: 5, borderBottomWidth: 1, borderBottomColor: Colors.black, paddingLeft: 10 }
     },
     Cart: {
         checkoutButton: { width: '60%', height: '10%', marginHorizontal: '20%', backgroundColor: Colors.theme_color, borderRadius: 20, marginVertical: '10%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: '2%' },
         checkoutText: { color: Colors.white, fontSize: 16, marginLeft: 10 },
         checkoutImage: { height: 30, width: 30 },
-        ProductName: { fontSize: 16, color: Colors.theme_color, marginVertical: 2,fontWeight:'bold' },
-        ProductDetail:{ fontSize: 12, color: '#000', },
-        articlenumber:{ fontSize: 16, color: '#000', marginVertical: 2 },
-        price:{ fontSize: 14, color: 'red', marginVertical: 2 }
+        ProductName: { fontSize: 16, color: Colors.theme_color, marginVertical: 2, fontWeight: 'bold' },
+        ProductDetail: { fontSize: 12, color: '#000', },
+        articlenumber: { fontSize: 16, color: '#000', marginVertical: 2 },
+        price: { fontSize: 14, color: 'red', marginVertical: 2 }
     },
     More: {
         logoutButton: { height: 50, width: '60%', backgroundColor: Colors.theme_color, flexDirection: 'row', marginVertical: 2, marginHorizontal: '20%', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 10, borderRadius: 25, marginTop: '40%' },

@@ -12,6 +12,7 @@ import { getCustomerList } from '../../actions/customeractions'
 import Colors from '../../utils/Colors'
 import { ApiCallPost } from '../../Services/ApiServices'
 import { BASE_URL, API_URL } from '../../config'
+import { get_Empty_Tag } from '../../helpers/InputValidations'
 
 
 class Customer extends React.Component {
@@ -184,7 +185,9 @@ class Customer extends React.Component {
                             />
 
                             :
-                            null
+                            <View style={[Style.CommonStyles.fullFlex, Style.CommonStyles.centerStyle,]}>
+                                <Text style={Style.CommonStyles.EmptyListTag}>{get_Empty_Tag('Customers')}</Text>
+                            </View>
                     }
 
                 </View>

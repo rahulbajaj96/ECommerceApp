@@ -7,6 +7,7 @@ import ModalDropdown from 'react-native-modal-dropdown';
 import Modal from "react-native-modal";
 
 import { Text, Image, TouchableOpacity, View, TextInput, ScrollView, FlatList } from 'react-native'
+import { get_Empty_Tag } from '../helpers/InputValidations';
 
 export const ProductInput = (props) => {
     return (
@@ -98,13 +99,23 @@ export const Make_A_List = (props) => {
 
     return (
         <View style={Style.Products.categories.categoriesListView}>
-            <FlatList
-                data={props.items}
-                style={{ marginTop: 5 }}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={item => renderProducts(item)}
-                {...props}
-            />
+            {
+                props.items.length == 0
+                    ?
+                    <View style={[Style.CommonStyles.fullFlex, Style.CommonStyles.centerStyle,]}>
+                        <Text style={Style.CommonStyles.EmptyListTag}>{get_Empty_Tag(props.tag)}</Text>
+                    </View>
+                    :
+
+
+                    <FlatList
+                        data={props.items}
+                        style={{ marginTop: 5 }}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={item => renderProducts(item)}
+                        {...props}
+                    />
+            }
             {
                 props.addPopUp == false
                     ?

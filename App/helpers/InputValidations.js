@@ -1,4 +1,4 @@
-import { Email_reg, EMPTY } from "../constants/AppConstants";
+import { Email_reg, EMPTY, EMPTY_TAG } from "../constants/AppConstants";
 import { save_To_AsyncStorage } from "../Services/StorageService";
 export var Login_Auth_Token = '';
 
@@ -27,4 +27,8 @@ export const Get_Message = (parameter) => {
 export const SaveToken = (token) => {
     save_To_AsyncStorage('@Auth_Token', token);
     Login_Auth_Token = token;
+}
+
+export const get_Empty_Tag = (name) => {
+    return `No ${name} ${EMPTY_TAG} ${name}`;
 }

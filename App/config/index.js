@@ -7,6 +7,7 @@ export const API_URL = {
     Customer_list: 'customerList',
     Delete_Customer: 'deleteCustomer',
     Edit_Customer: 'updateCustomer',
+    Sort_Customer: 'customerSort',
 
     //Categories
     Categories_List: 'category',

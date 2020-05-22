@@ -98,6 +98,8 @@ class SubCategories extends Component {
                         crudValue={1}
                         dotsClick={(item) => this.openModal(item)}
                         api={true}
+                        tag='Sub-Categories'
+
 
 
                     />

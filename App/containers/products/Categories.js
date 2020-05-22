@@ -5,7 +5,6 @@ import AppComponent from "../../components/AppComponent";
 import Toolbar from "../../components/Toolbar";
 import { SearchBar } from "../../components/SearchBar";
 import { Make_A_List, ModalView } from "../../components/Products";
-import { Login_Auth_Token } from "../../helpers/InputValidations";
 import { getCategoriesList } from "../../actions/categoriesactions";
 import { connect } from "react-redux";
 import { API_URL, BASE_URL } from "../../config";
@@ -92,17 +91,23 @@ class Categories extends Component {
                         onChangeText={searchValue => this.setState({ searchValue })}
 
                     />
+                 
+                         
+                            
 
-                    <Make_A_List
-                        items={categoryList}
-                        extraData={this.state}
-                        onItemClicked={(item) => this.handleListItemCicked(item)}
-                        onAddPopUp={() => this.onAddPopUp()}
-                        crudValue={1}
-                        dotsClick={(item) => this.openModal(item)}
-                        api={true}
+                            <Make_A_List
+                                items={categoryList}
+                                extraData={this.state}
+                                onItemClicked={(item) => this.handleListItemCicked(item)}
+                                onAddPopUp={() => this.onAddPopUp()}
+                                crudValue={1}
+                                dotsClick={(item) => this.openModal(item)}
+                                api={true}
+                                tag='Categories'
 
-                    />
+                            />
+                   
+
                     {/* <Modal
                         isVisible={modalVisibility}
                         onBackdropPress={() => this.setState({ modalVisibility: false })}
