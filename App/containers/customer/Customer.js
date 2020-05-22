@@ -19,7 +19,7 @@ class Customer extends React.Component {
     state = {
         searchedValue: '', modalVisibilty: false,
         sortingOrder: 0,
-        sortingArray: [{ name: 'Date', value: 0 }, { name: 'Price', value: 1 }, { name: 'Company Name', value: 2 }],
+        sortingArray: [{ name: 'Date', value: 0, key: 'created_at' }, { name: 'Company Name', value: 2, key: 'company_name' }],
         modalEditDelete: false,
         currentSelectedItem: '',
         customerList: []
@@ -80,10 +80,31 @@ class Customer extends React.Component {
             </View>
         )
     }
+    async getSortedArray(item) {
+        this.setState({ sortingOrder: itemvalue })
+        console.log('value', item.key);
+        let formdata = new FormData();
+        formdata.append('sort', item.key);
+        console.log('formdata of sorting Customers', formdata);
+        // var response = await ApiCallPost(`${BASE_URL}${API_URL.Sort_Customer}`, formdata);
+
+        // if (response != false) {
+        //     if (response.status == 1) {
+        //         console.log('Customer Successfully Sorted wrto ' + item.key);
+        //         this.setState({ customer_list: data, modalVisibilty: false });
+        //     }
+        //     else {
+
+        //     }
+        // }
+
+
+
+    }
     renderSorts = (item) => {
         const { sortingOrder, sortingArray } = this.state
         return (
-            <TouchableOpacity style={[{ borderBottomWidth: item.index == (sortingArray.length - 1) ? 0 : 0.5, }, Style.Orders.SortingModal.sortsItems]} onPress={() => this.setState({ sortingOrder: item.item.value })}>
+            <TouchableOpacity style={[{ borderBottomWidth: item.index == (sortingArray.length - 1) ? 0 : 0.5, }, Style.Orders.SortingModal.sortsItems]} onPress={() => this.getSortedArray(item.item)}>
                 <Text style={Style.Orders.SortingModal.sortItemTextColor}>{item.item.name}</Text>
                 {
                     item.item.value == sortingOrder
