@@ -1,4 +1,5 @@
 export const BASE_URL = 'https://apps.fiveriverscrown.com/api/';
+export const PIC_URL = 'https://apps.fiveriverscrown.com';
 export const API_URL = {
     Login_url: 'login',
 

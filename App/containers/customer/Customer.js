@@ -11,7 +11,7 @@ import { connect } from "react-redux";
 import { getCustomerList } from '../../actions/customeractions'
 import Colors from '../../utils/Colors'
 import { ApiCallPost } from '../../Services/ApiServices'
-import { BASE_URL, API_URL } from '../../config'
+import { BASE_URL, API_URL, PIC_URL } from '../../config'
 import { get_Empty_Tag } from '../../helpers/InputValidations'
 
 
@@ -48,11 +48,13 @@ class Customer extends React.Component {
     }
 
     renderOrderList = (item) => {
-        const { prefixing_type, profile_pic, first_name, email, company_name, kvk_number, last_name } = item.item.customer_id
+        console.log('items customer',item.item)
+        const { prefixing_type, profile_pic, first_name, email, company_name, kvk_number, last_name } = item.item.get_customers
+        // console.log('profile pic ', profile_pic);
         return (
             <View style={Style.Orders.orderListItemView}>
                 <View style={[{ flex: 0.2, borderWidth: 0 }, Style.CommonStyles.centerStyle]}>
-                    <Image source={profile_pic != null ? { uri: profile_pic } : Images.customer_black} style={{ height: 50, width: 50, borderRadius: 0 }} resizeMode='contain' />
+                    <Image source={profile_pic != null ? { uri: `${profile_pic}` } : Images.customer_black} style={{ height: 50, width: 50, borderRadius: 0 }} />
                 </View>
                 <View style={{ flex: 0.6, paddingHorizontal: 10, marginVertical: 5 }}>
                     <Text style={{ marginVertical: 2, fontSize: 14, color: '#000' }}>Name: <Text style={{ color: Colors.theme_color }}> {prefixing_type} {first_name} {last_name}</Text></Text>
@@ -81,22 +83,22 @@ class Customer extends React.Component {
         )
     }
     async getSortedArray(item) {
-        this.setState({ sortingOrder: itemvalue })
+        this.setState({ sortingOrder: item.value })
         console.log('value', item.key);
         let formdata = new FormData();
         formdata.append('sort', item.key);
         console.log('formdata of sorting Customers', formdata);
-        // var response = await ApiCallPost(`${BASE_URL}${API_URL.Sort_Customer}`, formdata);
+        var response = await ApiCallPost(`${BASE_URL}${API_URL.Sort_Customer}`, formdata);
 
-        // if (response != false) {
-        //     if (response.status == 1) {
-        //         console.log('Customer Successfully Sorted wrto ' + item.key);
-        //         this.setState({ customer_list: data, modalVisibilty: false });
-        //     }
-        //     else {
+        if (response != false) {
+            if (response.status == 1) {
+                console.log('Customer Successfully Sorted wrto ' + item.key + 'and data is \n' + JSON.stringify(response.data));
+                this.setState({ customerList: response.data, modalVisibilty: false });
+            }
+            else {
 
-        //     }
-        // }
+            }
+        }
 
 
 

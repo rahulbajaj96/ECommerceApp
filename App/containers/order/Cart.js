@@ -87,7 +87,7 @@ class Cart extends React.Component {
         const { navigation } = this.props
         return (
             <AppComponent>
-                <Toolbar title='Cart' right={1} back={true} navigation={navigation} />
+                <Toolbar title='Cart' right={1} back={true} navigation={navigation} onSavePress={() => navigation.navigate('Bill_Checkout')} />
                 <View style={{ flex: 1 }}>
                     <FlatList
                         data={[1, 2, 3, 4, 5]}
