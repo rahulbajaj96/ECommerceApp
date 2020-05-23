@@ -73,7 +73,7 @@ class Customer extends React.Component {
                 <View style={[{ flex: 0.2, paddingVertical: 10, borderWidth: 0 }, Style.CommonStyles.centerStyle]}>
                     {/* <Text style={{ marginVertical: 5, fontSize: 14, color: '#000' }}>Phone</Text> */}
                     <TouchableOpacity style={[{ flex: 0.1, borderWidth: 0 }, Style.CommonStyles.centerStyle]}
-                        onPress={() => this.openEditDelete(item.item.customer_id)}
+                        onPress={() => this.openEditDelete(item.item.get_customers)}
                     >
                         <Image source={Images.dots} style={{ height: 30, width: 30, }} />
                     </TouchableOpacity>
@@ -152,6 +152,7 @@ class Customer extends React.Component {
 
     }
     openEditDelete = (item) => {
+        console.log('item >>>',item)
         this.setState({ modalEditDelete: true, currentSelectedItem: item })
     }
     navigateToAddCustomer = () => {

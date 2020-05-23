@@ -6,8 +6,8 @@ import { BASE_URL } from "../config";
 export const loginaction = (email, password) => {
     return async function (dispatch) {
         let formData = new FormData();
-        formData.append('email', 'worker@yopmail.com');
-        formData.append('password', 'DoW9p98P');
+        formData.append('email', email);
+        formData.append('password', password);
         formData.append('device_token', '12');
         formData.append('device_type', Platform.OS == 'ios' ? 1 : 2);
         console.log('formdata of Login Api ', JSON.stringify(formData));

@@ -50,7 +50,7 @@ class Login extends Component {
             this.AnimationValue,
             {
                 toValue,
-                duration: 500,
+                duration: 400,
                 easing: Easing.linear,
                 useNativeDriver: false
             },
