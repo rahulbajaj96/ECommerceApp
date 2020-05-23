@@ -72,6 +72,8 @@ function AddCustomer(props) {
         setAddress(propData.address)
         setAANHEF(propData.prefixing_type)
         setCustomer_id(propData.id)
+        setImageUri(propData.profile_pic)
+        setImageUploaded(true)
     }
     function goToImagePicker() {
 

@@ -253,20 +253,24 @@ function AddCategory(props) {
                 <ScrollView style={{ paddingHorizontal: '5%' }}>
 
 
-                    <View style={[Style.Products.AddCategory.addCategoryImageStyle,]}>
-                        {
-                            image_picked
-                                ?
+
+                    {
+                        image_picked
+                            ?
+                            <TouchableOpacity style={[Style.Products.AddCategory.addCategoryImageStyle,]} onPress={() => openImage()}>
                                 <Image style={{ flex: 1 }} source={{ uri: category_image }} />
-                                :
+                            </TouchableOpacity>
+                            :
+                            <View style={[Style.Products.AddCategory.addCategoryImageStyle,]}>
                                 <View style={[Style.CommonStyles.fullFlex, Style.CommonStyles.centerStyle]}>
                                     <Text style={[Style.Products.AddCategory.CategoryImageText, { fontSize: 30 }]} onPress={() => openImage()}>+</Text>
 
                                     <Text style={Style.Products.AddCategory.CategoryImageText}>ADD IMAGE</Text>
                                 </View>
-                        }
+                            </View>
+                    }
 
-                    </View>
+
                     {
                         SubCategoryEnabled
                             ?
