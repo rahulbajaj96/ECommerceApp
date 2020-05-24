@@ -20,6 +20,11 @@ export const API_URL = {
     SubCategory_List: 'subcategory/list',
     AddSubCategory: 'subcategory/store',
     Edit_SubCategory: 'subcategory/update',
-    Delet_SubCategory: 'subcategory/destroy'
+    Delet_SubCategory: 'subcategory/destroy',
+
+
+    //Products
+    Product_Sizes: 'productsize',
+    Product_Colors: 'productcolor'
 
 }

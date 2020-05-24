@@ -46,7 +46,7 @@ export const Make_A_List = (props) => {
 
     function renderProducts(items) {
         // const { navigation } = this.props
-        console.log('items', items);
+        // console.log('items', items);
         var data = props.api ? items.item : ''
 
         return (

@@ -5,10 +5,14 @@ import AppComponent from "../../components/AppComponent";
 import Toolbar from "../../components/Toolbar";
 import { SearchBar } from "../../components/SearchBar";
 import { Make_A_List, ModalView } from "../../components/Products";
+import { getProductColors } from "../../actions/product_colors_actions";
+import { connect } from "react-redux";
+
 
 class Products extends Component {
     state = { searchValue: '', modalVisibility: false, currentSelectedItem: '' }
 
+  
     handleListItemCicked = (item) => {
         const { navigation } = this.props
 
@@ -70,5 +74,14 @@ class Products extends Component {
         )
     }
 }
-export default Products;
+const mapStateToProps = (state) => {
+    return state;
+}
+const mapDispatchToProps = (dispatch) => {
+    return {
+        // getColors: () => dispatch(getProductColors())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Products);
 //da2244

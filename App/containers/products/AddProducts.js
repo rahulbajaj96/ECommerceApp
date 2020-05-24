@@ -7,8 +7,11 @@ import Colors from '../../utils/Colors'
 import { ProductInput, DropDown } from '../../components/Products';
 import Modal from "react-native-modal";
 import ImagePicker from 'react-native-image-picker';
-
+import { connect } from "react-redux";
 import Images from '../../utils/Image';
+import { getProductColors } from '../../actions/product_colors_actions'
+import { getColorParamsFromName,getSizeParamsFromName } from '../../helpers/GetProductValues'
+import { getProductSizes } from '../../actions/product_sizes_actions'
 const colors = ['red', 'green', 'yellow', 'orange']
 const sizes = ['Small', 'Medium', 'Large', 'X-Large']
 let images_aaray = ['https://via.placeholder.com/600/66b7d2', 'https://via.placeholder.com/600/51aa97', 'https://via.placeholder.com/600/51aa97']
@@ -33,16 +36,59 @@ class AddProduct extends React.Component {
         selectedIndex: 0,
         title: '',
         Category: 'Select a Category',
-        SubCategory: 'Select a SubCategory'
+
+        SubCategory: 'Select a SubCategory',
+
+        colors_available: [],
+        sizes_available: [],
+        categories_available: [],
+        subcategories_available: []
+
     }
 
     componentDidMount() {
 
         console.log(this.props.route.params)
         this.setPropData(this.props.route.params)
-
+        this.get_product_color();
+        this.get_product_sizes();
+        
 
     }
+
+    /**
+     * @method get_product_color provides u the colors from api and sets to spinner
+     */
+    async get_product_color() {
+        const { colors_available } = this.state
+        await this.props.getColors();
+        const { product_color_reducer } = this.props
+        for (let i = 0; i < product_color_reducer.colors_available.length; i++) {
+            colors_available.push(product_color_reducer.colors_available[i].color);
+        }
+        console.log('colors', colors_available);
+        this.setState({ colors_available })
+    }
+
+    /**
+     * @method get_product_sizes
+     * @method getSizes() get the sizes from the API and save to @params {*} size_available
+     */
+    async get_product_sizes() {
+        const { sizes_available } = this.state
+        await this.props.getSizes();
+        const { product_size_reducer } = this.props
+        for (let i = 0; i < product_size_reducer.sizes_available.length; i++) {
+            sizes_available.push(product_size_reducer.sizes_available[i].size);
+        }
+        console.log('sizes', sizes_available);
+        this.setState({ sizes_available })
+    }
+
+    /**
+     * @method setPropData
+     * @param propData contains the data about Add or Edit Products
+     */
     setPropData = (propData) => {
         if (propData.id == 2) {
             const { multipleSelection } = this.state
@@ -80,11 +126,14 @@ class AddProduct extends React.Component {
      * @param {*} main_index :index of main Array i.e multipleSelection
      * @method changePaticularColor() sets the changed color to main array
      */
-    changePaticularColor(colors_index, value, main_index) {
+    async changePaticularColor(colors_index, value, main_index) {
         const { multipleSelection } = this.state
         console.log('color', colors_index, '\n color_value', value, '\n main array index', main_index)
+        const { product_color_reducer } = this.props
 
-        multipleSelection[main_index].color_selected = value;
+        let color_selected = await getColorParamsFromName(product_color_reducer.colors_available, value);
+        console.log('color_id_selected', color_selected);
+        multipleSelection[main_index].color_selected = color_selected.id;
         this.setState({ multipleSelection })
 
     }
@@ -96,11 +145,13 @@ class AddProduct extends React.Component {
      * @param {*} main_index index of main Array i.e multipleSelection
      * @method changePaticularSize sets the selected size to main aray
      */
-    changePaticularSize(size_index, value, main_index) {
+   async changePaticularSize(size_index, value, main_index) {
         const { multipleSelection } = this.state
-        multipleSelection[main_index].size_Selected = value;
+        const { product_size_reducer } = this.props
+        let size_selected = await getSizeParamsFromName(product_size_reducer.sizes_available, value);
+        console.log('size_selected', size_selected);
+        multipleSelection[main_index].size_Selected = size_selected.id;
         this.setState({ multipleSelection })
-
 
     }
 
@@ -209,10 +260,10 @@ class AddProduct extends React.Component {
 
         formData.append("variations", productName);
         console.log('formData od Add Product ', JSON.stringify(formData));
-
+        console.log('multipleSelection',multipleSelection)
     }
     render() {
-        const { productName, articlenum, purchasePrice, sellingPrice, multipleSelection, modalVisibility, selectedImage, selectedIndex, title, Category, SubCategory } = this.state
+        const { productName, articlenum, purchasePrice, sellingPrice, multipleSelection, modalVisibility, selectedImage, selectedIndex, title, Category, SubCategory, colors_available,sizes_available } = this.state
         const { navigation } = this.props
         return (
             <AppComponent >
@@ -313,12 +364,12 @@ class AddProduct extends React.Component {
                             <View>
 
                                 <DropDown
-                                    options={colors}
+                                    options={colors_available}
                                     defaultValue={particularSet.color_selected != '' ? particularSet.color_selected : 'Select a Color'}
                                     onSelect={(index, value) => this.changePaticularColor(index, value, i)}
                                 />
                                 <DropDown
-                                    options={sizes}
+                                    options={sizes_available}
                                     defaultValue={particularSet.size_Selected != '' ? particularSet.size_Selected : 'Select a Size'}
                                     onSelect={(index, value) => this.changePaticularSize(index, value, i)}
                                 />
@@ -353,8 +404,17 @@ class AddProduct extends React.Component {
 
 }
 
+const mapStateToProps = (state) => {
+    return state;
+}
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getColors: () => dispatch(getProductColors()),
+        getSizes: () => dispatch(getProductSizes())
+    }
+}
 
-export default AddProduct;
+export default connect(mapStateToProps, mapDispatchToProps)(AddProduct);
 {/* <View style={{ flexDirection: 'row', width: '100%', height: 50, borderBottomWidth: 0.8, borderBottomColor: '#c6c6ca' }}>
                         <ModalDropdown options={['option 1', 'option 2', 3, 4, 5]}
                             style={{ borderWidth: 0, width: '90%', height: '100%', justifyContent: 'center', }}
