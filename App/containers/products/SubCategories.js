@@ -36,8 +36,8 @@ class SubCategories extends Component {
     handleListItemCicked = (item) => {
         const { navigation } = this.props
 
-        console.log('item clicked', item)
-        navigation.navigate('Productss');
+        console.log('item clicked', item.item.category_id, item.item.id)
+        navigation.navigate('Productss', { category_id: item.item.category_id, subCategory_id: item.item.id });
     }
     onAddPopUp = () => {
         const { navigation } = this.props

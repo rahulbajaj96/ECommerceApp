@@ -30,3 +30,13 @@ export function getSizeParamsFromName(sizes_array, size_selected) {
     }
     return size_selected_params;
 }
+export function getCategoryParamsFromName(category_array, category_selected) {
+    let category_selected_params = '';
+    for (let i = 0; i < category_array.length; i++) {
+        if (category_array[i].name == category_selected) {
+            category_selected_params = category_array[i];
+            break;
+        }
+    }
+    return category_selected_params;
+}

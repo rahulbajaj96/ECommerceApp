@@ -6,6 +6,7 @@ import { categoriesReducer } from "./CategoriesReducer";
 import { subcategoriesReducer } from "./SubCategoriesReducer";
 import { product_color_reducer } from "./ProductsColorsReducer";
 import { product_size_reducer } from "./ProductSizesReducer";
+import { productsReducer } from "./ProductsReducer";
 
 const AllReducers = combineReducers({
     LoginReducer,
@@ -14,7 +15,8 @@ const AllReducers = combineReducers({
     categoriesReducer,
     subcategoriesReducer,
     product_color_reducer,
-    product_size_reducer
+    product_size_reducer,
+    productsReducer
 })
 
 export default AllReducers;

@@ -25,6 +25,10 @@ export const API_URL = {
 
     //Products
     Product_Sizes: 'productsize',
-    Product_Colors: 'productcolor'
+    Product_Colors: 'productcolor',
+    AddProduct: 'product/store',
+    Product_List: 'product/list',
+    Edit_Products: 'product/update',
+    Delete_Products: 'product/destroy'
 
 }

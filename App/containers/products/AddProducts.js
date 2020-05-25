@@ -10,8 +10,11 @@ import ImagePicker from 'react-native-image-picker';
 import { connect } from "react-redux";
 import Images from '../../utils/Image';
 import { getProductColors } from '../../actions/product_colors_actions'
-import { getColorParamsFromName,getSizeParamsFromName } from '../../helpers/GetProductValues'
+import { getColorParamsFromName, getSizeParamsFromName, getCategoryParamsFromName } from '../../helpers/GetProductValues'
 import { getProductSizes } from '../../actions/product_sizes_actions'
+import { getSubCategoriesList_On_category } from '../../actions/subcategoriesactions'
+import { ApiCallPost } from '../../Services/ApiServices'
+import { BASE_URL, API_URL } from '../../config'
 const colors = ['red', 'green', 'yellow', 'orange']
 const sizes = ['Small', 'Medium', 'Large', 'X-Large']
 let images_aaray = ['https://via.placeholder.com/600/66b7d2', 'https://via.placeholder.com/600/51aa97', 'https://via.placeholder.com/600/51aa97']
@@ -29,20 +32,21 @@ class AddProduct extends React.Component {
         articlenum: '',
         purchasePrice: '',
         sellingPrice: '',
-        multipleSelection: [{ color_selected: '', size_Selected: '', number_of_Pieces: '' },],
+        multipleSelection: [{ product_color_id: '', size_id: '', quantity: '' },],
         images_aaray: [],
         modalVisibility: false,
         selectedImage: 'https://via.placeholder.com/600/66b7d2',
         selectedIndex: 0,
         title: '',
-        Category: 'Select a Category',
+        Category: '',
 
         SubCategory: 'Select a SubCategory',
 
         colors_available: [],
         sizes_available: [],
         categories_available: [],
-        subcategories_available: []
+        subcategories_available: [],
+        images_path_array: []
 
     }
 
@@ -52,7 +56,8 @@ class AddProduct extends React.Component {
         this.setPropData(this.props.route.params)
         this.get_product_color();
         this.get_product_sizes();
-        
+        this.get_Categories_Available();
+
 
     }
 
@@ -84,7 +89,37 @@ class AddProduct extends React.Component {
         console.log('sizes', sizes_available);
         this.setState({ sizes_available })
     }
+    async get_Categories_Available() {
+        const { categories_available } = this.state
+        const { categoriesReducer } = this.props
+        for (let i = 0; i < categoriesReducer.category_list.length; i++) {
+            categories_available.push(categoriesReducer.category_list[i].name)
+        }
+        console.log('categories_available', categories_available);
+        this.setState({ categories_available })
+    }
+    async get_Categories_Available() {
+        const { categories_available } = this.state
+        const { categoriesReducer } = this.props
+        for (let i = 0; i < categoriesReducer.category_list.length; i++) {
+            categories_available.push(categoriesReducer.category_list[i].name)
+        }
+        console.log('categories_available', categories_available);
+        this.setState({ categories_available })
+    }
+    async get_SubCategory(category_id) {
+        const { subcategories_available } = this.state
+        await this.props.getSubCategories(category_id);
+        const { subcategoriesReducer } = this.props
+        // console.log('reducer data', categoriesReducer);
+        for (let i = 0; i < subcategoriesReducer.subcategory_list_based_on_category.length; i++) {
+            subcategories_available.push(subcategoriesReducer.subcategory_list_based_on_category[i].name)
+        }
+        console.log('subcategories_available', subcategories_available);
+        this.setState({ subcategories_available })
 
+
+    }
     /**
      * @method setPropData
      * @param propData contains the data about Add or Edit Products
@@ -133,7 +168,7 @@ class AddProduct extends React.Component {
 
         let color_selected = await getColorParamsFromName(product_color_reducer.colors_available, value);
         console.log('color_id_selected', color_selected);
-        multipleSelection[main_index].color_selected = color_selected.id;
+        multipleSelection[main_index].product_color_id = '' + color_selected.id;
         this.setState({ multipleSelection })
 
     }
@@ -145,14 +180,26 @@ class AddProduct extends React.Component {
      * @param {*} main_index index of main Array i.e multipleSelection
      * @method changePaticularSize sets the selected size to main aray
      */
-   async changePaticularSize(size_index, value, main_index) {
+    async changePaticularSize(size_index, value, main_index) {
         const { multipleSelection } = this.state
         const { product_size_reducer } = this.props
         let size_selected = await getSizeParamsFromName(product_size_reducer.sizes_available, value);
         console.log('size_selected', size_selected);
-        multipleSelection[main_index].size_Selected = size_selected.id;
+        multipleSelection[main_index].size_id = '' + size_selected.id;
         this.setState({ multipleSelection })
 
+    }
+
+    async SelectCategory(index, value) {
+        const { categoriesReducer } = this.props
+        let category_selected = await getCategoryParamsFromName(categoriesReducer.category_list, value)
+        this.setState({ Category: category_selected.id })
+        this.get_SubCategory(category_selected.id);
+    }
+    async SelectSubCategory(index, value) {
+        const { subcategoriesReducer } = this.props
+        let subcategory_selected = await getCategoryParamsFromName(subcategoriesReducer.subcategory_list_based_on_category, value)
+        this.setState({ SubCategory: subcategory_selected.id })
     }
 
     /**
@@ -163,7 +210,7 @@ class AddProduct extends React.Component {
      */
     setPrice(value, index) {
         const { multipleSelection } = this.state
-        multipleSelection[index].number_of_Pieces = value;
+        multipleSelection[index].quantity = value;
         this.setState({ multipleSelection })
     }
 
@@ -173,7 +220,7 @@ class AddProduct extends React.Component {
     addMore() {
         const { multipleSelection } = this.state
         // console.log('multiple ', multipleSelection)
-        multipleSelection[multipleSelection.length] = { color_selected: '', size_Selected: '', number_of_Pieces: '' }
+        multipleSelection[multipleSelection.length] = { product_color_id: '', size_id: '', quantity: '' }
         this.setState({ multipleSelection })
     }
     check() {
@@ -185,7 +232,7 @@ class AddProduct extends React.Component {
      * @method openCamera directly opens the camera
      */
     openCamera() {
-        const { images_aaray } = this.state
+        const { images_aaray, images_path_array } = this.state
 
         ImagePicker.launchCamera(options, (response) => {
             console.log('response ', response.uri)
@@ -195,7 +242,11 @@ class AddProduct extends React.Component {
                 console.log('ImagePicker Error: ', response.error);
             } else {
                 images_aaray.push(response.uri);
-                this.setState({ images_aaray })
+                images_path_array.push({
+                    name: 'ABC',
+                    type: response.type, uri: response.uri
+                })
+                this.setState({ images_aaray, images_path_array })
             }
 
         });
@@ -206,7 +257,7 @@ class AddProduct extends React.Component {
      * and sets the image selected into image Array
      */
     openGallery() {
-        const { images_aaray } = this.state
+        const { images_aaray, images_path_array } = this.state
         ImagePicker.launchImageLibrary(options, (response) => {
             // Same code as in above section!
             if (response.didCancel) {
@@ -216,7 +267,11 @@ class AddProduct extends React.Component {
             } else {
                 console.log('response Gallery', response.uri)
                 images_aaray.push(response.uri);
-                this.setState({ images_aaray })
+                images_path_array.push({
+                    name: 'ABC',
+                    type: response.type, uri: response.uri
+                })
+                this.setState({ images_aaray, images_path_array })
             }
 
         });
@@ -232,8 +287,8 @@ class AddProduct extends React.Component {
         })
     }
     openModal() {
-        console.log('images', this.state.images_aaray)
-        // const { images_aaray } = this.state
+        // console.log('images', this.state.images_aaray)
+        const { images_aaray } = this.state
         this.setState({ modalVisibility: true, selectedImage: images_aaray[0] })
     }
     renderPictures = (item) => {
@@ -245,25 +300,46 @@ class AddProduct extends React.Component {
             </TouchableOpacity>
         )
     }
-    handleSaveProduct = () => {
-        const { productName, articlenum, purchasePrice, sellingPrice, Category, SubCategory, multipleSelection } = this.state
+    async handleSaveProduct() {
+        const { productName, articlenum, purchasePrice, sellingPrice, Category, SubCategory, multipleSelection, images_path_array } = this.state
 
 
 
         let formData = new FormData();
         formData.append("name", productName);
-        formData.append("category_id", productName);
-        formData.append("subcategory_id", productName);
+        formData.append("category_id", Category);
+        formData.append("subcategory_id", SubCategory);
         formData.append("article_no", articlenum);
         formData.append("purchase_price", purchasePrice);
         formData.append("sale_price", sellingPrice);
 
-        formData.append("variations", productName);
+        formData.append("variations", JSON.stringify(multipleSelection));
+
+        for (let i = 0; i < images_path_array.length; i++) {
+            formData.append(`images[${i}]`, images_path_array[i]);
+        }
+
+
         console.log('formData od Add Product ', JSON.stringify(formData));
-        console.log('multipleSelection',multipleSelection)
+
+        var response = await ApiCallPost(`${BASE_URL}${API_URL.AddProduct}`, formData);
+        console.log('response Add Category', response);
+        // if (response != false) {
+        //     if (response.status == 1) {
+
+        //         Toast.show(response.message)
+        //         // navigation.popToTop()
+        //         navigation.navigate('Categories');
+        //     }
+        //     else {
+        //         Toast.show(response.message)
+        //     }
+
+        // }
+
     }
     render() {
-        const { productName, articlenum, purchasePrice, sellingPrice, multipleSelection, modalVisibility, selectedImage, selectedIndex, title, Category, SubCategory, colors_available,sizes_available } = this.state
+        const { productName, articlenum, purchasePrice, sellingPrice, multipleSelection, modalVisibility, selectedImage, selectedIndex, title, Category, SubCategory, colors_available, sizes_available, categories_available, subcategories_available, images_aaray } = this.state
         const { navigation } = this.props
         return (
             <AppComponent >
@@ -277,7 +353,7 @@ class AddProduct extends React.Component {
                         <TouchableOpacity onPress={() => this.openGallery()}>
                             <Image style={Style.Products.AddProduct.GalleryImage} source={Images.gallery} />
                         </TouchableOpacity>
-                        <TouchableOpacity style={[Style.Products.AddProduct.ImageNumber, Style.CommonStyles.centerStyle]} onPress={() => this.openModal()}>
+                        <TouchableOpacity style={[Style.Products.AddProduct.ImageNumber, Style.CommonStyles.centerStyle]} onPress={() => this.openModal()} disabled={images_aaray.length == 0 ? true : false}>
                             <Text>{images_aaray.length}</Text>
                             <Image style={{ height: 15, width: 15, marginLeft: 2 }} source={Images.updown} />
 
@@ -304,12 +380,12 @@ class AddProduct extends React.Component {
                             </View>
                             <View style={{ flex: 0.1 }} />
                             <View style={{ flex: 0.20, paddingBottom: 5 }}>
-                                {/* {
+                                {
                                     images_aaray.length != 0 ?
                                         <Text style={Style.Products.AddProduct.ImageModal.image_num}>{(selectedIndex) + 1}/{images_aaray.length}</Text>
                                         : null
-                                } */}
-                                <Text style={Style.Products.AddProduct.ImageModal.image_num}>{(selectedIndex) + 1}/{images_aaray.length}</Text>
+                                }
+                                {/* <Text style={Style.Products.AddProduct.ImageModal.image_num}>{(selectedIndex) + 1}/{images_aaray.length}</Text> */}
                                 <FlatList
                                     data={images_aaray}
                                     renderItem={item => this.renderPictures(item)}
@@ -323,14 +399,14 @@ class AddProduct extends React.Component {
                         </View>
                     </Modal>
                     <DropDown
-                        options={[1, 2, 3, 4, 5]}
-                        defaultValue={Category}
-                        onSelect={(index, value) => this.setState({ Category: value })}
+                        options={categories_available}
+                        defaultValue={Category != '' ? Category : 'Select any Category'}
+                        onSelect={(index, value) => this.SelectCategory(index, value)}
                     />
                     <DropDown
-                        options={[1, 2, 3, 4, 5]}
-                        defaultValue={SubCategory}
-                        onSelect={(index, value) => this.setState({ SubCategory: value })}
+                        options={subcategories_available}
+                        defaultValue={SubCategory != '' ? SubCategory : 'Select any SubCategory'}
+                        onSelect={(index, value) => this.SelectSubCategory(index, value)}
                     />
                     <ProductInput
                         label='Product Name'
@@ -365,12 +441,12 @@ class AddProduct extends React.Component {
 
                                 <DropDown
                                     options={colors_available}
-                                    defaultValue={particularSet.color_selected != '' ? particularSet.color_selected : 'Select a Color'}
+                                    defaultValue={particularSet.product_color_id != '' ? particularSet.product_color_id : 'Select a Color'}
                                     onSelect={(index, value) => this.changePaticularColor(index, value, i)}
                                 />
                                 <DropDown
                                     options={sizes_available}
-                                    defaultValue={particularSet.size_Selected != '' ? particularSet.size_Selected : 'Select a Size'}
+                                    defaultValue={particularSet.size_id != '' ? particularSet.size_id : 'Select a Size'}
                                     onSelect={(index, value) => this.changePaticularSize(index, value, i)}
                                 />
 
@@ -378,7 +454,7 @@ class AddProduct extends React.Component {
                                     <View style={{ flex: 0.5, paddingRight: '5%' }}>
                                         <ProductInput
                                             label='Number of Pieces'
-                                            value={particularSet.number_of_Pieces}
+                                            value={particularSet.quantity}
                                             maxLength={10}
                                             keyboardType='number-pad'
                                             onChangeText={purchasePrice => this.setPrice(purchasePrice, i)} />
@@ -410,7 +486,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         getColors: () => dispatch(getProductColors()),
-        getSizes: () => dispatch(getProductSizes())
+        getSizes: () => dispatch(getProductSizes()),
+        getSubCategories: (id) => dispatch(getSubCategoriesList_On_category(id)),
     }
 }
 

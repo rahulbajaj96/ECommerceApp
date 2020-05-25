@@ -15,8 +15,14 @@ export const CATEGORIES_LIST_FAILURE = 'get_Categories_Failure';
 export const SUB_CATEGORIES_LIST_SUCCESS = 'get_SubCategories_Success';
 export const SUB_CATEGORIES_LIST_FAILURE = 'get_SubCategories_Failure';
 
+export const SUB_CATEGORIES_LIST_BASED_ON_CATEGORY_SUCCESS = 'get_SubCategories_based_on_category_Success';
+export const SUB_CATEGORIES_LIST_BASED_ON_CATEGORY_FAILURE = 'get_SubCategories_based_on_category_Failure';
+
 export const PRODUCTS_COLORS_SUCCESS = 'product_colors_success';
 export const PRODUCTS_COLORS_FAILURE = 'product_colors_failure';
 
 export const PRODUCTS_SIZES_SUCCESS = 'product_sizes_success';
 export const PRODUCTS_SIZES_FAILURE = 'product_sizes_failure';
+
+export const PRODUCTS_LIST_SUCCESS = 'product_list_success';
+export const PRODUCTS_LIST_FAILURE = 'product_list_failure';
