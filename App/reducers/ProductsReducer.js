@@ -1,8 +1,10 @@
-import { PRODUCTS_LIST_SUCCESS, PRODUCTS_LIST_FAILURE } from "../constants/ReduxConstants"
+import { PRODUCTS_LIST_SUCCESS, PRODUCTS_LIST_FAILURE, PRODUCTS_DETAIL_FAILURE, PRODUCTS_DETAIL_SUCCESS } from "../constants/ReduxConstants"
 
 const initialState = {
     products_List: [],
-    products_api_response: ''
+    products_api_response: '',
+    product_detail_api_response: '',
+
 }
 export const productsReducer = (state = initialState, actions) => {
     switch (actions.type) {
@@ -15,6 +17,14 @@ export const productsReducer = (state = initialState, actions) => {
             ...state,
             products_api_response: actions.payload
         };
+        case PRODUCTS_DETAIL_FAILURE: return {
+            ...state,
+            product_detail_api_response: actions.payload
+        };
+        case PRODUCTS_DETAIL_SUCCESS: return {
+            ...state,
+            product_detail_api_response: actions.payload
+        }
         default: return state;
     }
 }

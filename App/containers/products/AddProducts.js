@@ -3,7 +3,8 @@ import { Text, Image, TouchableOpacity, View, TextInput, ScrollView, FlatList } 
 import AppComponent from '../../components/AppComponent'
 import Toolbar from '../../components/Toolbar'
 import Style from '../../utils/Style'
-import Colors from '../../utils/Colors'
+import Colors from '../../utils/Colors';
+import Toast from 'react-native-simple-toast';
 import { ProductInput, DropDown } from '../../components/Products';
 import Modal from "react-native-modal";
 import ImagePicker from 'react-native-image-picker';
@@ -52,7 +53,7 @@ class AddProduct extends React.Component {
 
     componentDidMount() {
 
-        console.log(this.props.route.params)
+        console.log('propDtaaProducts',this.props.route.params)
         this.setPropData(this.props.route.params)
         this.get_product_color();
         this.get_product_sizes();
@@ -129,9 +130,9 @@ class AddProduct extends React.Component {
             const { multipleSelection } = this.state
 
             for (let i = 0; i < multipleSelection.length; i++) {
-                multipleSelection[i].color_selected = 'red',
-                    multipleSelection[i].number_of_Pieces = '5',
-                    multipleSelection[i].size_Selected = 'Large'
+                multipleSelection[i].product_color_id = 'red',
+                    multipleSelection[i].quantity = '5',
+                    multipleSelection[i].size_id = 'Large'
             }
             this.setState({
                 Category: 'Clothes',
@@ -302,7 +303,7 @@ class AddProduct extends React.Component {
     }
     async handleSaveProduct() {
         const { productName, articlenum, purchasePrice, sellingPrice, Category, SubCategory, multipleSelection, images_path_array } = this.state
-
+        const { navigation } = this.props
 
 
         let formData = new FormData();
@@ -324,18 +325,18 @@ class AddProduct extends React.Component {
 
         var response = await ApiCallPost(`${BASE_URL}${API_URL.AddProduct}`, formData);
         console.log('response Add Category', response);
-        // if (response != false) {
-        //     if (response.status == 1) {
+        if (response != false) {
+            if (response.status == 1) {
 
-        //         Toast.show(response.message)
-        //         // navigation.popToTop()
-        //         navigation.navigate('Categories');
-        //     }
-        //     else {
-        //         Toast.show(response.message)
-        //     }
+                Toast.show(response.message)
+                // navigation.popToTop()
+                navigation.navigate('Productss', { category_id: Category, subCategory_id: SubCategory });
+            }
+            else {
+                Toast.show(response.message)
+            }
 
-        // }
+        }
 
     }
     render() {

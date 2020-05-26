@@ -29,6 +29,7 @@ export const API_URL = {
     AddProduct: 'product/store',
     Product_List: 'product/list',
     Edit_Products: 'product/update',
-    Delete_Products: 'product/destroy'
+    Delete_Products: 'product/destroy',
+    View_product: 'product/view'
 
 }

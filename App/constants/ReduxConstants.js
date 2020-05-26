@@ -26,3 +26,6 @@ export const PRODUCTS_SIZES_FAILURE = 'product_sizes_failure';
 
 export const PRODUCTS_LIST_SUCCESS = 'product_list_success';
 export const PRODUCTS_LIST_FAILURE = 'product_list_failure';
+
+export const PRODUCTS_DETAIL_SUCCESS = 'product_detail_success';
+export const PRODUCTS_DETAIL_FAILURE = 'product_detail_failure';

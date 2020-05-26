@@ -9,10 +9,11 @@ import { getProductColors } from "../../actions/product_colors_actions";
 import { connect } from "react-redux";
 import { getProductslist } from "../../actions/productsactions";
 import { BASE_URL, API_URL } from "../../config";
+import { ApiCallPost } from "../../Services/ApiServices";
 
 
 class Products extends Component {
-    state = { searchValue: '', modalVisibility: false, currentSelectedItem: '', productsList: [], Paramsinfo }
+    state = { searchValue: '', modalVisibility: false, currentSelectedItem: '', productsList: [], Paramsinfo: '' }
 
     componentDidMount() {
         const { navigation, route } = this.props
@@ -44,7 +45,7 @@ class Products extends Component {
         const { navigation } = this.props
 
         console.log('item clicked', item)
-        navigation.navigate('ProductDetail');
+        navigation.navigate('ProductDetail', { product_id: item.item.id });
     }
     openModal = (item) => {
         console.log('item clicked', item)
@@ -68,19 +69,19 @@ class Products extends Component {
         let formdata = new FormData();
         formdata.append('product_id', currentSelectedItem.id);
 
-        // let response = await ApiCallPost(`${BASE_URL}${API_URL.Delete_Products}`, formdata);
-        // console.log('Products Deleted', response);
-        // if (response != false) {
-        //     if (response.status == 1) {
-        //         console.log('Products Deleted', response);
-        //         this.setState({ modalVisibility: false })
-        //         this.get_products_list(Paramsinfo);
-        //     }
-        // }
+        let response = await ApiCallPost(`${BASE_URL}${API_URL.Delete_Products}`, formdata);
+        console.log('Products Deleted', response);
+        if (response != false) {
+            if (response.status == 1) {
+                console.log('Products Deleted', response);
+                this.setState({ modalVisibility: false })
+                this.get_products_list(Paramsinfo);
+            }
+        }
     }
 
     render() {
-        const { searchValue, modalVisibility, currentSelectedItem } = this.state
+        const { searchValue, modalVisibility, currentSelectedItem, productsList } = this.state
         const { navigation } = this.props
         return (
             <AppComponent>
@@ -92,12 +93,14 @@ class Products extends Component {
 
                     />
                     <Make_A_List
-                        items={[1, 2, 3, 4, 5, 6]}
+                        items={productsList}
                         extraData={this.state}
                         onItemClicked={(item) => this.handleListItemCicked(item)}
                         onAddPopUp={() => this.AddProducts()}
                         crudValue={1}
                         dotsClick={(item) => this.openModal(item)}
+                        api={true}
+                        tag='Products'
 
                     />
                     <ModalView

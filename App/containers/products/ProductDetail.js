@@ -6,6 +6,8 @@ import Colors from '../../utils/Colors';
 import Style from '../../utils/Style';
 import Images from '../../utils/Image';
 import AppIntroSlider from 'react-native-app-intro-slider';
+import { connect } from 'react-redux'
+import { getProductDetail } from '../../actions/productsactions';
 
 let color_codes = ['#3A137C', '#BBF11D', '#F1371D', '#1D3AF1', '#1DF1EB', '#1DF12D', '#F19A1D', '#E11DF1']
 let sizes = ['S', "M", "L", "XL", "XXL", "XXXL"];
@@ -19,7 +21,13 @@ class ProductDetail extends React.Component {
         colors_Left_button_enabled: true,
         colors_Right_button_enabled: true,
         size_left_button_enabled: true,
-        size_right_button_enabled: true
+        size_right_button_enabled: true,
+        product_id: '',
+        articleNum: '',
+        product_name: '',
+        category_name: '',
+        Subcategory_name: '',
+        product_images: []
 
     }
     /**
@@ -30,8 +38,11 @@ class ProductDetail extends React.Component {
      * 
      */
     componentDidMount() {
+        const { route } = this.props
+
         this.setDefaultValuesColor();
         this.setDefaultSizeValues();
+        this.get_product_detail(route.params.product_id);
     }
     setDefaultValuesColor() {
         const { color_current_Value } = this.state
@@ -74,7 +85,24 @@ class ProductDetail extends React.Component {
         this.setState({ current_selected_color: value })
 
     }
+    async get_product_detail(product_id) {
+        await this.props.get_ProductDetail(product_id);
+        const { product_images } = this.state
+        const { productsReducer } = this.props
+        if (productsReducer.product_detail_api_response.status == 1) {
+            console.log('Product Detail', productsReducer.product_detail_api_response.data)
+            let response = productsReducer.product_detail_api_response.data
+            for (let i = 0; i < response.product_image.length; i++) {
+                product_images.push(response.product_image[i].image);
+            }
+            this.setState({
+                articleNum: response.article_no, product_name: response.name, category_name: response.category_name,
+                Subcategory_name: response.subcategory_name, product_images
 
+            })
+        }
+
+    }
     renderView() {
         const { color_current_Value, current_selected_color } = this.state
         let views = []
@@ -163,7 +191,7 @@ class ProductDetail extends React.Component {
 
     render() {
         const { navigation } = this.props
-        const { color_current_Value, size_initialValue, colors_Left_button_enabled, colors_Right_button_enabled, size_left_button_enabled, size_right_button_enabled } = this.state
+        const { color_current_Value, size_initialValue, colors_Left_button_enabled, colors_Right_button_enabled, size_left_button_enabled, size_right_button_enabled, articleNum, product_name, product_images, category_name, Subcategory_name } = this.state
         return (
             <AppComponent>
                 <Toolbar title='Product Detail' back={true} navigation={navigation} />
@@ -173,18 +201,18 @@ class ProductDetail extends React.Component {
                     <ScrollView style={{ flex: 1, paddingHorizontal: 10 }} >
 
                         <View style={{ paddingVertical: 10, borderWidth: 0, }}>
-                            
+
                             <AppIntroSlider
-                                data={images_aaray}
+                                data={product_images}
                                 renderItem={item => this.renderProductImage(item)}
                                 showNextButton={false}
                                 showDoneButton={false}
                             />
                         </View>
-                        <Text style={Style.Products.ProductDetail.PropertiesStyle}>Category: Clothes/Jeans</Text>
+                        <Text style={Style.Products.ProductDetail.PropertiesStyle}>Category: {category_name}/{Subcategory_name}</Text>
                         <View style={Style.CommonStyles.borderStyle} />
-                        <Text style={Style.Products.ProductDetail.articleNum}>Article Number : <Text style={{ color: Colors.theme_color }}>1234567</Text></Text>
-                        <Text style={Style.Products.ProductDetail.articleNum}>Product Name : <Text style={{ color: Colors.theme_color }}>Top1</Text></Text>
+                        <Text style={Style.Products.ProductDetail.articleNum}>Article Number : <Text style={{ color: Colors.theme_color }}>{articleNum}</Text></Text>
+                        <Text style={Style.Products.ProductDetail.articleNum}>Product Name : <Text style={{ color: Colors.theme_color }}>{product_name}</Text></Text>
                         <View style={Style.CommonStyles.borderStyle} />
 
 
@@ -244,7 +272,15 @@ class ProductDetail extends React.Component {
         )
     }
 }
-export default ProductDetail;
+const mapStateToProps = (state) => {
+    return state;
+}
+const mapDispatchToProps = (dispatch) => {
+    return {
+        get_ProductDetail: (id) => dispatch(getProductDetail(id))
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(ProductDetail);
 
 // const json = {
 //     articlenumber: 123456,

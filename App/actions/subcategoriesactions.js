@@ -10,7 +10,7 @@ export const getSubCategoriesList = (id) => {
         dispatch({ type: SPINNER_ON })
 
         var response = await ApiCallPost(`${BASE_URL}${API_URL.SubCategory_List}`, formdata);
-        // console.log('Categorieslist', response);
+        console.log('Categorieslist', response);
         if (response != false) {
             dispatch({ type: SPINNER_OFF })
             if (response.status == 1) {

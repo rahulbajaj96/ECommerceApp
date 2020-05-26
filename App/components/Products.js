@@ -57,7 +57,11 @@ export const Make_A_List = (props) => {
                     {
                         props.api
                             ?
-                            <Image source={data.image != '' ? { uri: data.image } : Images.appIcon} style={{ height: 50, width: 50, }} />
+                            props.tag == 'Products'
+                                ?
+                                <Image source={data.product_image.length != 0 ? { uri: data.product_image[0].image } : Images.appIcon} style={{ height: 50, width: 50, }} />
+                                :
+                                <Image source={data.image != '' ? { uri: data.image } : Images.appIcon} style={{ height: 50, width: 50, }} />
 
                             :
                             <Image source={Images.appIcon} style={{ height: 50, width: 50, }} />
