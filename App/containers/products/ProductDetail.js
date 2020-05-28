@@ -27,7 +27,10 @@ class ProductDetail extends React.Component {
         product_name: '',
         category_name: '',
         Subcategory_name: '',
-        product_images: []
+        product_images: [],
+        colors_available: [],
+        sizes_available: [],
+        pieces_available: ''
 
     }
     /**
@@ -45,24 +48,24 @@ class ProductDetail extends React.Component {
         this.get_product_detail(route.params.product_id);
     }
     setDefaultValuesColor() {
-        const { color_current_Value } = this.state
+        const { color_current_Value, colors_available } = this.state
         // console.log('color value', color_current_Value);
         if (color_current_Value == 0)
             this.setState({ colors_Left_button_enabled: false })
         else
             this.setState({ colors_Left_button_enabled: true })
-        if (color_codes.length <= (color_current_Value + 5))
+        if (colors_available.length <= (color_current_Value + 5))
             this.setState({ colors_Right_button_enabled: false })
         else
             this.setState({ colors_Right_button_enabled: true })
     }
     setDefaultSizeValues() {
-        const { size_initialValue } = this.state
+        const { size_initialValue, sizes_available } = this.state
         if (size_initialValue == 0)
             this.setState({ size_left_button_enabled: false })
         else
             this.setState({ size_left_button_enabled: true })
-        if (sizes.length <= (size_initialValue + 5))
+        if (sizes_available.length <= (size_initialValue + 5))
             this.setState({ size_right_button_enabled: false })
         else
             this.setState({ size_right_button_enabled: true })
@@ -82,7 +85,8 @@ class ProductDetail extends React.Component {
      * @param value contains the position of color selected
      */
     colorSelected(value) {
-        this.setState({ current_selected_color: value })
+        this.setState({ current_selected_color: value,size_initialSelected:0 }, () => this.setColors_Sizes());
+
 
     }
     async get_product_detail(product_id) {
@@ -90,32 +94,48 @@ class ProductDetail extends React.Component {
         const { product_images } = this.state
         const { productsReducer } = this.props
         if (productsReducer.product_detail_api_response.status == 1) {
-            console.log('Product Detail', productsReducer.product_detail_api_response.data)
+            // console.log('Product Detail', productsReducer.product_detail_api_response.data.colors)
             let response = productsReducer.product_detail_api_response.data
             for (let i = 0; i < response.product_image.length; i++) {
                 product_images.push(response.product_image[i].image);
             }
             this.setState({
                 articleNum: response.article_no, product_name: response.name, category_name: response.category_name,
-                Subcategory_name: response.subcategory_name, product_images
+                Subcategory_name: response.subcategory_name, product_images,
+                colors_available: productsReducer.product_detail_api_response.data.colors
 
-            })
+            }
+                , () => this.setColors_Sizes())
+
         }
 
     }
+
+    setColors_Sizes() {
+        const { colors_available, current_selected_color, pieces_available, size_initialSelected } = this.state
+
+        console.log('collors_available', colors_available);
+        this.setState({ sizes_available: colors_available[current_selected_color].sizes, pieces_available: colors_available[current_selected_color].sizes[size_initialSelected].quantity }
+            ,
+        )
+
+
+
+
+    }
     renderView() {
-        const { color_current_Value, current_selected_color } = this.state
+        const { color_current_Value, current_selected_color, colors_available } = this.state
         let views = []
         let loopValue = 0;
-        if ((color_current_Value + 5) > color_codes.length) {
-            loopValue = color_codes.length
+        if ((color_current_Value + 5) > colors_available.length) {
+            loopValue = colors_available.length
         }
         else {
             loopValue = (color_current_Value + 5)
         }
         for (let i = color_current_Value; i < loopValue; i++) {
             views.push(
-                <TouchableOpacity style={{ flex: 0.20, backgroundColor: color_codes[i], margin: 5, borderWidth: current_selected_color == i ? 2 : 0, borderColor: current_selected_color == i ? Colors.theme_color : null, padding: 2, }} key={i} disabled={current_selected_color == i} onPress={() => this.colorSelected(i)} />
+                <TouchableOpacity style={{ flex: 0.20, backgroundColor: colors_available[i].hash_color, margin: 5, borderWidth: current_selected_color == i ? 2 : 0, borderColor: current_selected_color == i ? Colors.theme_color : null, padding: 2, }} key={i} disabled={current_selected_color == i} onPress={() => this.colorSelected(i)} />
             )
         }
         return views;
@@ -128,10 +148,11 @@ class ProductDetail extends React.Component {
      * @param size_initialValue is used to compare and display the 5 sizes in views
      */
     renderSizes() {
-        let { size_initialSelected, size_initialValue } = this.state
+        let { size_initialSelected, size_initialValue, sizes_available } = this.state
+        console.log('sizes available', sizes_available)
         let loopValue = 0;
-        if ((size_initialValue + 5) > sizes.length) {
-            loopValue = sizes.length
+        if ((size_initialValue + 5) > sizes_available.length) {
+            loopValue = sizes_available.length
         }
         else {
             loopValue = size_initialValue + 5
@@ -140,7 +161,7 @@ class ProductDetail extends React.Component {
         for (let i = size_initialValue; i < loopValue; i++) {
             SizeViews.push(
                 <TouchableOpacity key={i} style={[{ flex: 0.20, borderWidth: size_initialSelected == i ? 2 : 0, borderColor: Colors.theme_color, }, Style.CommonStyles.centerStyle]} onPress={() => this.SelectSize(i)}>
-                    <Text style={{ fontSize: 12, color: '#000', }}>{sizes[i]}</Text>
+                    <Text style={{ fontSize: 12, color: '#000', }}>{sizes_available.length == 0 ? '' : sizes_available[i].size}</Text>
                 </TouchableOpacity>
             )
         }
@@ -186,12 +207,21 @@ class ProductDetail extends React.Component {
 
     }
     SelectSize(value) {
-        this.setState({ size_initialSelected: value })
+        this.setState({ size_initialSelected: value },() => this.set_Sizes_Quantity())
+    }
+    set_Sizes_Quantity()
+    {
+        const { colors_available, current_selected_color, pieces_available, size_initialSelected } = this.state
+
+        console.log('collors_available', colors_available);
+        this.setState({pieces_available: colors_available[current_selected_color].sizes[size_initialSelected].quantity }
+            ,
+        )
     }
 
     render() {
         const { navigation } = this.props
-        const { color_current_Value, size_initialValue, colors_Left_button_enabled, colors_Right_button_enabled, size_left_button_enabled, size_right_button_enabled, articleNum, product_name, product_images, category_name, Subcategory_name } = this.state
+        const { color_current_Value, size_initialValue, colors_Left_button_enabled, colors_Right_button_enabled, size_left_button_enabled, size_right_button_enabled, articleNum, product_name, product_images, category_name, Subcategory_name,pieces_available } = this.state
         return (
             <AppComponent>
                 <Toolbar title='Product Detail' back={true} navigation={navigation} />
@@ -262,7 +292,7 @@ class ProductDetail extends React.Component {
                         </View>
                         <View style={Style.CommonStyles.borderStyle} />
 
-                        <Text style={[Style.Products.ProductDetail.PropertiesStyle, { fontSize: 18 }]}>Pieces Available :<Text style={{ color: Colors.theme_color }}>1234567</Text></Text>
+                        <Text style={[Style.Products.ProductDetail.PropertiesStyle, { fontSize: 18 }]}>Pieces Available :<Text style={{ color: Colors.theme_color }}>{pieces_available}</Text></Text>
 
 
                     </ScrollView>
@@ -281,62 +311,3 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(ProductDetail);
-
-// const json = {
-//     articlenumber: 123456,
-//     category_id: 1,
-//     category_name: 'clothes',
-//     Subcategory_id: 2,
-//     Subcategory_name: 'tops',
-//     Product_id: 101,
-//     product_name: 'tops1',
-//     totalPieces:45,
-//     colors: [
-//         {
-//             color: 'red',
-//             images: [
-//                 {
-//                     url: '',
-//                 }, {
-//                     url: ''
-//                 }
-//             ],
-//             sizes_available: [S, M, L, XL, XXL],
-//             piesces_available: [{
-//                 size: S,
-//                 pieces: 10
-//             },
-//             {
-//                 size: M,
-//                 pieces: 10
-//             },
-//             {
-//                 size: L,
-//                 pieces: 10
-//             }]
-//         },
-//         {
-//             color: 'blue',
-//             images: [
-//                 {
-//                     url: '',
-//                 }, {
-//                     url: ''
-//                 }
-//             ],
-//             sizes_available: [S, M, L, XL, XXL],
-//             piesces_available: [{
-//                 size: S,
-//                 pieces: 10
-//             },
-//             {
-//                 size: M,
-//                 pieces: 10
-//             },
-//             {
-//                 size: L,
-//                 pieces: 10
-//             }]
-//         }
-//     ]
-// }

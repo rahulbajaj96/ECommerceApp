@@ -16,6 +16,20 @@ export function getColorParamsFromName(colors_array, color_selected) {
     }
     return color_selected_params;
 }
+export function getColorParamsFromID(colors_array, color_selected) {
+    console.log('color selected', color_selected);
+
+
+    console.log('colors Available func', colors_array);
+    let color_selected_params = '';
+    for (let i = 0; i < colors_array.length; i++) {
+        if (colors_array[i].color == color_selected) {
+            color_selected_params = colors_array[i]
+            break;
+        }
+    }
+    return color_selected_params;
+}
 export function getSizeParamsFromName(sizes_array, size_selected) {
     console.log('size_selected', size_selected);
 
