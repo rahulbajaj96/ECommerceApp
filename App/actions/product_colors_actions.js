@@ -5,7 +5,7 @@ import { PRODUCTS_COLORS_SUCCESS, PRODUCTS_COLORS_FAILURE } from "../constants/R
 export const getProductColors = () => {
     return async function (dispatch) {
         var colors = await ApiCallGet(`${BASE_URL}${API_URL.Product_Colors}`, '');
-        console.log('colors of Products available ', colors);
+        // console.log('colors of Products available ', colors);
         if (colors != false) {
             if (colors.status == 1)
                 dispatch(SuccessFul_Colors(colors));

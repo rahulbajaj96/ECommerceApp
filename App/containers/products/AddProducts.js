@@ -11,7 +11,7 @@ import ImagePicker from 'react-native-image-picker';
 import { connect } from "react-redux";
 import Images from '../../utils/Image';
 import { getProductColors } from '../../actions/product_colors_actions'
-import { getColorParamsFromName, getSizeParamsFromName, getCategoryParamsFromName } from '../../helpers/GetProductValues'
+import { getColorParamsFromName, getSizeParamsFromName, getCategoryParamsFromName, getColorParamsFromID, getSizeParamsFromID } from '../../helpers/GetProductValues'
 import { getProductSizes } from '../../actions/product_sizes_actions'
 import { getSubCategoriesList_On_category } from '../../actions/subcategoriesactions'
 import { ApiCallPost } from '../../Services/ApiServices'
@@ -33,16 +33,17 @@ class AddProduct extends React.Component {
         articlenum: '',
         purchasePrice: '',
         sellingPrice: '',
-        multipleSelection: [{ product_color_id: '', size_id: '', quantity: '' },],
+        multipleSelection: [{ product_color_id: '', size_id: '', quantity: '', product_color_name: '', size_name: '' },],
         images_aaray: [],
         modalVisibility: false,
         selectedImage: 'https://via.placeholder.com/600/66b7d2',
         selectedIndex: 0,
         title: '',
         Category: '',
+        Category_id: '',
 
         SubCategory: 'Select a SubCategory',
-
+        SubCategory_id: '',
         colors_available: [],
         sizes_available: [],
         categories_available: [],
@@ -53,7 +54,7 @@ class AddProduct extends React.Component {
 
     componentDidMount() {
 
-        console.log('propDtaaProducts',this.props.route.params)
+        console.log('propDtaaProducts', this.props.route.params)
         this.setPropData(this.props.route.params)
         this.get_product_color();
         this.get_product_sizes();
@@ -72,7 +73,7 @@ class AddProduct extends React.Component {
         for (let i = 0; i < product_color_reducer.colors_available.length; i++) {
             colors_available.push(product_color_reducer.colors_available[i].color);
         }
-        console.log('colors', colors_available);
+        // console.log('colors', colors_available);
         this.setState({ colors_available })
     }
 
@@ -87,7 +88,7 @@ class AddProduct extends React.Component {
         for (let i = 0; i < product_size_reducer.sizes_available.length; i++) {
             sizes_available.push(product_size_reducer.sizes_available[i].size);
         }
-        console.log('sizes', sizes_available);
+        // console.log('sizes', sizes_available);
         this.setState({ sizes_available })
     }
     async get_Categories_Available() {
@@ -96,7 +97,7 @@ class AddProduct extends React.Component {
         for (let i = 0; i < categoriesReducer.category_list.length; i++) {
             categories_available.push(categoriesReducer.category_list[i].name)
         }
-        console.log('categories_available', categories_available);
+        // console.log('categories_available', categories_available);
         this.setState({ categories_available })
     }
     async get_Categories_Available() {
@@ -105,7 +106,7 @@ class AddProduct extends React.Component {
         for (let i = 0; i < categoriesReducer.category_list.length; i++) {
             categories_available.push(categoriesReducer.category_list[i].name)
         }
-        console.log('categories_available', categories_available);
+        // console.log('categories_available', categories_available);
         this.setState({ categories_available })
     }
     async get_SubCategory(category_id) {
@@ -116,7 +117,7 @@ class AddProduct extends React.Component {
         for (let i = 0; i < subcategoriesReducer.subcategory_list_based_on_category.length; i++) {
             subcategories_available.push(subcategoriesReducer.subcategory_list_based_on_category[i].name)
         }
-        console.log('subcategories_available', subcategories_available);
+        // console.log('subcategories_available', subcategories_available);
         this.setState({ subcategories_available })
 
 
@@ -125,24 +126,54 @@ class AddProduct extends React.Component {
      * @method setPropData
      * @param propData contains the data about Add or Edit Products
      */
-    setPropData = (propData) => {
+    async setPropData(propData) {
         if (propData.id == 2) {
-            const { multipleSelection } = this.state
+            let { multipleSelection, images_aaray, images_path_array } = this.state
 
-            for (let i = 0; i < multipleSelection.length; i++) {
-                multipleSelection[i].product_color_id = 'red',
-                    multipleSelection[i].quantity = '5',
-                    multipleSelection[i].size_id = 'Large'
+            // for (let i = 0; i < multipleSelection.length; i++) {
+            //     multipleSelection[i].product_color_id = 'red',
+            //         multipleSelection[i].quantity = '5',
+            //         multipleSelection[i].size_id = 'Large'
+            // }
+
+            // let category_params = await getCategoryParamsFromID(propData.data.);
+            for (let i = 0; i < propData.data.product_image.length; i++) {
+                images_aaray.push(propData.data.product_image[i].image);
+                images_path_array.push({
+                    name: 'ABC',
+                    type: 'image/jpeg', uri: propData.data.product_image[i].image
+                })
             }
+            console.log('images array:', images_aaray);
+            console.log('images_path_array:', images_path_array);
+            const { product_color_reducer, product_size_reducer } = this.props
+            multipleSelection = [];
+            for (let i = 0; i < propData.data.variations.length; i++) {
+                var color_params = await getColorParamsFromID(product_color_reducer.colors_available, propData.data.variations[i].product_color_id);
+                var size_params = await getSizeParamsFromID(product_size_reducer.sizes_available, propData.data.variations[i].size_id);
+                multipleSelection.push({
+                    quantity: propData.data.variations[i].quantity,
+                    product_color_id: propData.data.variations[i].product_color_id,
+                    size_id: propData.data.variations[i].size_id,
+                    size_name: size_params.size,
+                    product_color_name: color_params.color
+                })
+            }
+
+            console.log('multiple Selection Data', multipleSelection);
+
             this.setState({
-                Category: 'Clothes',
-                SubCategory: 'jeans',
+                Category_id: propData.data.category_id,
+                SubCategory_id: propData.data.subcategory_id,
+                Category: propData.data.category_name,
+                SubCategory: propData.data.subcategory_name,
                 title: propData.title,
-                productName: 'qwerty',
-                articlenum: '123456',
-                purchasePrice: '500',
-                sellingPrice: '1000',
-                multipleSelection
+                productName: propData.data.name,
+                articlenum: propData.data.article_no,
+                purchasePrice: '' + propData.data.purchase_price,
+                sellingPrice: '' + propData.data.sale_price,
+                multipleSelection,
+                images_aaray
             })
 
         }
@@ -153,6 +184,12 @@ class AddProduct extends React.Component {
 
             })
         }
+    }
+
+    async formMultipleSelectionParticularObject() {
+
+        var color_params = await getColorParamsFromID(product_color_reducer.colors_available, propData.data.variations[i].product_color_id);
+        let size_params = await getSizeParamsFromID(product_size_reducer.sizes_available, propData.data.variations[i].size_id);
     }
 
     /**
@@ -170,6 +207,8 @@ class AddProduct extends React.Component {
         let color_selected = await getColorParamsFromName(product_color_reducer.colors_available, value);
         console.log('color_id_selected', color_selected);
         multipleSelection[main_index].product_color_id = '' + color_selected.id;
+        multipleSelection[main_index].product_color_name = value;
+
         this.setState({ multipleSelection })
 
     }
@@ -187,6 +226,8 @@ class AddProduct extends React.Component {
         let size_selected = await getSizeParamsFromName(product_size_reducer.sizes_available, value);
         console.log('size_selected', size_selected);
         multipleSelection[main_index].size_id = '' + size_selected.id;
+        multipleSelection[main_index].size_name = value
+
         this.setState({ multipleSelection })
 
     }
@@ -194,13 +235,13 @@ class AddProduct extends React.Component {
     async SelectCategory(index, value) {
         const { categoriesReducer } = this.props
         let category_selected = await getCategoryParamsFromName(categoriesReducer.category_list, value)
-        this.setState({ Category: category_selected.id })
+        this.setState({ Category_id: category_selected.id, Category: value })
         this.get_SubCategory(category_selected.id);
     }
     async SelectSubCategory(index, value) {
         const { subcategoriesReducer } = this.props
         let subcategory_selected = await getCategoryParamsFromName(subcategoriesReducer.subcategory_list_based_on_category, value)
-        this.setState({ SubCategory: subcategory_selected.id })
+        this.setState({ SubCategory_id: subcategory_selected.id, SubCategory: value })
     }
 
     /**
@@ -221,7 +262,7 @@ class AddProduct extends React.Component {
     addMore() {
         const { multipleSelection } = this.state
         // console.log('multiple ', multipleSelection)
-        multipleSelection[multipleSelection.length] = { product_color_id: '', size_id: '', quantity: '' }
+        multipleSelection[multipleSelection.length] = { product_color_id: '', size_id: '', quantity: '', product_color_name: '', size_name: ''  }
         this.setState({ multipleSelection })
     }
     check() {
@@ -302,19 +343,26 @@ class AddProduct extends React.Component {
         )
     }
     async handleSaveProduct() {
-        const { productName, articlenum, purchasePrice, sellingPrice, Category, SubCategory, multipleSelection, images_path_array } = this.state
+        const { productName, articlenum, purchasePrice, sellingPrice, Category_id, SubCategory_id, multipleSelection, images_path_array } = this.state
         const { navigation } = this.props
 
-
+        let variationsarray = []
+        for (let i = 0; i < multipleSelection.length; i++) {
+            variationsarray.push({
+                product_color_id: multipleSelection[i].product_color_id,
+                size_id: multipleSelection[i].size_id,
+                quantity: multipleSelection[i].quantity
+            })
+        }
         let formData = new FormData();
         formData.append("name", productName);
-        formData.append("category_id", Category);
-        formData.append("subcategory_id", SubCategory);
+        formData.append("category_id", Category_id);
+        formData.append("subcategory_id", SubCategory_id);
         formData.append("article_no", articlenum);
         formData.append("purchase_price", purchasePrice);
         formData.append("sale_price", sellingPrice);
 
-        formData.append("variations", JSON.stringify(multipleSelection));
+        formData.append("variations", JSON.stringify(variationsarray));
 
         for (let i = 0; i < images_path_array.length; i++) {
             formData.append(`images[${i}]`, images_path_array[i]);
@@ -442,12 +490,12 @@ class AddProduct extends React.Component {
 
                                 <DropDown
                                     options={colors_available}
-                                    defaultValue={particularSet.product_color_id != '' ? particularSet.product_color_id : 'Select a Color'}
+                                    defaultValue={particularSet.product_color_name != '' ? particularSet.product_color_name : 'Select a Color'}
                                     onSelect={(index, value) => this.changePaticularColor(index, value, i)}
                                 />
                                 <DropDown
                                     options={sizes_available}
-                                    defaultValue={particularSet.size_id != '' ? particularSet.size_id : 'Select a Size'}
+                                    defaultValue={particularSet.size_name != '' ? particularSet.size_name : 'Select a Size'}
                                     onSelect={(index, value) => this.changePaticularSize(index, value, i)}
                                 />
 
