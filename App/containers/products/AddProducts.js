@@ -43,6 +43,8 @@ class AddProduct extends React.Component {
         title: '',
         Category: '',
         Category_id: '',
+        Page_id: 0,
+        product_id: '',
 
         SubCategory: 'Select a SubCategory',
         SubCategory_id: '',
@@ -54,12 +56,12 @@ class AddProduct extends React.Component {
 
     }
 
-    componentDidMount() {
+    async componentDidMount() {
 
         console.log('propDtaaProducts', this.props.route.params)
-        this.setPropData(this.props.route.params)
-        this.get_product_color();
-        this.get_product_sizes();
+        await this.get_product_color();
+        await this.get_product_sizes();
+        await this.setPropData(this.props.route.params)
         this.get_Categories_Available();
 
 
@@ -129,8 +131,12 @@ class AddProduct extends React.Component {
      * @param propData contains the data about Add or Edit Products
      */
     async setPropData(propData) {
+        if (propData.id == 1) {
+            this.setState({ Page_id: propData.id })
+        }
         if (propData.id == 2) {
             let { multipleSelection, images_aaray, images_path_array } = this.state
+            const { product_color_reducer, product_size_reducer } = this.props
 
             // for (let i = 0; i < multipleSelection.length; i++) {
             //     multipleSelection[i].product_color_id = 'red',
@@ -146,9 +152,7 @@ class AddProduct extends React.Component {
                     type: 'image/jpeg', uri: propData.data.product_image[i].image
                 })
             }
-            console.log('images array:', images_aaray);
-            console.log('images_path_array:', images_path_array);
-            const { product_color_reducer, product_size_reducer } = this.props
+
             multipleSelection = [];
             for (let i = 0; i < propData.data.variations.length; i++) {
                 var color_params = await getColorParamsFromID(product_color_reducer.colors_available, propData.data.variations[i].product_color_id);
@@ -175,7 +179,9 @@ class AddProduct extends React.Component {
                 purchasePrice: '' + propData.data.purchase_price,
                 sellingPrice: '' + propData.data.sale_price,
                 multipleSelection,
-                images_aaray
+                images_aaray,
+                Page_id: propData.id,
+                product_id: propData.data.id
             })
 
         }
@@ -264,7 +270,7 @@ class AddProduct extends React.Component {
     addMore() {
         const { multipleSelection } = this.state
         // console.log('multiple ', multipleSelection)
-        multipleSelection[multipleSelection.length] = { product_color_id: '', size_id: '', quantity: '', product_color_name: '', size_name: ''  }
+        multipleSelection[multipleSelection.length] = { product_color_id: '', size_id: '', quantity: '', product_color_name: '', size_name: '' }
         this.setState({ multipleSelection })
     }
     check() {
@@ -345,7 +351,7 @@ class AddProduct extends React.Component {
         )
     }
     async handleSaveProduct() {
-        const { productName, articlenum, purchasePrice, sellingPrice, Category_id, SubCategory_id, multipleSelection, images_path_array } = this.state
+        const { productName, articlenum, purchasePrice, sellingPrice, Category_id, SubCategory_id, multipleSelection, images_path_array, Page_id, product_id } = this.state
         const { navigation } = this.props
 
         let variationsarray = []
@@ -363,30 +369,48 @@ class AddProduct extends React.Component {
         formData.append("article_no", articlenum);
         formData.append("purchase_price", purchasePrice);
         formData.append("sale_price", sellingPrice);
-
         formData.append("variations", JSON.stringify(variationsarray));
-
         for (let i = 0; i < images_path_array.length; i++) {
             formData.append(`images[${i}]`, images_path_array[i]);
         }
+        if (Page_id == 1) {
+            console.log('formData od Add Product ', JSON.stringify(formData));
 
+            var response = await ApiCallPost(`${BASE_URL}${API_URL.AddProduct}`, formData);
+            console.log('response Add Category', response);
+            if (response != false) {
+                if (response.status == 1) {
 
-        console.log('formData od Add Product ', JSON.stringify(formData));
+                    Toast.show(response.message)
+                    // navigation.popToTop()
+                    navigation.navigate('Productss', { category_id: Category_id, subCategory_id: SubCategory_id });
+                }
+                else {
+                    Toast.show(response.message)
+                }
 
-        var response = await ApiCallPost(`${BASE_URL}${API_URL.AddProduct}`, formData);
-        console.log('response Add Category', response);
-        if (response != false) {
-            if (response.status == 1) {
-
-                Toast.show(response.message)
-                // navigation.popToTop()
-                navigation.navigate('Productss', { category_id: Category_id, subCategory_id: SubCategory_id });
             }
-            else {
-                Toast.show(response.message)
-            }
-
         }
+        else if (Page_id == 2) {
+            formData.append('product_id', product_id);
+            console.log('formData od Edit Product ', JSON.stringify(formData));
+            var EditResponse = await ApiCallPost(`${BASE_URL}${API_URL.Edit_Products}`, formData);
+            console.log('response Add Category', EditResponse);
+            if (EditResponse != false) {
+                if (EditResponse.status == 1) {
+
+                    Toast.show(EditResponse.message)
+                    // navigation.popToTop()
+                    navigation.navigate('Productss', { category_id: Category_id, subCategory_id: SubCategory_id });
+                }
+                else {
+                    Toast.show(EditResponse.message)
+                }
+
+            }
+        }
+
+
 
     }
     render() {
