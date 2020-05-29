@@ -16,6 +16,7 @@ export const ProductInput = (props) => {
             <Input
                 style={Style.Products.AddProduct.inputStyle}
                 underlineColorAndroid='transparent'
+                returnKeyType='done'
                 {...props}
             />
         </Item>

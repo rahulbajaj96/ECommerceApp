@@ -6,22 +6,36 @@ import Style from "../../utils/Style";
 import AppComponent from "../../components/AppComponent";
 import Toolbar from "../../components/Toolbar";
 import Images from "../../utils/Image";
+import { connect } from "react-redux";
 import { Make_A_List } from "../../components/Products";
 import { SearchBar } from "../../components/SearchBar";
+import { getCategoriesList } from "../../actions/categoriesactions";
 
 class OrderCategories extends Component {
-    state = { searchValue: '' }
+    state = { searchValue: '', categoryList: [] }
 
+    componentDidMount() {
+
+        this.get_Categories();
+    }
 
     handleListItemCicked = (item) => {
         const { navigation } = this.props
 
         console.log('item clicked', item)
-        navigation.navigate('OrderSubCategories')
+        navigation.navigate('OrderSubCategories', { category_id: item.item })
+    }
+    async get_Categories() {
+        await this.props.getCategories();
+        const { categoriesReducer } = this.props
+        // console.log('reducer data', categoriesReducer);
+        if (categoriesReducer.category_list_response.status == 1) {
+            this.setState({ categoryList: categoriesReducer.category_list })
+        }
     }
 
     render() {
-        const { searchValue } = this.state
+        const { searchValue,categoryList } = this.state
         const { navigation } = this.props
 
         return (
@@ -34,13 +48,15 @@ class OrderCategories extends Component {
                         onChangeText={searchValue => this.setState({ searchValue })}
 
                     />
-                  
+
                     <Make_A_List
-                        items={[1, 2, 3, 4, 5, 6]}
+                        items={categoryList}
                         extraData={this.state}
                         onItemClicked={(item) => this.handleListItemCicked(item)}
                         addPopUp={false}
                         onAddPopUp={() => console.log('AddpopUpClicked')}
+                        api={true}
+                        tag='Categories'
 
                     />
                     {/* <View style={Style.Products.categories.categoriesListView}>
@@ -63,5 +79,13 @@ class OrderCategories extends Component {
         )
     }
 }
-export default OrderCategories;
+const mapStateToProps = (state) => {
+    return state;
+}
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getCategories: () => dispatch(getCategoriesList())
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(OrderCategories);
 //da2244

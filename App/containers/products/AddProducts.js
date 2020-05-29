@@ -9,6 +9,8 @@ import { ProductInput, DropDown } from '../../components/Products';
 import Modal from "react-native-modal";
 import ImagePicker from 'react-native-image-picker';
 import { connect } from "react-redux";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+
 import Images from '../../utils/Image';
 import { getProductColors } from '../../actions/product_colors_actions'
 import { getColorParamsFromName, getSizeParamsFromName, getCategoryParamsFromName, getColorParamsFromID, getSizeParamsFromID } from '../../helpers/GetProductValues'
@@ -378,7 +380,7 @@ class AddProduct extends React.Component {
 
                 Toast.show(response.message)
                 // navigation.popToTop()
-                navigation.navigate('Productss', { category_id: Category, subCategory_id: SubCategory });
+                navigation.navigate('Productss', { category_id: Category_id, subCategory_id: SubCategory_id });
             }
             else {
                 Toast.show(response.message)
@@ -393,7 +395,7 @@ class AddProduct extends React.Component {
         return (
             <AppComponent >
                 <Toolbar title={title} right={1} back={true} navigation={navigation} onSavePress={() => this.handleSaveProduct()} />
-                <ScrollView style={[Style.CommonStyles.fullFlex], { paddingHorizontal: '2%', paddingTop: '2%' }}>
+                <KeyboardAwareScrollView style={[Style.CommonStyles.fullFlex], { paddingHorizontal: '2%', paddingTop: '2%' }}>
 
                     <View style={Style.Products.AddProduct.ImagePickerView}>
                         <TouchableOpacity onPress={() => this.openCamera()}>
@@ -521,7 +523,7 @@ class AddProduct extends React.Component {
 
                         </TouchableOpacity>
                     </View>
-                </ScrollView>
+                </KeyboardAwareScrollView>
             </AppComponent >
         )
     }

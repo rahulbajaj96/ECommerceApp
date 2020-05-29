@@ -6,6 +6,9 @@ import Colors from '../../utils/Colors';
 import Style from '../../utils/Style';
 import Images from '../../utils/Image';
 import AppIntroSlider from 'react-native-app-intro-slider';
+import { connect } from 'react-redux'
+import { getProductDetail } from '../../actions/productsactions';
+
 
 let color_codes = ['#3A137C', '#BBF11D', '#F1371D', '#1D3AF1', '#1DF1EB', '#1DF12D', '#F19A1D', '#E11DF1']
 let sizes = ['S', "M", "L", "XL", "XXL", "XXXL"];
@@ -19,7 +22,19 @@ class OrderProductDetail extends React.Component {
         colors_Left_button_enabled: true,
         colors_Right_button_enabled: true,
         size_left_button_enabled: true,
-        size_right_button_enabled: true
+        size_right_button_enabled: true,
+
+        product_id: '',
+        articleNum: '',
+        product_name: '',
+        category_name: '',
+        Subcategory_name: '',
+        product_images: [],
+        colors_available: [],
+        sizes_available: [],
+        pieces_available: '',
+        sale_price: '',
+        quantity: 0
 
     }
     /**
@@ -30,28 +45,30 @@ class OrderProductDetail extends React.Component {
      * 
      */
     componentDidMount() {
+        const { route } = this.props
+        this.get_product_detail(route.params.product_id);
         this.setDefaultValuesColor();
         this.setDefaultSizeValues();
     }
     setDefaultValuesColor() {
-        const { color_current_Value } = this.state
+        const { color_current_Value, colors_available } = this.state
         // console.log('color value', color_current_Value);
         if (color_current_Value == 0)
             this.setState({ colors_Left_button_enabled: false })
         else
             this.setState({ colors_Left_button_enabled: true })
-        if (color_codes.length <= (color_current_Value + 5))
+        if (colors_available.length <= (color_current_Value + 5))
             this.setState({ colors_Right_button_enabled: false })
         else
             this.setState({ colors_Right_button_enabled: true })
     }
     setDefaultSizeValues() {
-        const { size_initialValue } = this.state
+        const { size_initialValue, sizes_available } = this.state
         if (size_initialValue == 0)
             this.setState({ size_left_button_enabled: false })
         else
             this.setState({ size_left_button_enabled: true })
-        if (sizes.length <= (size_initialValue + 5))
+        if (sizes_available.length <= (size_initialValue + 5))
             this.setState({ size_right_button_enabled: false })
         else
             this.setState({ size_right_button_enabled: true })
@@ -71,23 +88,58 @@ class OrderProductDetail extends React.Component {
      * @param value contains the position of color selected
      */
     colorSelected(value) {
-        this.setState({ current_selected_color: value })
+        this.setState({ current_selected_color: value, size_initialSelected: 0 }, () => this.setColors_Sizes());
+
+
+    }
+    async get_product_detail(product_id) {
+        await this.props.get_ProductDetail(product_id);
+        const { product_images } = this.state
+        const { productsReducer } = this.props
+        if (productsReducer.product_detail_api_response.status == 1) {
+            // console.log('Product Detail', productsReducer.product_detail_api_response.data.colors)
+            let response = productsReducer.product_detail_api_response.data
+            for (let i = 0; i < response.product_image.length; i++) {
+                product_images.push(response.product_image[i].image);
+            }
+            this.setState({
+                articleNum: response.article_no, product_name: response.name, category_name: response.category_name,
+                Subcategory_name: response.subcategory_name, product_images,
+                colors_available: productsReducer.product_detail_api_response.data.colors,
+                sale_price: response.sale_price
+
+            }
+                , () => this.setColors_Sizes())
+
+        }
+
+    }
+    setColors_Sizes() {
+        const { colors_available, current_selected_color, pieces_available, size_initialSelected } = this.state
+
+        console.log('collors_available', colors_available);
+        this.setState({ sizes_available: colors_available[current_selected_color].sizes, pieces_available: colors_available[current_selected_color].sizes[size_initialSelected].quantity,quantity:0 }
+             ,
+        )
+
+
+
 
     }
 
     renderView() {
-        const { color_current_Value, current_selected_color } = this.state
+        const { color_current_Value, current_selected_color, colors_available } = this.state
         let views = []
         let loopValue = 0;
-        if ((color_current_Value + 5) > color_codes.length) {
-            loopValue = color_codes.length
+        if ((color_current_Value + 5) > colors_available.length) {
+            loopValue = colors_available.length
         }
         else {
             loopValue = (color_current_Value + 5)
         }
         for (let i = color_current_Value; i < loopValue; i++) {
             views.push(
-                <TouchableOpacity style={{ flex: 0.20, backgroundColor: color_codes[i], margin: 5, borderWidth: current_selected_color == i ? 2 : 0, borderColor: current_selected_color == i ? Colors.theme_color : null, padding: 2, }} key={i} disabled={current_selected_color == i} onPress={() => this.colorSelected(i)} />
+                <TouchableOpacity style={{ flex: 0.20, backgroundColor: colors_available[i].hash_color, margin: 5, borderWidth: current_selected_color == i ? 2 : 0, borderColor: current_selected_color == i ? Colors.theme_color : null, padding: 2, }} key={i} disabled={current_selected_color == i} onPress={() => this.colorSelected(i)} />
             )
         }
         return views;
@@ -100,10 +152,11 @@ class OrderProductDetail extends React.Component {
      * @param size_initialValue is used to compare and display the 5 sizes in views
      */
     renderSizes() {
-        let { size_initialSelected, size_initialValue } = this.state
+        let { size_initialSelected, size_initialValue, sizes_available } = this.state
+        console.log('sizes available', sizes_available)
         let loopValue = 0;
-        if ((size_initialValue + 5) > sizes.length) {
-            loopValue = sizes.length
+        if ((size_initialValue + 5) > sizes_available.length) {
+            loopValue = sizes_available.length
         }
         else {
             loopValue = size_initialValue + 5
@@ -112,7 +165,7 @@ class OrderProductDetail extends React.Component {
         for (let i = size_initialValue; i < loopValue; i++) {
             SizeViews.push(
                 <TouchableOpacity key={i} style={[{ flex: 0.20, borderWidth: size_initialSelected == i ? 2 : 0, borderColor: Colors.theme_color, }, Style.CommonStyles.centerStyle]} onPress={() => this.SelectSize(i)}>
-                    <Text style={{ fontSize: 12, color: '#000', }}>{sizes[i]}</Text>
+                    <Text style={{ fontSize: 12, color: '#000', }}>{sizes_available.length == 0 ? '' : sizes_available[i].size}</Text>
                 </TouchableOpacity>
             )
         }
@@ -158,7 +211,17 @@ class OrderProductDetail extends React.Component {
 
     }
     SelectSize(value) {
-        this.setState({ size_initialSelected: value })
+        this.setState({ size_initialSelected: value }, () => this.set_Sizes_Quantity())
+    }
+    set_Sizes_Quantity() {
+        const { colors_available, current_selected_color, pieces_available, size_initialSelected } = this.state
+
+        console.log('collors_available', colors_available);
+        this.setState({ pieces_available: colors_available[current_selected_color].sizes[size_initialSelected].quantity
+        ,quantity:0
+        }
+            ,
+        )
     }
 
     AddtoCart() {
@@ -180,9 +243,17 @@ class OrderProductDetail extends React.Component {
     doneButton = () => {
         this.props.navigation.navigate('Cart');
     }
+    IncerementQuantity = () => {
+        let { quantity } = this.state
+        this.setState({ quantity: ++quantity })
+    }
+    decerementQuantity = () => {
+        let { quantity } = this.state
+        this.setState({ quantity: --quantity })
+    }
     render() {
         const { navigation } = this.props
-        const { color_current_Value, size_initialValue, colors_Left_button_enabled, colors_Right_button_enabled, size_left_button_enabled, size_right_button_enabled } = this.state
+        const { color_current_Value, size_initialValue, colors_Left_button_enabled, colors_Right_button_enabled, size_left_button_enabled, size_right_button_enabled, articleNum, product_name, product_images, category_name, Subcategory_name, pieces_available, sale_price, quantity } = this.state
         return (
             <AppComponent>
                 <Toolbar title='Product Detail' back={true} navigation={navigation} />
@@ -194,18 +265,19 @@ class OrderProductDetail extends React.Component {
                         <View style={{ paddingVertical: 10, borderWidth: 0, }}>
 
                             <AppIntroSlider
-                                data={images_aaray}
+                                data={product_images}
                                 renderItem={item => this.renderProductImage(item)}
                                 showNextButton={false}
                                 showDoneButton={false}
                             />
                         </View>
-                        <Text style={Style.Products.ProductDetail.PropertiesStyle}>Category: Clothes/Jeans</Text>
+                        <Text style={Style.Products.ProductDetail.PropertiesStyle}>Category: {category_name}/{Subcategory_name}</Text>
                         <View style={Style.CommonStyles.borderStyle} />
-                        <Text style={Style.Products.ProductDetail.articleNum}>Article Number : <Text style={{ color: Colors.theme_color }}>1234567</Text></Text>
-                        <Text style={Style.Products.ProductDetail.articleNum}>Product Name : <Text style={{ color: Colors.theme_color }}>Top1</Text></Text>
-                        <Text style={Style.Products.ProductDetail.articleNum}>Product Price : <Text style={{ color: Colors.theme_color }}>$1000</Text></Text>
+                        <Text style={Style.Products.ProductDetail.articleNum}>Article Number : <Text style={{ color: Colors.theme_color }}>{articleNum}</Text></Text>
+                        <Text style={Style.Products.ProductDetail.articleNum}>Product Name : <Text style={{ color: Colors.theme_color }}>{product_name}</Text></Text>
+                        <Text style={Style.Products.ProductDetail.articleNum}>Product Price : <Text style={{ color: Colors.theme_color }}>${sale_price}</Text></Text>
                         <View style={Style.CommonStyles.borderStyle} />
+
 
 
 
@@ -255,22 +327,22 @@ class OrderProductDetail extends React.Component {
                         <View style={Style.CommonStyles.borderStyle} />
 
 
-                        <Text style={[Style.Products.ProductDetail.PropertiesStyle, { fontSize: 18 }]}>Pieces Available :<Text style={{ color: Colors.theme_color }}>100</Text></Text>
+                        <Text style={[Style.Products.ProductDetail.PropertiesStyle, { fontSize: 18 }]}>Pieces Available :<Text style={{ color: Colors.theme_color }}>{pieces_available}</Text></Text>
 
 
                         <Text style={[Style.Products.ProductDetail.PropertiesStyle, { fontSize: 18 }]}>Quantity</Text>
 
                         <View style={{ flexDirection: 'row', height: 30, width: '30%', alignItems: 'center', justifyContent: 'space-between', borderWidth: 0, }}>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => this.decerementQuantity()} disabled={quantity == 0 ? true : false} >
                                 <Image style={{ height: 22, width: 22, marginHorizontal: 5 }} source={Images.delete} />
                             </TouchableOpacity>
-                            <Text style={{ fontSize: 20 }}>5</Text>
-                            <TouchableOpacity>
+                            <Text style={{ fontSize: 20 }}>{quantity}</Text>
+                            <TouchableOpacity onPress={() => this.IncerementQuantity()} disabled={quantity == pieces_available ? true : false}>
                                 <Image style={{ height: 22, width: 22, marginHorizontal: 5 }} source={Images.add} />
                             </TouchableOpacity>
                         </View>
                         <Text style={[Style.Products.ProductDetail.PropertiesStyle, { fontSize: 18, marginTop: 10 }]}>Total Cost :<Text style={{ color: Colors.theme_color }}>
-                            $5000</Text></Text>
+                            ${quantity * sale_price}</Text></Text>
                         <View style={{ height: 50, width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 10 }}>
                             <TouchableOpacity style={[{ height: '100%', width: '45%', borderRadius: 50, backgroundColor: Colors.theme_color }, Style.CommonStyles.centerStyle]}
                                 onPress={() => this.AddtoCart()}
@@ -295,7 +367,15 @@ class OrderProductDetail extends React.Component {
         )
     }
 }
-export default OrderProductDetail;
+const mapStateToProps = (state) => {
+    return state;
+}
+const mapDispatchToProps = (dispatch) => {
+    return {
+        get_ProductDetail: (id) => dispatch(getProductDetail(id))
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(OrderProductDetail);
 
 // const json = {
 //     articlenumber: 123456,
