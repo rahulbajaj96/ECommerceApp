@@ -18,6 +18,7 @@ import { getProductSizes } from '../../actions/product_sizes_actions'
 import { getSubCategoriesList_On_category } from '../../actions/subcategoriesactions'
 import { ApiCallPost } from '../../Services/ApiServices'
 import { BASE_URL, API_URL } from '../../config'
+import { SPINNER_ON, SPINNER_OFF } from '../../constants/ReduxConstants'
 const colors = ['red', 'green', 'yellow', 'orange']
 const sizes = ['Small', 'Medium', 'Large', 'X-Large']
 let images_aaray = ['https://via.placeholder.com/600/66b7d2', 'https://via.placeholder.com/600/51aa97', 'https://via.placeholder.com/600/51aa97']
@@ -59,6 +60,7 @@ class AddProduct extends React.Component {
     async componentDidMount() {
 
         console.log('propDtaaProducts', this.props.route.params)
+        this.props.loader_On();
         await this.get_product_color();
         await this.get_product_sizes();
         await this.setPropData(this.props.route.params)
@@ -183,7 +185,7 @@ class AddProduct extends React.Component {
                 Page_id: propData.id,
                 product_id: propData.data.id
             })
-
+            this.props.loader_Off();
         }
         else {
             this.setState({
@@ -191,7 +193,9 @@ class AddProduct extends React.Component {
                 title: propData.title,
 
             })
+            this.props.loader_Off();
         }
+      
     }
 
     async formMultipleSelectionParticularObject() {
@@ -353,7 +357,7 @@ class AddProduct extends React.Component {
     async handleSaveProduct() {
         const { productName, articlenum, purchasePrice, sellingPrice, Category_id, SubCategory_id, multipleSelection, images_path_array, Page_id, product_id } = this.state
         const { navigation } = this.props
-
+        this.props.loader_On();
         let variationsarray = []
         for (let i = 0; i < multipleSelection.length; i++) {
             variationsarray.push({
@@ -383,9 +387,11 @@ class AddProduct extends React.Component {
 
                     Toast.show(response.message)
                     // navigation.popToTop()
+                    this.props.loader_Off();
                     navigation.navigate('Productss', { category_id: Category_id, subCategory_id: SubCategory_id });
                 }
                 else {
+                    this.props.loader_Off();
                     Toast.show(response.message)
                 }
 
@@ -394,20 +400,23 @@ class AddProduct extends React.Component {
         else if (Page_id == 2) {
             formData.append('product_id', product_id);
             console.log('formData od Edit Product ', JSON.stringify(formData));
-            var EditResponse = await ApiCallPost(`${BASE_URL}${API_URL.Edit_Products}`, formData);
-            console.log('response Add Category', EditResponse);
-            if (EditResponse != false) {
-                if (EditResponse.status == 1) {
+            setTimeout(() => {
+                this.props.loader_Off();
+            }, 2000);
+            // var EditResponse = await ApiCallPost(`${BASE_URL}${API_URL.Edit_Products}`, formData);
+            // console.log('response Add Category', EditResponse);
+            // if (EditResponse != false) {
+            //     if (EditResponse.status == 1) {
 
-                    Toast.show(EditResponse.message)
-                    // navigation.popToTop()
-                    navigation.navigate('Productss', { category_id: Category_id, subCategory_id: SubCategory_id });
-                }
-                else {
-                    Toast.show(EditResponse.message)
-                }
+            //         Toast.show(EditResponse.message)
+            //         // navigation.popToTop()
+            //         navigation.navigate('Productss', { category_id: Category_id, subCategory_id: SubCategory_id });
+            //     }
+            //     else {
+            //         Toast.show(EditResponse.message)
+            //     }
 
-            }
+            // }
         }
 
 
@@ -563,6 +572,9 @@ const mapDispatchToProps = (dispatch) => {
         getColors: () => dispatch(getProductColors()),
         getSizes: () => dispatch(getProductSizes()),
         getSubCategories: (id) => dispatch(getSubCategoriesList_On_category(id)),
+        loader_On: () => dispatch({ type: SPINNER_ON }),
+        loader_Off: () => dispatch({ type: SPINNER_OFF })
+
     }
 }
 

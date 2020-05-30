@@ -30,6 +30,11 @@ export const API_URL = {
     Product_List: 'product/list',
     Edit_Products: 'product/update',
     Delete_Products: 'product/destroy',
-    View_product: 'product/view'
+    View_product: 'product/view',
+
+    //Cart
+    Add_to_cart: 'cart/store',
+    Cart_list: 'cart/list',
+    Delete_from_cart: 'cart/destroy',
 
 }

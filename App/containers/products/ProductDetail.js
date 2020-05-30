@@ -85,7 +85,7 @@ class ProductDetail extends React.Component {
      * @param value contains the position of color selected
      */
     colorSelected(value) {
-        this.setState({ current_selected_color: value,size_initialSelected:0 }, () => this.setColors_Sizes());
+        this.setState({ current_selected_color: value, size_initialSelected: 0 }, () => this.setColors_Sizes());
 
 
     }
@@ -115,7 +115,7 @@ class ProductDetail extends React.Component {
         const { colors_available, current_selected_color, pieces_available, size_initialSelected } = this.state
 
         console.log('collors_available', colors_available);
-        this.setState({ sizes_available: colors_available[current_selected_color].sizes, pieces_available: colors_available[current_selected_color].sizes[size_initialSelected].quantity }
+        this.setState({ sizes_available: colors_available.length != 0 ? colors_available[current_selected_color].sizes : [], pieces_available: colors_available.length != 0 ? colors_available[current_selected_color].sizes[size_initialSelected].quantity : [] }
             ,
         )
 
@@ -207,21 +207,20 @@ class ProductDetail extends React.Component {
 
     }
     SelectSize(value) {
-        this.setState({ size_initialSelected: value },() => this.set_Sizes_Quantity())
+        this.setState({ size_initialSelected: value }, () => this.set_Sizes_Quantity())
     }
-    set_Sizes_Quantity()
-    {
+    set_Sizes_Quantity() {
         const { colors_available, current_selected_color, pieces_available, size_initialSelected } = this.state
 
         console.log('collors_available', colors_available);
-        this.setState({pieces_available: colors_available[current_selected_color].sizes[size_initialSelected].quantity }
+        this.setState({ pieces_available: colors_available[current_selected_color].sizes[size_initialSelected].quantity }
             ,
         )
     }
 
     render() {
         const { navigation } = this.props
-        const { color_current_Value, size_initialValue, colors_Left_button_enabled, colors_Right_button_enabled, size_left_button_enabled, size_right_button_enabled, articleNum, product_name, product_images, category_name, Subcategory_name,pieces_available } = this.state
+        const { color_current_Value, size_initialValue, colors_Left_button_enabled, colors_Right_button_enabled, size_left_button_enabled, size_right_button_enabled, articleNum, product_name, product_images, category_name, Subcategory_name, pieces_available, colors_available, sizes_available } = this.state
         return (
             <AppComponent>
                 <Toolbar title='Product Detail' back={true} navigation={navigation} />
@@ -258,8 +257,13 @@ class ProductDetail extends React.Component {
                                 <Image source={Images.left_arrow} style={{ height: 20, width: 20, }} />
                             </TouchableOpacity>
                             <View style={{ flex: 0.8, flexDirection: 'row' }}>
-
-                                {this.renderView()}
+                                {
+                                    colors_available.length != 0
+                                        ?
+                                        this.renderView()
+                                        : null
+                                }
+                               
                             </View>
                             <TouchableOpacity style={[{ flex: 0.1, opacity: colors_Right_button_enabled ? 1 : 0.2, }, Style.CommonStyles.centerStyle]}
                                 onPress={() => this.changeColor(1)}
@@ -281,7 +285,14 @@ class ProductDetail extends React.Component {
                                 <Image source={Images.left_arrow} style={{ height: 20, width: 20, }} />
                             </TouchableOpacity>
                             <View style={{ flex: 0.8, flexDirection: 'row' }}>
-                                {this.renderSizes()}
+                                {
+                                    sizes_available.length != 0
+                                    ?
+                                    this.renderSizes()
+                                    :
+                                    null
+                                }
+                               
                             </View>
                             <TouchableOpacity style={[{ flex: 0.1, opacity: size_right_button_enabled ? 1 : 0.2 }, Style.CommonStyles.centerStyle]}
                                 onPress={() => this.changeSize(1)}

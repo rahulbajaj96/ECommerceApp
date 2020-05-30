@@ -8,6 +8,9 @@ import Images from '../../utils/Image';
 import AppIntroSlider from 'react-native-app-intro-slider';
 import { connect } from 'react-redux'
 import { getProductDetail } from '../../actions/productsactions';
+import { ApiCallPost } from '../../Services/ApiServices';
+import { BASE_URL, API_URL } from '../../config';
+import Toast from 'react-native-simple-toast';
 
 
 let color_codes = ['#3A137C', '#BBF11D', '#F1371D', '#1D3AF1', '#1DF1EB', '#1DF12D', '#F19A1D', '#E11DF1']
@@ -29,12 +32,14 @@ class OrderProductDetail extends React.Component {
         product_name: '',
         category_name: '',
         Subcategory_name: '',
+        category_id: '',
+        Subcategory_id: '',
         product_images: [],
         colors_available: [],
         sizes_available: [],
         pieces_available: '',
         sale_price: '',
-        quantity: 0
+        quantity: 0,
 
     }
     /**
@@ -94,10 +99,11 @@ class OrderProductDetail extends React.Component {
     }
     async get_product_detail(product_id) {
         await this.props.get_ProductDetail(product_id);
-        const { product_images } = this.state
+        let { product_images } = this.state
         const { productsReducer } = this.props
+        product_images = []
         if (productsReducer.product_detail_api_response.status == 1) {
-            // console.log('Product Detail', productsReducer.product_detail_api_response.data.colors)
+            console.log('Product Detail', productsReducer.product_detail_api_response.data)
             let response = productsReducer.product_detail_api_response.data
             for (let i = 0; i < response.product_image.length; i++) {
                 product_images.push(response.product_image[i].image);
@@ -106,7 +112,10 @@ class OrderProductDetail extends React.Component {
                 articleNum: response.article_no, product_name: response.name, category_name: response.category_name,
                 Subcategory_name: response.subcategory_name, product_images,
                 colors_available: productsReducer.product_detail_api_response.data.colors,
-                sale_price: response.sale_price
+                sale_price: response.sale_price,
+                product_id: product_id,
+                category_id: response.category_id,
+                Subcategory_id: response.subcategory_id
 
             }
                 , () => this.setColors_Sizes())
@@ -118,7 +127,7 @@ class OrderProductDetail extends React.Component {
         const { colors_available, current_selected_color, pieces_available, size_initialSelected } = this.state
 
         console.log('collors_available', colors_available);
-        this.setState({ sizes_available: colors_available[current_selected_color].sizes, pieces_available: colors_available[current_selected_color].sizes[size_initialSelected].quantity,quantity:0 }
+        this.setState({ sizes_available: colors_available[current_selected_color].sizes, pieces_available: colors_available[current_selected_color].sizes[size_initialSelected].quantity, quantity: 0 }
              ,
         )
 
@@ -217,28 +226,57 @@ class OrderProductDetail extends React.Component {
         const { colors_available, current_selected_color, pieces_available, size_initialSelected } = this.state
 
         console.log('collors_available', colors_available);
-        this.setState({ pieces_available: colors_available[current_selected_color].sizes[size_initialSelected].quantity
-        ,quantity:0
+        this.setState({
+            pieces_available: colors_available[current_selected_color].sizes[size_initialSelected].quantity
+            , quantity: 0
         }
             ,
         )
     }
 
-    AddtoCart() {
-        Alert.alert(
-            '',
-            'This product has been addes to cart.Do you want to add more?',
-            [
-                { text: 'Yes', onPress: () => console.log('Yes Pressed'), style: 'cancel' },
-                {
-                    text: 'No', onPress: () =>
+    async AddtoCart() {
+        const { product_id, product_images, product_name, category_name, category_id, Subcategory_id, Subcategory_name, articleNum, quantity, sale_price, colors_available, current_selected_color, size_initialSelected, sizes_available } = this.state
+        let cartformData = new FormData();
+        cartformData.append('product_id', product_id);
+        cartformData.append('color_id', colors_available[current_selected_color].id);
+        cartformData.append('size_id', sizes_available[size_initialSelected].size_id);
+        cartformData.append('quantity', quantity);
+        cartformData.append('price', quantity * sale_price);
+        cartformData.append('product_name', product_name);
+        console.log('formdata of Add To cart ', cartformData);
 
-                        console.log('Cancel Pressed')
+        let responseAddToCart = await ApiCallPost(`${BASE_URL}${API_URL.Add_to_cart}`, cartformData);
+        console.log('resonse', responseAddToCart);
+        if (responseAddToCart != false) {
+            if (responseAddToCart.status == 1) {
+                Alert.alert(
+                    '',
+                    'This product has been addes to cart.Do you want to add more?',
+                    [
+                        { text: 'Yes', onPress: () => this.performYesCall(product_id), style: 'cancel' },
+                        {
+                            text: 'No', onPress: () =>
 
-                },
-            ],
-            { cancelable: false }
-        )
+                                console.log('Cancel Pressed')
+
+                        },
+                    ],
+                    { cancelable: false }
+                )
+            }
+            else {
+                setTimeout(() => {
+                    Toast.show(responseAddToCart.message)
+                }, 500);
+            }
+
+        }
+
+
+    }
+    performYesCall(product_id) {
+        this.scrollViewProductDetail.scrollTo({ x: 0, y: 0, animated: true })
+        this.get_product_detail(product_id);
     }
     doneButton = () => {
         this.props.navigation.navigate('Cart');
@@ -253,14 +291,16 @@ class OrderProductDetail extends React.Component {
     }
     render() {
         const { navigation } = this.props
-        const { color_current_Value, size_initialValue, colors_Left_button_enabled, colors_Right_button_enabled, size_left_button_enabled, size_right_button_enabled, articleNum, product_name, product_images, category_name, Subcategory_name, pieces_available, sale_price, quantity } = this.state
+        const { color_current_Value, size_initialValue, colors_Left_button_enabled, colors_Right_button_enabled, size_left_button_enabled, size_right_button_enabled, articleNum, product_name, product_images, category_name, Subcategory_name, pieces_available, sale_price, quantity, sizes_available, colors_available } = this.state
         return (
             <AppComponent>
                 <Toolbar title='Product Detail' back={true} navigation={navigation} />
 
                 <View style={{ flex: 1, }}>
 
-                    <ScrollView style={{ flex: 1, paddingHorizontal: 10 }} >
+                    <ScrollView style={{ flex: 1, paddingHorizontal: 10 }}
+                        ref={(ref) => { this.scrollViewProductDetail = ref; }}
+                    >
 
                         <View style={{ paddingVertical: 10, borderWidth: 0, }}>
 
@@ -292,8 +332,12 @@ class OrderProductDetail extends React.Component {
                                 <Image source={Images.left_arrow} style={{ height: 20, width: 20, }} />
                             </TouchableOpacity>
                             <View style={{ flex: 0.8, flexDirection: 'row' }}>
-
-                                {this.renderView()}
+                                {
+                                    colors_available.length != 0
+                                        ?
+                                        this.renderView()
+                                        : null
+                                }
                             </View>
                             <TouchableOpacity style={[{ flex: 0.1, opacity: colors_Right_button_enabled ? 1 : 0.2, }, Style.CommonStyles.centerStyle]}
                                 onPress={() => this.changeColor(1)}
@@ -315,7 +359,13 @@ class OrderProductDetail extends React.Component {
                                 <Image source={Images.left_arrow} style={{ height: 20, width: 20, }} />
                             </TouchableOpacity>
                             <View style={{ flex: 0.8, flexDirection: 'row' }}>
-                                {this.renderSizes()}
+                                {
+                                    sizes_available.length != 0
+                                        ?
+                                        this.renderSizes()
+                                        :
+                                        null
+                                }
                             </View>
                             <TouchableOpacity style={[{ flex: 0.1, opacity: size_right_button_enabled ? 1 : 0.2 }, Style.CommonStyles.centerStyle]}
                                 onPress={() => this.changeSize(1)}
@@ -344,8 +394,9 @@ class OrderProductDetail extends React.Component {
                         <Text style={[Style.Products.ProductDetail.PropertiesStyle, { fontSize: 18, marginTop: 10 }]}>Total Cost :<Text style={{ color: Colors.theme_color }}>
                             ${quantity * sale_price}</Text></Text>
                         <View style={{ height: 50, width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 10 }}>
-                            <TouchableOpacity style={[{ height: '100%', width: '45%', borderRadius: 50, backgroundColor: Colors.theme_color }, Style.CommonStyles.centerStyle]}
+                            <TouchableOpacity style={[{ height: '100%', width: '45%', borderRadius: 50, backgroundColor: Colors.theme_color, opacity: quantity == 0 ? 0.2 : 1, }, Style.CommonStyles.centerStyle]}
                                 onPress={() => this.AddtoCart()}
+                                disabled={quantity == 0 ? true : false}
                             >
                                 <Text style={{ color: '#fff', fontSize: 16 }}>Continue</Text>
                             </TouchableOpacity>
