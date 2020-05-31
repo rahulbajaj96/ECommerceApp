@@ -32,3 +32,9 @@ export const PRODUCTS_DETAIL_FAILURE = 'product_detail_failure';
 
 export const CART_LIST_SUCCESS = 'cart_list_success';
 export const CART_LIST_FAILURE = 'cart_list_failure';
+
+export const ORDER_LIST_SUCCESS = 'order_list_success';
+export const ORDER_LIST_FAILURE = 'order_list_failure';
+
+export const ORDER_DETAIL_SUCCESS = 'order_detail_success';
+export const ORDER_DETAIL_FAILURE = 'order_detail_failure';

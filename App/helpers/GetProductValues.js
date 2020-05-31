@@ -1,7 +1,3 @@
-import { useDispatch, useSelector } from "react-redux";
-import React from 'react'
-
-
 export function getColorParamsFromName(colors_array, color_selected) {
     console.log('color selected', color_selected);
 

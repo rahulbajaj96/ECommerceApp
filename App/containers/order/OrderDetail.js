@@ -6,10 +6,22 @@ import AppIntroSlider from 'react-native-app-intro-slider';
 import Style from '../../utils/Style';
 import Images from '../../utils/Image';
 let images_aaray = ['https://via.placeholder.com/600/66b7d2', 'https://via.placeholder.com/600/51aa97', 'https://via.placeholder.com/600/51aa97']
+import { getOrderDetail } from '../../actions/orderaction'
 
 
 class OrderDetail extends React.Component {
     state = {}
+    componentDidMount() {
+        const { route } = this.props
+        console.log('order_id', route.params.order_id);
+        // this.getOrderDetails(route.params.order_id);
+
+    }
+    async getOrderDetails(id) {
+        await this.props.get_Order_Details(id);
+        const { orderReducer } = this.state
+        console.log('response of Order Detail', orderReducer.order_detail_response);
+    }
     renderProductImage = (item) => {
         console.log('item', item)
         return (
@@ -49,8 +61,8 @@ class OrderDetail extends React.Component {
                 <Toolbar title='Order Detail' back={true} navigation={navigation} />
                 <View style={{ flex: 1 }}>
 
-                    <View style={{ flex: 0.1,  alignItems: 'flex-end', justifyContent: 'center',paddingHorizontal:20 }}>
-                        <Text style={Style.Orders.viewBill} onPress={()=> console.log('Bill url')}>View Bill</Text>
+                    <View style={{ flex: 0.1, alignItems: 'flex-end', justifyContent: 'center', paddingHorizontal: 20 }}>
+                        <Text style={Style.Orders.viewBill} onPress={() => console.log('Bill url')}>View Bill</Text>
                     </View>
                     <FlatList
                         data={[1, 2, 3, 4, 5]}
@@ -68,4 +80,12 @@ class OrderDetail extends React.Component {
         )
     }
 }
-export default OrderDetail;
+const mapStateToProps = (state) => {
+    return state;
+}
+const mapDispatchToProps = (dispatch) => {
+    return {
+        get_Order_Details: (id) => dispatch(getOrderDetail(id))
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(OrderDetail);

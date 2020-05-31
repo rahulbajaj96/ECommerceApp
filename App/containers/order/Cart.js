@@ -35,12 +35,12 @@ class Cart extends React.Component {
     }
     renderCartItems = (item) => {
         console.log('cart items', item.item)
-        const { product_name, category, subcategory, article_no, total_amount, size, color, quantity } = item.item
+        const { product_name, category, subcategory, article_no, total_amount, size, color, quantity, product_images } = item.item
         return (
             <View style={{ flex: 1, marginVertical: 2, marginHorizontal: 5, borderBottomWidth: 0.2, paddingVertical: 10, paddingHorizontal: 5, flexDirection: 'row' }}>
 
                 <View style={[{ flex: 0.30, }, Style.CommonStyles.centerStyle]}>
-                    <Image style={{ height: '80%', width: '100%', }} source={{ uri: images_aaray[0] }} />
+                    <Image style={{ height: '80%', width: '100%', }} source={{ uri: product_images.length != 0 ? product_images[0].image : images_aaray[0] }} />
                 </View>
                 <View style={{ flex: 0.7, paddingHorizontal: 10 }}>
                     <Text style={Style.Cart.ProductName}>{product_name}</Text>
@@ -81,12 +81,25 @@ class Cart extends React.Component {
         }
 
     }
+    goToCheckout() {
+        const { navigation } = this.props
+        const { cart } = this.state
+        let checkoutArray = [];
+        let finalPrice = 0;
+        for (let i = 0; i < cart.length; i++) {
+            checkoutArray.push({ id: cart[i].id });
+            finalPrice += parseInt(cart[i].total_amount)
+        }
+        console.log('checkout array', JSON.stringify(checkoutArray));
+        console.log('finalPrice = ' + finalPrice);
+        navigation.navigate('Bill_Checkout', { checkoutArray: checkoutArray, total_price: finalPrice })
+    }
     render() {
         const { navigation } = this.props
         const { cart } = this.state
         return (
             <AppComponent>
-                <Toolbar title='Cart' right={1} back={true} navigation={navigation} onSavePress={() => navigation.navigate('Bill_Checkout')} />
+                <Toolbar title='Cart' right={1} back={true} navigation={navigation} onSavePress={() => this.goToCheckout()} />
                 <View style={{ flex: 1 }}>
                     {
                         cart.length != 0

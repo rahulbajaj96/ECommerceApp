@@ -8,6 +8,7 @@ import { product_color_reducer } from "./ProductsColorsReducer";
 import { product_size_reducer } from "./ProductSizesReducer";
 import { productsReducer } from "./ProductsReducer";
 import { cartReducer } from "./CartReducer";
+import { orderReducer } from "./OrderReducer";
 
 const AllReducers = combineReducers({
     LoginReducer,
@@ -18,7 +19,8 @@ const AllReducers = combineReducers({
     product_color_reducer,
     product_size_reducer,
     productsReducer,
-    cartReducer
+    cartReducer,
+    orderReducer
 })
 
 export default AllReducers;

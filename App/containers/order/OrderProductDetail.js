@@ -40,6 +40,7 @@ class OrderProductDetail extends React.Component {
         pieces_available: '',
         sale_price: '',
         quantity: 0,
+        cartButton: false
 
     }
     /**
@@ -255,10 +256,7 @@ class OrderProductDetail extends React.Component {
                     [
                         { text: 'Yes', onPress: () => this.performYesCall(product_id), style: 'cancel' },
                         {
-                            text: 'No', onPress: () =>
-
-                                console.log('Cancel Pressed')
-
+                            text: 'No', onPress: () => this.setState({ cartButton: true })
                         },
                     ],
                     { cancelable: false }
@@ -291,7 +289,7 @@ class OrderProductDetail extends React.Component {
     }
     render() {
         const { navigation } = this.props
-        const { color_current_Value, size_initialValue, colors_Left_button_enabled, colors_Right_button_enabled, size_left_button_enabled, size_right_button_enabled, articleNum, product_name, product_images, category_name, Subcategory_name, pieces_available, sale_price, quantity, sizes_available, colors_available } = this.state
+        const { color_current_Value, size_initialValue, colors_Left_button_enabled, colors_Right_button_enabled, size_left_button_enabled, size_right_button_enabled, articleNum, product_name, product_images, category_name, Subcategory_name, pieces_available, sale_price, quantity, sizes_available, colors_available, cartButton } = this.state
         return (
             <AppComponent>
                 <Toolbar title='Product Detail' back={true} navigation={navigation} />
@@ -400,10 +398,11 @@ class OrderProductDetail extends React.Component {
                             >
                                 <Text style={{ color: '#fff', fontSize: 16 }}>Continue</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={[{ height: '100%', width: '45%', borderRadius: 50, backgroundColor: Colors.theme_color }, Style.CommonStyles.centerStyle]}
+                            <TouchableOpacity style={[{ height: '100%', width: '45%', borderRadius: 50, backgroundColor: Colors.theme_color, opacity: cartButton ? 1 : 0.2, }, Style.CommonStyles.centerStyle]}
+                                disabled={!cartButton}
                                 onPress={() => this.doneButton()}
                             >
-                                <Text style={{ color: '#fff', fontSize: 16 }}>Done</Text>
+                                <Text style={{ color: '#fff', fontSize: 16 }}>Proceed To Cart</Text>
                             </TouchableOpacity>
 
 

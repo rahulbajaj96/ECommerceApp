@@ -37,4 +37,9 @@ export const API_URL = {
     Cart_list: 'cart/list',
     Delete_from_cart: 'cart/destroy',
 
+    //Order
+    Create_order: 'order/store',
+    OrderList: 'order/list',
+    viewOrder: 'order/show',
+
 }

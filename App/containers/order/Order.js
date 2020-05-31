@@ -4,8 +4,10 @@ import AppComponent from '../../components/AppComponent'
 import Toolbar from '../../components/Toolbar'
 import { SearchBar } from '../../components/SearchBar'
 import Style from '../../utils/Style';
+import { connect } from "react-redux";
 import Modal from "react-native-modal";
 import Images from '../../utils/Image'
+import {  getOrderList } from '../../actions/orderaction'
 
 class Order extends React.Component {
     constructor(props) {
@@ -13,10 +15,25 @@ class Order extends React.Component {
         // this.nav = props.navigation()
     }
     state = {
-        searchedValue: '', modalVisibilty: false,
+        searchedValue: '',
+        orders_array: [],
+        modalVisibilty: false,
         sortingOrder: 0,
         sortingArray: [{ name: 'Date', value: 0 }, { name: 'Price', value: 1 }, { name: 'Company Name', value: 2 }],
         modalEditDelete: false, modalTitle: ''
+    }
+    componentDidMount() {
+        this.getorders();
+    }
+
+    async getorders() {
+        await this.props.get_Order_List();
+        const { orderReducer } = this.props
+        console.log('OrderReducers', orderReducer.order_list_response)
+        if (orderReducer.order_list_response.status == 1) {
+            this.setState({ orders_array: orderReducer.order_list })
+        }
+
     }
     openEditDelete = (item) => {
         this.setState({ modalEditDelete: true, modalTitle: 'Order' })
@@ -72,7 +89,7 @@ class Order extends React.Component {
         navigation.navigate('OrderCategories')
     }
     render() {
-        const { searchedValue, modalVisibilty, sortingArray, sortingOrder, modalEditDelete, modalTitle } = this.state
+        const { searchedValue, modalVisibilty, sortingArray, sortingOrder, modalEditDelete, modalTitle,orders_array } = this.state
         return (
             <AppComponent>
                 <Toolbar title='Orders' />
@@ -140,4 +157,12 @@ class Order extends React.Component {
         )
     }
 }
-export default Order;
+const mapStateToProps = (state) => {
+    return state;
+}
+const mapDispatchToProps = (dispatch) => {
+    return {
+        get_Order_List: () => dispatch(getOrderList())
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Order);
