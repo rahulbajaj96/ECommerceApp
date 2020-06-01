@@ -103,6 +103,7 @@ export default {
             sortItemTextColor: { color: Colors.black, fontSize: 14, },
             radioButton: { borderWidth: 1, borderColor: '#000', height: 20, width: 20, borderRadius: 10, backgroundColor: Colors.theme_color }
         },
+        orderCompanyName:{ marginVertical: 2, fontSize: 16, color: Colors.theme_color ,},
         viewBill: { fontSize: 14, color: Colors.theme_color, },
         orderListItemView: { flex: 1, flexDirection: 'row', marginVertical: 5, borderBottomWidth: 1, borderBottomColor: Colors.black, paddingLeft: 10 }
     },

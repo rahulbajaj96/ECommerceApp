@@ -128,13 +128,7 @@ class OrderProductDetail extends React.Component {
         const { colors_available, current_selected_color, pieces_available, size_initialSelected } = this.state
 
         console.log('collors_available', colors_available);
-        this.setState({ sizes_available: colors_available[current_selected_color].sizes, pieces_available: colors_available[current_selected_color].sizes[size_initialSelected].quantity, quantity: 0 }
-             ,
-        )
-
-
-
-
+        this.setState({ sizes_available: colors_available.length != 0 ? colors_available[current_selected_color].sizes : [], pieces_available: colors_available.length != 0 ? colors_available[current_selected_color].sizes[size_initialSelected].quantity : 0, quantity: 0 })
     }
 
     renderView() {
@@ -228,11 +222,8 @@ class OrderProductDetail extends React.Component {
 
         console.log('collors_available', colors_available);
         this.setState({
-            pieces_available: colors_available[current_selected_color].sizes[size_initialSelected].quantity
-            , quantity: 0
-        }
-            ,
-        )
+            pieces_available: colors_available[current_selected_color].sizes[size_initialSelected].quantity, quantity: 0
+        })
     }
 
     async AddtoCart() {

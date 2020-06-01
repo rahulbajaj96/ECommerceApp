@@ -7,7 +7,7 @@ import Style from '../../utils/Style';
 import { connect } from "react-redux";
 import Modal from "react-native-modal";
 import Images from '../../utils/Image'
-import {  getOrderList } from '../../actions/orderaction'
+import { getOrderList } from '../../actions/orderaction'
 
 class Order extends React.Component {
     constructor(props) {
@@ -23,9 +23,21 @@ class Order extends React.Component {
         modalEditDelete: false, modalTitle: ''
     }
     componentDidMount() {
-        this.getorders();
-    }
+        const { navigation } = this.props
+        navigation.addListener('focus', () => {
+            // The screen is focused
+            console.log('when screen is focused');
+            // Call any action
+            this.getorders();
 
+        });
+    }
+    componentWillUnmount() {
+        const { navigation } = this.props
+
+        console.log('componenet gone ')
+        navigation.removeListener('focus');
+    }
     async getorders() {
         await this.props.get_Order_List();
         const { orderReducer } = this.props
@@ -39,14 +51,15 @@ class Order extends React.Component {
         this.setState({ modalEditDelete: true, modalTitle: 'Order' })
     }
     renderOrderList = (item) => {
+        const { get_customers, id, created_at } = item.item
         return (
             <View style={Style.Orders.orderListItemView}>
                 <TouchableOpacity style={{ flex: 0.8, paddingHorizontal: 10 }}
-                    onPress={() => this.props.navigation.navigate('OrderDetail')}
+                    onPress={() => this.props.navigation.navigate('OrderDetail', { order_id: id })}
                 >
-                    <Text style={{ marginVertical: 2, fontSize: 14, color: '#000' }}>Company Name</Text>
-                    <Text style={{ marginVertical: 2, fontSize: 14, color: '#000' }}>Company Name</Text>
-                    <Text style={{ marginVertical: 2, fontSize: 14, color: '#000' }}>Date</Text>
+                    <Text style={[Style.Orders.orderCompanyName,{fontWeight:'bold'}]}>{get_customers.first_name}{get_customers.last_name}</Text>
+                    <Text style={Style.Orders.orderCompanyName}>{get_customers.company_name}</Text>
+                    <Text style={{ marginVertical: 2, fontSize: 14, color: '#000' }}>{created_at}</Text>
 
 
                 </TouchableOpacity>
@@ -89,7 +102,7 @@ class Order extends React.Component {
         navigation.navigate('OrderCategories')
     }
     render() {
-        const { searchedValue, modalVisibilty, sortingArray, sortingOrder, modalEditDelete, modalTitle,orders_array } = this.state
+        const { searchedValue, modalVisibilty, sortingArray, sortingOrder, modalEditDelete, modalTitle, orders_array } = this.state
         return (
             <AppComponent>
                 <Toolbar title='Orders' />
@@ -128,7 +141,7 @@ class Order extends React.Component {
                 </View>
                 <View style={{ flex: 0.8, }}>
                     <FlatList
-                        data={[1, 2, 3, 4, 5]}
+                        data={orders_array}
                         renderItem={item => this.renderOrderList(item)}
                         extraData={this.state}
                         keyExtractor={(item, index) => index.toString()}

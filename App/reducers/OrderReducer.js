@@ -10,7 +10,7 @@ export const orderReducer = (state = initialState, action) => {
         case ORDER_LIST_SUCCESS: return {
             ...state,
             order_list_response: action.payload,
-            order_list: payload.data
+            order_list: action.payload.data
         };
         case ORDER_LIST_FAILURE: return {
             ...state,

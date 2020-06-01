@@ -11,7 +11,7 @@ import { getCustomerList } from '../../actions/customeractions';
 import { getCustomerParamsFromName } from '../../helpers/GetCustomerValues';
 import { ApiCallPost } from '../../Services/ApiServices';
 import { BASE_URL, API_URL } from '../../config';
-import { Toast } from 'native-base';
+import Toast from 'react-native-simple-toast';
 
 class Bill_Checkout extends React.Component {
     state = {
@@ -55,22 +55,23 @@ class Bill_Checkout extends React.Component {
         )
     }
     async printRealInvoice(value) {
-        const { route, customerReducer } = this.props
+        const { route, customerReducer, navigation } = this.props
         const { selected_customer } = this.state
         let selected_customer_params = await getCustomerParamsFromName(customerReducer.customer_list, selected_customer);
         console.log('checkoutarray', JSON.stringify(route.params.checkoutArray))
         let formdata = new FormData();
         formdata.append('carts', JSON.stringify(route.params.checkoutArray));
         formdata.append('customer_id', selected_customer_params.customer_id);
-        formdata.append('customer_bill_status', value ? 1 : 0);
+        formdata.append('company_bill_status', value ? 1 : 0);
         console.log('formData of Print bill and place order', formdata);
         var order_response = await ApiCallPost(`${BASE_URL}${API_URL.Create_order}`, formdata);
         console.log('response', order_response);
-        // if (order_response != false) {
-        //     if (order_response.status == 1) {
-        //         Toast.show('Order Created');
-        //     }
-        // }
+        if (order_response != false) {
+            if (order_response.status == 1) {
+                Toast.show('Order Created');
+                navigation.navigate('Order');
+            }
+        }
 
 
     }

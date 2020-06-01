@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Textarea } from 'native-base';
 import Style from '../../utils/Style';
 import Spinner from 'react-native-loading-spinner-overlay'
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Colors from '../../utils/Colors';
 import ImagePicker from 'react-native-image-picker';
 import Images from '../../utils/Image';
@@ -179,6 +179,7 @@ function AddCategory(props) {
                 }
             }
             else if (PAGE_ID == 2) {
+                formdata.append('image', PhotoPath);
                 formdata.append('category_id', Category_ID);
                 console.log('Edit Category Api Call')
                 console.log('formdata of Edit Ctaegory ', formdata);
@@ -222,6 +223,7 @@ function AddCategory(props) {
             else if (PAGE_ID == 3) {
                 console.log('Edit SubCategory Api Call')
                 // formdata.append('image', PhotoPath);
+                formdata.append('image', PhotoPath);
                 formdata.append('category_id', Category_ID);
                 formdata.append('subcategory_id', Subcategory_ID);
                 console.log('formData of Edit SubCategory ', formdata);
@@ -250,7 +252,7 @@ function AddCategory(props) {
             <Toolbar title={title} back={true} navigation={navigation} right={1} onSavePress={() => handleSaveCategory()} />
             <Spinner visible={spinner} />
             <View style={[Style.CommonStyles.fullFlex,]}>
-                <ScrollView style={{ paddingHorizontal: '5%' }}>
+                <KeyboardAwareScrollView style={{ paddingHorizontal: '5%' }}>
 
 
 
@@ -294,7 +296,7 @@ function AddCategory(props) {
 
                     />
 
-                </ScrollView>
+                </KeyboardAwareScrollView>
             </View>
 
         </AppComponent>

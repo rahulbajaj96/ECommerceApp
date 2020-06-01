@@ -400,23 +400,23 @@ class AddProduct extends React.Component {
         else if (Page_id == 2) {
             formData.append('product_id', product_id);
             console.log('formData od Edit Product ', JSON.stringify(formData));
-            setTimeout(() => {
-                this.props.loader_Off();
-            }, 2000);
-            // var EditResponse = await ApiCallPost(`${BASE_URL}${API_URL.Edit_Products}`, formData);
-            // console.log('response Add Category', EditResponse);
-            // if (EditResponse != false) {
-            //     if (EditResponse.status == 1) {
+           
+            var EditResponse = await ApiCallPost(`${BASE_URL}${API_URL.Edit_Products}`, formData);
+            console.log('response Edit Category', EditResponse);
+            if (EditResponse != false) {
+                if (EditResponse.status == 1) {
 
-            //         Toast.show(EditResponse.message)
-            //         // navigation.popToTop()
-            //         navigation.navigate('Productss', { category_id: Category_id, subCategory_id: SubCategory_id });
-            //     }
-            //     else {
-            //         Toast.show(EditResponse.message)
-            //     }
+                    Toast.show(EditResponse.message)
+                    this.props.loader_Off();
+                    // navigation.popToTop()
+                    navigation.navigate('Productss', { category_id: Category_id, subCategory_id: SubCategory_id });
+                }
+                else {
+                    Toast.show(EditResponse.message)
+                    this.props.loader_Off();
+                }
 
-            // }
+            }
         }
 
 
