@@ -9,6 +9,15 @@ import Images from '../../utils/Image';
 import ImagePicker from 'react-native-image-picker';
 import { AANHEFArray } from '../../constants/AppConstants'
 
+import { EmptyValidation, Get_Message, EmailValidation } from '../../helpers/InputValidations';
+import Toast from 'react-native-simple-toast';
+import { useDispatch, useSelector } from "react-redux";
+import Spinner from 'react-native-loading-spinner-overlay'
+import { ApiCallPost } from '../../Services/ApiServices';
+import { BASE_URL, API_URL } from '../../config';
+import { SPINNER_ON, SPINNER_OFF } from '../../constants/ReduxConstants';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 function AddEmployee(props) {
     const [first_name, setfirst_name] = useState('')
     const [last_name, setlast_name] = useState('')
@@ -23,10 +32,17 @@ function AddEmployee(props) {
     const [AANHEF, setAANHEF] = useState()
     const [ImageUploaded, setImageUploaded] = useState(false)
     const navigation = useNavigation();
-
+    const [ID, setID] = useState(0)
+    const [Address, setAddress] = useState('')
     const [title, settitle] = useState('')
+    const [Customer_id, setCustomer_id] = useState('')
+    const [photoPath, setphotoPath] = useState('')
 
+    const dispatch = useDispatch();
+    const { spinner } = useSelector(state => ({
+        spinner: state.spinnerReducer.SpinnerVisibility,
 
+    }));
 
     useEffect(() => {
         console.log('props', props.route.params)
@@ -35,22 +51,28 @@ function AddEmployee(props) {
 
     function setPropData(propData) {
         settitle(propData.title)
+        setID(propData.id)
         if (propData.id == 2) {
-            setEditEmployeeData(propData)
+            setEditEmployeeData(propData.data)
         }
 
     }
-    function setEditEmployeeData() {
-        setPostalCode('01');
-        setfirst_name('Rahul')
-        setlast_name('Bajaj');
-        setcompany_name('Work from Home');
-        setKVKNum('12346789');
-        setemail('qwerty@iop.com')
-        setphone('98745563210');
-        setStreet('ABC def #90');
-        setcity('Patiala');
-        setAANHEF('Mrs.')
+    function setEditEmployeeData(propData) {
+        console.log('propData', propData)
+        setPostalCode(propData.postal_code);
+        setfirst_name(propData.first_name)
+        setlast_name(propData.last_name);
+        setcompany_name(propData.company_name);
+        setKVKNum(propData.kvk_number);
+        setemail(propData.email)
+        setphone(propData.telephone);
+        setStreet(propData.street_house_no);
+        setcity(propData.city);
+        setAddress(propData.address)
+        setAANHEF(propData.prefixing_type)
+        setCustomer_id(propData.id)
+        setImageUri(propData.profile_pic)
+        setImageUploaded(true)
     }
 
     function goToImagePicker() {
@@ -75,32 +97,146 @@ function AddEmployee(props) {
             } else {
                 const source = { uri: response.uri };
 
+                setphotoPath({
+                    name: 'ABC',
+                    type: response.type, uri: response.uri
+                })
                 setImageUploaded(true);
                 setImageUri(response.uri);
-
-                // You can also display the image using data:
-                // const source = { uri: 'data:image/jpeg;base64,' + response.data };
 
 
             }
         });
-
-
-
     }
+    async function handleSaveCustomer() {
+        if (!EmptyValidation(ImageUri)) {
+            Toast.show("Please select a Customer pic");
+            return;
+        }
+        if (!EmptyValidation(AANHEF)) {
+            Toast.show(Get_Message("AANHEF"));
+            return;
+        }
 
+        if (!EmptyValidation(first_name)) {
+            Toast.show(Get_Message("First Name"));
+            return;
+        }
+        if (!EmptyValidation(last_name)) {
+            Toast.show(Get_Message("Last Name"));
+            return;
+        }
+        if (!EmptyValidation(company_name)) {
+            Toast.show(Get_Message("Comapany Name"));
+            return;
+        }
+        if (!EmptyValidation(KVKNum)) {
+            Toast.show(Get_Message("KVK Number"));
+            return;
+        }
+        if (!EmptyValidation(email)) {
+            Toast.show(Get_Message("Email"));
+            return;
+        }
+        if (!EmailValidation(email)) {
+            Toast.show(Email_VALIDATION_MESSAGE);
+            return;
+        }
+        if (!EmptyValidation(phone)) {
+            Toast.show(Get_Message("Phone no."));
+            return;
+        }
+        if (!EmptyValidation(email)) {
+            Toast.show(Get_Message("Email"));
+            return;
+        }
+        if (!EmptyValidation(city)) {
+            Toast.show(Get_Message("City"));
+            return;
+        }
+        if (!EmptyValidation(PostalCode)) {
+            Toast.show(Get_Message("Postal code"));
+            return;
+        }
+        else {
+
+
+
+            let formdata = new FormData();
+            formdata.append('first_name', first_name);
+            formdata.append('last_name', last_name);
+            formdata.append('email', email);
+            formdata.append('company_name', company_name);
+            formdata.append('kvk_number', KVKNum);
+            formdata.append('telephone', phone);
+            formdata.append('address', Address);
+            formdata.append('postal_code', PostalCode);
+            formdata.append('city', city);
+            formdata.append('street_house_no', Street)
+            formdata.append('prefixing_type', AANHEF);
+            formdata.append('profile_pic', photoPath)
+
+
+            if (ID == 1) {
+                console.log('handle Add Employee', `${BASE_URL}${API_URL.AddEmployee}`);
+                console.log('formdata of Add Employee Api ', formdata)
+
+                dispatch({ type: SPINNER_ON })
+
+                var response = await ApiCallPost(`${BASE_URL}${API_URL.AddEmployee}`, formdata);
+                console.log('response of Add Employee Api', JSON.stringify(response))
+
+                dispatch({ type: SPINNER_OFF })
+
+                if (response != false)
+                    if (response.status == 1) {
+
+                        Toast.show(response.message)
+                        // navigation.popToTop()
+                        navigation.navigate('Employee', { reload: true });
+                        // dispatch(getCustomerList())
+
+                    }
+                    else {
+                        Toast.show(response.message)
+                    }
+            }
+            else {
+                console.log('handleEdit Employee')
+                formdata.append('worker_id', Customer_id);
+                console.log('formdata of Edit Employee', formdata)
+                dispatch({ type: SPINNER_ON })
+
+                var responseEdit = await ApiCallPost(`${BASE_URL}${API_URL.Edit_Employee}`, formdata);
+                console.log('response of Edit Employee Api', JSON.stringify(responseEdit))
+                dispatch({ type: SPINNER_OFF })
+                if (responseEdit != false)
+                    if (responseEdit.status == 1) {
+
+                        Toast.show(responseEdit.message)
+                        // navigation.popToTop()
+                        navigation.navigate('Employee', { reload: true });
+                        // dispatch(getCustomerList())
+
+                    }
+                    else {
+                        Toast.show(responseEdit.message)
+                    }
+            }
+        }
+    }
     return (
         <AppComponent>
-            <Toolbar title={title} right={1} back={true} navigation={navigation} />
-            <ScrollView style={[Style.CommonStyles.fullFlex, { paddingHorizontal: '5%', paddingVertical: '5%' }]}>
-
+            <Toolbar title={title} right={1} back={true} navigation={navigation} onSavePress={() => handleSaveCustomer()} />
+            <KeyboardAwareScrollView style={[Style.CommonStyles.fullFlex, { paddingHorizontal: '5%', paddingVertical: '5%' }]}>
+                <Spinner visible={spinner} />
                 <View style={[Style.Customers.AddCustomer.Customer_image_view_main]}>
                     <View style={[Style.Customers.AddCustomer.Customer_image_view, Style.CommonStyles.centerStyle]}>
-                        <Image source={ImageUploaded ? { uri: ImageUri } : Images.appIcon} style={{ flex: 1 }} resizeMode='contain' />
-                        <TouchableOpacity style={[{ height: 40, width: 40, position: 'absolute', right: -10, bottom: -5, borderWidth: 0 }, Style.CommonStyles.centerStyle]}
+                        <Image source={ImageUploaded ? { uri: ImageUri } : Images.appIcon} style={Style.Customers.AddCustomer.Customer_imageStyle} />
+                        <TouchableOpacity style={[{ height: 40, width: 40, position: 'absolute', right: -10, bottom: -5, borderWidth: 0, backgroundColor: '#F2F2F2' }, Style.CommonStyles.centerStyle]}
                             onPress={() => goToImagePicker()}
                         >
-                            <Image style={{ height: 35, width: 35, }} source={Images.add_pop_up} />
+                            <Image style={{ height: 40, width: 40, }} source={Images.add_pop_up} />
                         </TouchableOpacity>
 
 
@@ -108,7 +244,7 @@ function AddEmployee(props) {
                 </View>
                 <DropDown
                     options={AANHEFArray}
-                    defaultValue='AANHEF'
+                    defaultValue={AANHEF == '' ? 'AANHEF' : AANHEF}
                     onSelect={(index, value) => setAANHEF(value)}
                 />
                 {/* <ProductInput
@@ -138,6 +274,7 @@ function AddEmployee(props) {
                 <ProductInput
                     label='KVK number'
                     value={KVKNum}
+                    maxLength={8}
                     onChangeText={KVKNum => setKVKNum(KVKNum)} />
 
                 <ProductInput
@@ -165,6 +302,10 @@ function AddEmployee(props) {
 
                 <Text style={{ color: '#000', fontSize: 16, marginTop: 20, fontWeight: 'bold', }}>Address</Text>
                 <ProductInput
+                    label='Address'
+                    value={Address}
+                    onChangeText={Address => setAddress(Address)} />
+                <ProductInput
                     label='Street and HouseNo.'
                     value={Street}
                     onChangeText={street => setStreet(street)} />
@@ -185,7 +326,7 @@ function AddEmployee(props) {
                 </View>
                 <View style={{ height: 50 }} />
 
-            </ScrollView>
+            </KeyboardAwareScrollView>
         </AppComponent>
     )
 

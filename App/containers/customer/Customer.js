@@ -62,13 +62,6 @@ class Customer extends React.Component {
                     <Text style={{ marginVertical: 2, fontSize: 14, color: '#000' }}>KVK : <Text style={{ color: Colors.theme_color }}> {kvk_number}</Text></Text>
                     <Text style={{ marginVertical: 2, fontSize: 12, color: Colors.theme_color }}>{email}</Text>
 
-                    {/* <Text style={{ marginVertical: 5, fontSize: 14, color: '#000' }}>Company Name</Text>
-
-                    <Text style={{ marginVertical: 5, fontSize: 14, color: '#000' }}>Email</Text>
-                    <Text style={{ marginVertical: 5, fontSize: 14, color: '#000' }}>Address</Text> */}
-
-
-
                 </View>
                 <View style={[{ flex: 0.2, paddingVertical: 10, borderWidth: 0 }, Style.CommonStyles.centerStyle]}>
                     {/* <Text style={{ marginVertical: 5, fontSize: 14, color: '#000' }}>Phone</Text> */}

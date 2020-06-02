@@ -41,7 +41,10 @@ class Bill_Checkout extends React.Component {
     }
 
     checkBill() {
-
+        if (this.state.selected_customer == '') {
+            Toast.show('Please select a customer');
+            return;
+        }
         Alert.alert(
             '',
             'Do you want to print Invoice of this Order',

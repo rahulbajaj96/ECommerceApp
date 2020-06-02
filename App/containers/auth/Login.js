@@ -5,6 +5,7 @@ import { Item, Input, Label } from 'native-base';
 import Style from "../../utils/Style";
 import Images from "../../utils/Image";
 import Toast from 'react-native-simple-toast';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { get_From_AsyncStorage, save_To_AsyncStorage } from "../../Services/StorageService";
 import { ApiCallGet, ApiCallPost } from '../../Services/ApiServices';
 import AppComponent from '../../components/AppComponent'
@@ -114,6 +115,7 @@ class Login extends Component {
                 await save_To_AsyncStorage('@login_auth_response', JSON.stringify(LoginReducer.response_from_login_Api.data));
                 SaveToken(LoginReducer.response_from_login_Api.data.token);
                 Toast.show(LoginReducer.response_from_login_Api.message);
+                this.setState({ email: '', password: '' })
                 this.props.navigation.navigate('Tabs', {
                     screen: 'Products'
                     // , params: {
@@ -122,7 +124,10 @@ class Login extends Component {
                 });
             }
             else {
-                Toast.show(LoginReducer.response_from_login_Api.message);
+                setTimeout(() => {
+                    Toast.show(LoginReducer.response_from_login_Api.message);
+
+                }, 500);
             }
 
         }
@@ -189,38 +194,42 @@ class Login extends Component {
 
 
                             }]}>
+                                <KeyboardAwareScrollView style={{ flex: 1, paddingHorizontal: '7%', }}>
+                                    <Animated.Text style={{ fontSize: 20, color: '#000', textAlign: 'center', marginTop: 10 }}>Login</Animated.Text>
+                                   
+                                        <Item stackedLabel style={Style.LoginStyles.AuthItemStyle}>
+                                            <Label style={Style.LoginStyles.AuthItemLabel}>EMAIL</Label>
+                                            <Input
+                                                value={email}
+                                                style={Style.LoginStyles.AuthItemTextInput}
+                                                underlineColorAndroid='transparent'
+                                                keyboardType='email-address'
+                                                returnKeyType='done'
+                                                placeholder={'Enter your email'}
+                                                onChangeText={email => this.setState({ email })} />
+                                        </Item>
+                                        <Item stackedLabel style={Style.LoginStyles.AuthItemStyle}>
+                                            <Label style={Style.LoginStyles.AuthItemLabel}>PASSWORD</Label>
+                                            <Input
+                                                value={password}
+                                                style={Style.LoginStyles.AuthItemTextInput}
+                                                underlineColorAndroid='transparent'
+                                                secureTextEntry={true}
+                                                returnKeyType='done'
+                                                placeholder={'Enter your password'}
+                                                onChangeText={password => this.setState({ password })} />
+                                        </Item>
 
-                                <Animated.Text style={{ fontSize: 20, color: '#000', textAlign: 'center', marginTop: 10 }}>Login</Animated.Text>
-                                <Item stackedLabel style={Style.LoginStyles.AuthItemStyle}>
-                                    <Label style={Style.LoginStyles.AuthItemLabel}>EMAIL</Label>
-                                    <Input
-                                        value={email}
-                                        style={Style.LoginStyles.AuthItemTextInput}
-                                        underlineColorAndroid='transparent'
-                                        keyboardType='email-address'
-                                        placeholder={'Enter your email'}
-                                        onChangeText={email => this.setState({ email })} />
-                                </Item>
-                                <Item stackedLabel style={Style.LoginStyles.AuthItemStyle}>
-                                    <Label style={Style.LoginStyles.AuthItemLabel}>PASSWORD</Label>
-                                    <Input
-                                        value={password}
-                                        style={Style.LoginStyles.AuthItemTextInput}
-                                        underlineColorAndroid='transparent'
-                                        secureTextEntry={true}
-                                        placeholder={'Enter your password'}
-                                        onChangeText={password => this.setState({ password })} />
-                                </Item>
-                                <TouchableOpacity style={[Style.LoginStyles.ButtonStyle, Style.CommonStyles.centerStyle]} onPress={() => this.checkLoginConditions()} >
-                                    <Text style={{ color: '#000', fontSize: 14, color: '#fff' }}>Login</Text>
-                                </TouchableOpacity>
+                                        <TouchableOpacity style={[Style.LoginStyles.ButtonStyle, Style.CommonStyles.centerStyle]} onPress={() => this.checkLoginConditions()} >
+                                            <Text style={{ color: '#000', fontSize: 14, color: '#fff' }}>Login</Text>
+                                        </TouchableOpacity>
+                                        <Text style={Style.LoginStyles.ForgotPasswordText}
+
+                                            onPress={() => this.goToForgotPassword()}
+                                        >FORGOT PASSWORD?</Text>
 
 
-                                <Text style={Style.LoginStyles.ForgotPasswordText}
-
-                                    onPress={() => this.goToForgotPassword()}
-                                >FORGOT PASSWORD?</Text>
-
+                                </KeyboardAwareScrollView>
                             </Animated.View>
 
                             :
@@ -235,26 +244,27 @@ class Login extends Component {
 
 
                             }]}>
+                                <KeyboardAwareScrollView style={{ flex: 1, paddingHorizontal: '7%', }}>
+                                    <Animated.Text style={{ fontSize: 20, color: '#000', textAlign: 'center', marginTop: 10 }}>Forgot Password</Animated.Text>
+                                    <Text style={Style.LoginStyles.forgotInst}> * Enter a email on which new password wil be sent</Text>
+                                    <Item stackedLabel style={Style.LoginStyles.AuthItemStyle}>
+                                        <Label style={Style.LoginStyles.AuthItemLabel}>EMAIL</Label>
+                                        <Input
+                                            value={forgotPasswordEmail}
+                                            style={Style.LoginStyles.AuthItemTextInput}
+                                            underlineColorAndroid='transparent'
+                                            placeholder={'Enter your email'}
+                                            returnKeyType='done'
+                                            keyboardType='email-address'
+                                            onChangeText={forgotPasswordEmail => this.setState({ forgotPasswordEmail })} />
+                                    </Item>
 
-                                <Animated.Text style={{ fontSize: 20, color: '#000', textAlign: 'center', marginTop: 10 }}>Forgot Password</Animated.Text>
-                                <Text style={Style.LoginStyles.forgotInst}> * Enter a email on which new password wil be sent</Text>
-                                <Item stackedLabel style={Style.LoginStyles.AuthItemStyle}>
-                                    <Label style={Style.LoginStyles.AuthItemLabel}>EMAIL</Label>
-                                    <Input
-                                        value={forgotPasswordEmail}
-                                        style={Style.LoginStyles.AuthItemTextInput}
-                                        underlineColorAndroid='transparent'
-                                        placeholder={'Enter your email'}
-                                        keyboardType='email-address'
-                                        onChangeText={forgotPasswordEmail => this.setState({ forgotPasswordEmail })} />
-                                </Item>
+                                    <TouchableOpacity style={[Style.LoginStyles.ButtonStyle, Style.CommonStyles.centerStyle]} onPress={() => this.goToLogin()} >
+                                        <Text style={{ color: '#000', fontSize: 14, color: '#fff' }}>Rediscover Password</Text>
+                                    </TouchableOpacity>
 
-                                <TouchableOpacity style={[Style.LoginStyles.ButtonStyle, Style.CommonStyles.centerStyle]} onPress={() => this.goToLogin()} >
-                                    <Text style={{ color: '#000', fontSize: 14, color: '#fff' }}>Rediscover Password</Text>
-                                </TouchableOpacity>
-
-                                <Text style={Style.LoginStyles.ForgotPasswordText} onPress={() => this.goToLogin()} >Back to Login!</Text>
-
+                                    <Text style={Style.LoginStyles.ForgotPasswordText} onPress={() => this.goToLogin()} >Back to Login!</Text>
+                                </KeyboardAwareScrollView>
                             </Animated.View>
 
                     }

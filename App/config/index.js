@@ -42,4 +42,11 @@ export const API_URL = {
     OrderList: 'order/list',
     viewOrder: 'order/show',
 
+    //Employees
+    Employee_List: 'workerList',
+    AddEmployee: 'addWorker',
+    Edit_Employee: 'updateWorker',
+    Delete_Employee: 'deleteWorker',
+    SortEmployee: 'workerSort',
+
 }

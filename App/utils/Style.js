@@ -21,16 +21,16 @@ export default {
         GradientImageStyle: { height: 100, width: 100, borderRadius: 50, backgroundColor: Colors.white, marginBottom: '15%' },
         AuthView: {
             //  width: '80%',height:DEVICE_HEIGHT*0.52, borderWidth: 0, marginHorizontal: '10%', zIndex: 1, marginTop: '-15%', backgroundColor: Colors.white, borderRadius: 10, elevation: 3, paddingHorizontal: '7%',position: 'absolute',
-            flex: 0.90, borderWidth: 0, marginHorizontal: '10%', zIndex: 1, marginTop: '-15%', backgroundColor: Colors.white, borderRadius: 10, elevation: 3, paddingHorizontal: '7%',
+            flex: 0.90, borderWidth: 0, marginHorizontal: '10%', zIndex: 1, marginTop: '-15%', backgroundColor: Colors.white, borderRadius: 10, elevation: 3,
         },
         ForgotPassView: {
-            width: '80%', height: DEVICE_HEIGHT * 0.4, borderWidth: 0, marginHorizontal: '10%', zIndex: 1, marginTop: '-15%', backgroundColor: Colors.white, borderRadius: 10, elevation: 3, paddingHorizontal: '7%', position: 'absolute',
+            width: '80%', height: DEVICE_HEIGHT * 0.4, borderWidth: 0, marginHorizontal: '10%', zIndex: 1, marginTop: '-15%', backgroundColor: Colors.white, borderRadius: 10, elevation: 3, position: 'absolute',
         },
-        forgotInst: { fontSize: 9, color: Colors.grey, marginTop: 5 },
+        forgotInst: { fontSize: 9, color: Colors.grey, marginTop:10,marginBottom:10 },
         AuthItemStyle: { width: '100%', height: 70, borderBottomColor: '#DEDEDE', borderWidth: 2, marginVertical: 5, },
         AuthItemLabel: { color: Colors.theme_color, marginVertical: 10, fontSize: 12, fontWeight: 'bold' },
         AuthItemTextInput: { borderColor: Colors.black, borderWidth: 0, fontSize: 14, marginLeft: -2, marginTop: -8, paddingBottom: 4, paddingLeft: 2 },
-        ForgotPasswordText: { color: Colors.grey, fontSize: 12, position: 'absolute', right: '5%', bottom: '5%' }
+        ForgotPasswordText: { color: Colors.grey, fontSize: 12, position: 'absolute', right: '5%', bottom:'-25%',zIndex:1 }
 
     },
     Toolbar: {

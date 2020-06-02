@@ -5,31 +5,67 @@ import Toolbar from '../../components/Toolbar'
 import { SearchBar } from '../../components/SearchBar'
 import Style from '../../utils/Style';
 import Modal from "react-native-modal";
+import { connect } from "react-redux";
 import Images from '../../utils/Image'
 import { ModalView } from '../../components/Products'
+import { getEmployeeList } from '../../actions/employessaction'
+import { ApiCallPost } from '../../Services/ApiServices'
+import { BASE_URL, API_URL } from '../../config'
+import { get_Empty_Tag } from '../../helpers/InputValidations'
+import Colors from '../../utils/Colors'
 
 class Employee extends React.Component {
     state = {
         searchedValue: '', modalVisibilty: false,
         sortingOrder: 0,
-        sortingArray: [{ name: 'Date', value: 0 }, { name: 'Price', value: 1 }, { name: 'Company Name', value: 2 }],
+        sortingArray: [{ name: 'Date', value: 0, key: 'created_at' }, { name: 'Company Name', value: 2, key: 'company_name' }],
         modalEditDelete: false,
-        currentSelectedItem: ''
+        currentSelectedItem: '',
+        employeeList: []
+    }
+    componentDidMount() {
+        const { navigation } = this.props
+        navigation.addListener('focus', () => {
+            // The screen is focused
+            console.log('when screen is focused');
+            // Call any action
+            this.get_Employee_List();
+
+        });
+
+
+    }
+    async get_Employee_List() {
+
+        await this.props.get_employee_list();
+        const { employeeReducer } = this.props
+        console.log('employeeReducer', employeeReducer)
+        this.setState({ employeeList: employeeReducer.employee_list_response.status == 1 ? employeeReducer.employee_list : [] })
+    }
+    componentWillUnmount() {
+        const { navigation } = this.props
+
+        console.log('componenet gone ')
+        navigation.removeListener('focus');
     }
     renderOrderList = (item) => {
+        console.log('items customer', item.item)
+        const { prefixing_type, profile_pic, first_name, email, company_name, kvk_number, last_name } = item.item.get_workers
         return (
             <View style={Style.Orders.orderListItemView}>
                 <View style={[{ flex: 0.2, borderWidth: 0 }, Style.CommonStyles.centerStyle]}>
-                    <Image source={Images.customer_black} style={{ height: 40, width: 40, }} />
+                    <Image source={profile_pic != null ? { uri: `${profile_pic}` } : Images.customer_black} style={{ height: 50, width: 50, borderRadius: 0 }} />
                 </View>
-                <View style={{ flex: 0.6, paddingHorizontal: 10 }}>
-                    <Text style={{ marginVertical: 2, fontSize: 14, color: '#000' }}>Mr./Mrs./Miss Employee</Text>
-                    <Text style={{ marginVertical: 2, fontSize: 14, color: '#000' }}>Company Name</Text>
-                    <Text style={{ marginVertical: 2, fontSize: 14, color: '#000' }}>KVK Number</Text>
+                <View style={{ flex: 0.6, paddingHorizontal: 10, marginVertical: 5 }}>
+                    <Text style={{ marginVertical: 2, fontSize: 14, color: '#000' }}>Name: <Text style={{ color: Colors.theme_color }}> {prefixing_type} {first_name} {last_name}</Text></Text>
+                    <Text style={{ marginVertical: 2, fontSize: 14, color: '#000' }}>Company: <Text style={{ color: Colors.theme_color }}>{company_name}</Text></Text>
+                    <Text style={{ marginVertical: 2, fontSize: 14, color: '#000' }}>KVK : <Text style={{ color: Colors.theme_color }}> {kvk_number}</Text></Text>
+                    <Text style={{ marginVertical: 2, fontSize: 12, color: Colors.theme_color }}>{email}</Text>
+
                     {/* <Text style={{ marginVertical: 5, fontSize: 14, color: '#000' }}>Company Name</Text>
 
-                    <Text style={{ marginVertical: 5, fontSize: 14, color: '#000' }}>Email</Text>
-                    <Text style={{ marginVertical: 5, fontSize: 14, color: '#000' }}>Address</Text> */}
+                <Text style={{ marginVertical: 5, fontSize: 14, color: '#000' }}>Email</Text>
+                <Text style={{ marginVertical: 5, fontSize: 14, color: '#000' }}>Address</Text> */}
 
 
 
@@ -37,7 +73,7 @@ class Employee extends React.Component {
                 <View style={[{ flex: 0.2, paddingVertical: 10, borderWidth: 0 }, Style.CommonStyles.centerStyle]}>
                     {/* <Text style={{ marginVertical: 5, fontSize: 14, color: '#000' }}>Phone</Text> */}
                     <TouchableOpacity style={[{ flex: 0.1, borderWidth: 0 }, Style.CommonStyles.centerStyle]}
-                        onPress={() => this.openEditDelete(item)}
+                        onPress={() => this.openEditDelete(item.item.get_workers)}
                     >
                         <Image source={Images.dots} style={{ height: 30, width: 30, }} />
                     </TouchableOpacity>
@@ -49,7 +85,7 @@ class Employee extends React.Component {
     renderSorts = (item) => {
         const { sortingOrder, sortingArray } = this.state
         return (
-            <TouchableOpacity style={[{ borderBottomWidth: item.index == (sortingArray.length - 1) ? 0 : 0.5, }, Style.Orders.SortingModal.sortsItems]} onPress={() => this.setState({ sortingOrder: item.item.value })}>
+            <TouchableOpacity style={[{ borderBottomWidth: item.index == (sortingArray.length - 1) ? 0 : 0.5, }, Style.Orders.SortingModal.sortsItems]} onPress={() => this.getSortedArray(item.item)}>
                 <Text style={Style.Orders.SortingModal.sortItemTextColor}>{item.item.name}</Text>
                 {
                     item.item.value == sortingOrder
@@ -62,23 +98,62 @@ class Employee extends React.Component {
         )
 
     }
+    async getSortedArray(item) {
+        this.setState({ sortingOrder: item.value })
+        console.log('value', item.key);
+        let formdata = new FormData();
+        formdata.append('sort', item.key);
+        console.log('formdata of sorting Customers', formdata);
+        var response = await ApiCallPost(`${BASE_URL}${API_URL.SortEmployee}`, formdata);
+
+        if (response != false) {
+            if (response.status == 1) {
+                console.log('Employee Successfully Sorted wrto ' + item.key + 'and data is \n' + JSON.stringify(response.data));
+                this.setState({ employeeList: response.data, modalVisibilty: false });
+            }
+            else {
+
+            }
+        }
+
+
+
+    }
     onEditPressed = () => {
         const { navigation } = this.props
-
-        navigation.navigate('AddEmployee', { id: 2, title: 'Edit Employee', data: {} })
+        const { currentSelectedItem } = this.state
+        navigation.navigate('AddEmployee', { id: 2, title: 'Edit Employee', data: currentSelectedItem })
         this.setState({ modalEditDelete: false })
 
 
     }
-    openEditDelete = () => {
-        this.setState({ modalEditDelete: true, currentSelectedItem: 'Current Employee' })
+    async onDeletePressed() {
+        const { currentSelectedItem } = this.state
+        console.log('id to be deleted', currentSelectedItem.id)
+        let formdata = new FormData();
+        formdata.append('worker_id', currentSelectedItem.id);
+
+        let response = await ApiCallPost(`${BASE_URL}${API_URL.Delete_Employee}`, formdata);
+        console.log('Employee Deleted', response);
+        if (response != false) {
+            if (response.status == 1) {
+                console.log('Person Deleted', response);
+                this.setState({ modalEditDelete: false })
+                this.get_Employee_List();
+            }
+        }
+
+    }
+    openEditDelete = (item) => {
+
+        this.setState({ modalEditDelete: true, currentSelectedItem: item })
     }
     navigateToAddCustomer = () => {
         const { navigation } = this.props
         navigation.navigate('AddEmployee', { id: 1, title: 'Add Employee', data: {} });
     }
     render() {
-        const { searchedValue, modalVisibilty, sortingArray, sortingOrder, modalEditDelete, currentSelectedItem } = this.state
+        const { searchedValue, modalVisibilty, sortingArray, sortingOrder, modalEditDelete, currentSelectedItem, employeeList } = this.state
         const { navigation } = this.props
 
         return (
@@ -117,20 +192,29 @@ class Employee extends React.Component {
                     </TouchableOpacity>
                 </View>
                 <View style={{ flex: 0.8, }}>
-                    <FlatList
-                        data={[1, 2, 3, 4, 5]}
-                        renderItem={item => this.renderOrderList(item)}
-                        extraData={this.state}
-                        keyExtractor={(item, index) => index.toString()}
-                    />
+                    {
+                        employeeList.length != 0
+                            ?
+                            <FlatList
+                                data={employeeList}
+                                renderItem={item => this.renderOrderList(item)}
+                                extraData={this.state}
+                                keyExtractor={(item, index) => index.toString()}
+                            />
+                            :
+                            <View style={[Style.CommonStyles.fullFlex, Style.CommonStyles.centerStyle,]}>
+                                <Text style={Style.CommonStyles.EmptyListTag}>{get_Empty_Tag('Employees')}</Text>
+                            </View>
+                    }
+
 
                 </View>
                 <ModalView
                     isVisible={modalEditDelete}
                     onBackdropPress={() => this.setState({ modalEditDelete: false })}
                     onEditPressed={() => this.onEditPressed()}
-                    onDeletePressed={() => console.log('onDeletePressed')}
-                    modalTitle={currentSelectedItem}
+                    onDeletePressed={() => this.onDeletePressed()}
+                    modalTitle={`${currentSelectedItem.first_name} ${currentSelectedItem.last_name}`}
 
                 />
 
@@ -138,4 +222,14 @@ class Employee extends React.Component {
         )
     }
 }
-export default Employee;
+const mapStateToProps = (state) => {
+    console.log('Customer', state)
+    return state;
+}
+const mapDispatchToProps = (dispatch) => {
+    return {
+        get_employee_list: () => dispatch(getEmployeeList())
+    }
+
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Employee);

@@ -38,3 +38,6 @@ export const ORDER_LIST_FAILURE = 'order_list_failure';
 
 export const ORDER_DETAIL_SUCCESS = 'order_detail_success';
 export const ORDER_DETAIL_FAILURE = 'order_detail_failure';
+
+export const EMPLOYEE_LIST_SUCCESS = 'get_employee_success';
+export const EMPLOYEE_LIST_FAILURE = 'get_employee_failure';

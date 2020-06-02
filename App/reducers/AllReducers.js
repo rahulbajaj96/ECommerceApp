@@ -9,6 +9,7 @@ import { product_size_reducer } from "./ProductSizesReducer";
 import { productsReducer } from "./ProductsReducer";
 import { cartReducer } from "./CartReducer";
 import { orderReducer } from "./OrderReducer";
+import { employeeReducer } from "./EmployeeReducer";
 
 const AllReducers = combineReducers({
     LoginReducer,
@@ -20,7 +21,8 @@ const AllReducers = combineReducers({
     product_size_reducer,
     productsReducer,
     cartReducer,
-    orderReducer
+    orderReducer,
+    employeeReducer
 })
 
 export default AllReducers;

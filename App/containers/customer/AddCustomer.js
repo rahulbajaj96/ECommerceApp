@@ -16,6 +16,7 @@ import { ApiCallPost } from '../../Services/ApiServices';
 import { BASE_URL, API_URL } from '../../config';
 import { SPINNER_ON, SPINNER_OFF } from '../../constants/ReduxConstants';
 import { getCustomerList } from '../../actions/customeractions';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 function AddCustomer(props) {
     const [first_name, setfirst_name] = useState('')
     const [last_name, setlast_name] = useState('')
@@ -115,8 +116,7 @@ function AddCustomer(props) {
     }
 
     async function handleSaveCustomer() {
-        if(!EmptyValidation(ImageUri))
-        {
+        if (!EmptyValidation(ImageUri)) {
             Toast.show("Please select a Customer pic");
             return;
         }
@@ -242,7 +242,7 @@ function AddCustomer(props) {
     return (
         <AppComponent>
             <Toolbar title={title} right={1} back={true} navigation={navigation} onSavePress={() => handleSaveCustomer()} />
-            <ScrollView style={[Style.CommonStyles.fullFlex, { paddingHorizontal: '5%', paddingVertical: '5%' }]}>
+            <KeyboardAwareScrollView style={[Style.CommonStyles.fullFlex, { paddingHorizontal: '5%', paddingVertical: '5%' }]}>
                 <Spinner visible={spinner} />
 
                 <View style={[Style.Customers.AddCustomer.Customer_image_view_main]}>
@@ -289,6 +289,7 @@ function AddCustomer(props) {
                 <ProductInput
                     label='KVK number'
                     value={KVKNum}
+                    maxLength={8}
                     keyboardType='number-pad'
                     onChangeText={KVKNum => setKVKNum(KVKNum)} />
 
@@ -340,7 +341,7 @@ function AddCustomer(props) {
                 </View>
                 <View style={{ height: 50 }} />
 
-            </ScrollView>
+            </KeyboardAwareScrollView>
         </AppComponent>
     )
 
