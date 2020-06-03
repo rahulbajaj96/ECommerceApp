@@ -8,7 +8,7 @@ import { MoreItems } from '../../components/MoreComponents'
 import { useNavigation } from '@react-navigation/native';
 import { remove_from_AsyncStorage } from '../../Services/StorageService'
 
-function MoreOptions(props) {
+function StoreOptions(props) {
     const navigation = useNavigation();
 
     function performLogout() {
@@ -40,8 +40,8 @@ function MoreOptions(props) {
                 <MoreItems label='Privacy policy' label_image={Images.privacy_policy} onClick={() => console.log('clicked')} />
                 <MoreItems label='About Us' label_image={Images.about_us} onClick={() => console.log('clicked')} />
                 <MoreItems label='Cart' label_image={Images.cart} onClick={() => console.log('clicked')} />
-                {/* <MoreItems label='Manage Employee' label_image={Images.employee} onClick={() => navigation.navigate('Employee')}
-                /> */}
+                <MoreItems label='Manage Employee' label_image={Images.employee} onClick={() => navigation.navigate('Employee')}
+                />
 
 
                 <TouchableOpacity style={Style.More.logoutButton} onPress={() => performLogout()}>
@@ -53,4 +53,4 @@ function MoreOptions(props) {
         </AppComponent>
     )
 }
-export default MoreOptions;
+export default StoreOptions;

@@ -3,6 +3,8 @@ export const PIC_URL = 'https://apps.fiveriverscrown.com';
 export const API_URL = {
     Login_url: 'login',
 
+    ForgotPassword: 'forgotEmail',
+
     //Customer Section
     Add_Customer: 'addCustomer',
     Customer_list: 'customerList',

@@ -15,6 +15,7 @@ import { connect } from "react-redux";
 import { loginaction } from "../../actions/loginactions";
 
 import Spinner from 'react-native-loading-spinner-overlay';
+import { forgotPassword } from "../../actions/forgotPasswordaction";
 class Login extends Component {
     constructor() {
         super();
@@ -69,7 +70,11 @@ class Login extends Component {
 
         get_From_AsyncStorage('@login_auth_response').then(result => {
             console.log('result', result)
-            if (result != null) this.props.navigation.navigate('Tabs', { screen: 'Products' });
+            if (result != null) 
+            {
+                var response =JSON.parse(result);
+                this.navigateFromLogin(response.user_type);
+            }
         });
 
     }
@@ -87,6 +92,16 @@ class Login extends Component {
         ).start();
     }
 
+    navigateFromLogin(user_type) {
+        console.log('user_type', user_type);
+        const { navigation } = this.props
+        //storeUser
+        if (user_type == '2')
+            navigation.navigate('StoreOptions');
+        else if (user_type == '3')
+            navigation.navigate('Tabs', { screen: 'Products' });
+
+    }
     async checkLoginConditions() {
         const { email, password, loginStatus } = this.state
 
@@ -116,12 +131,13 @@ class Login extends Component {
                 SaveToken(LoginReducer.response_from_login_Api.data.token);
                 Toast.show(LoginReducer.response_from_login_Api.message);
                 this.setState({ email: '', password: '' })
-                this.props.navigation.navigate('Tabs', {
-                    screen: 'Products'
-                    // , params: {
-                    //     screen: 'AddProduct'
-                    // }
-                });
+                this.navigateFromLogin(LoginReducer.response_from_login_Api.data.user_type);
+                // this.props.navigation.navigate('Tabs', {
+                //     screen: 'Products'
+                //     // , params: {
+                //     //     screen: 'AddProduct'
+                //     // }
+                // });
             }
             else {
                 setTimeout(() => {
@@ -130,6 +146,34 @@ class Login extends Component {
                 }, 500);
             }
 
+        }
+    }
+
+    async rediscoverPassword() {
+        const { forgotPasswordEmail } = this.state
+        if (EmptyValidation(forgotPasswordEmail) == false) {
+            Toast.show(Get_Message('email'));
+            return;
+        }
+        if (EmailValidation(forgotPasswordEmail) == false) {
+            Toast.show(Email_VALIDATION_MESSAGE);
+            return;
+        }
+        else {
+            await this.props.getPassword(forgotPasswordEmail);
+            const { forgotPassReducer } = this.props
+            if (forgotPassReducer.forgotPasswordResponse.status == 1) {
+
+                setTimeout(() => {
+                    Toast.show(forgotPassReducer.forgotPasswordResponse.message);
+                    this.goToLogin();
+                }, 500);
+            }
+            else {
+                setTimeout(() => {
+                    Toast.show(forgotPassReducer.forgotPasswordResponse.message);
+                }, 500);
+            }
         }
     }
     goToForgotPassword = () => {
@@ -196,37 +240,37 @@ class Login extends Component {
                             }]}>
                                 <KeyboardAwareScrollView style={{ flex: 1, paddingHorizontal: '7%', }}>
                                     <Animated.Text style={{ fontSize: 20, color: '#000', textAlign: 'center', marginTop: 10 }}>Login</Animated.Text>
-                                   
-                                        <Item stackedLabel style={Style.LoginStyles.AuthItemStyle}>
-                                            <Label style={Style.LoginStyles.AuthItemLabel}>EMAIL</Label>
-                                            <Input
-                                                value={email}
-                                                style={Style.LoginStyles.AuthItemTextInput}
-                                                underlineColorAndroid='transparent'
-                                                keyboardType='email-address'
-                                                returnKeyType='done'
-                                                placeholder={'Enter your email'}
-                                                onChangeText={email => this.setState({ email })} />
-                                        </Item>
-                                        <Item stackedLabel style={Style.LoginStyles.AuthItemStyle}>
-                                            <Label style={Style.LoginStyles.AuthItemLabel}>PASSWORD</Label>
-                                            <Input
-                                                value={password}
-                                                style={Style.LoginStyles.AuthItemTextInput}
-                                                underlineColorAndroid='transparent'
-                                                secureTextEntry={true}
-                                                returnKeyType='done'
-                                                placeholder={'Enter your password'}
-                                                onChangeText={password => this.setState({ password })} />
-                                        </Item>
 
-                                        <TouchableOpacity style={[Style.LoginStyles.ButtonStyle, Style.CommonStyles.centerStyle]} onPress={() => this.checkLoginConditions()} >
-                                            <Text style={{ color: '#000', fontSize: 14, color: '#fff' }}>Login</Text>
-                                        </TouchableOpacity>
-                                        <Text style={Style.LoginStyles.ForgotPasswordText}
+                                    <Item stackedLabel style={Style.LoginStyles.AuthItemStyle}>
+                                        <Label style={Style.LoginStyles.AuthItemLabel}>EMAIL</Label>
+                                        <Input
+                                            value={email}
+                                            style={Style.LoginStyles.AuthItemTextInput}
+                                            underlineColorAndroid='transparent'
+                                            keyboardType='email-address'
+                                            returnKeyType='done'
+                                            placeholder={'Enter your email'}
+                                            onChangeText={email => this.setState({ email })} />
+                                    </Item>
+                                    <Item stackedLabel style={Style.LoginStyles.AuthItemStyle}>
+                                        <Label style={Style.LoginStyles.AuthItemLabel}>PASSWORD</Label>
+                                        <Input
+                                            value={password}
+                                            style={Style.LoginStyles.AuthItemTextInput}
+                                            underlineColorAndroid='transparent'
+                                            secureTextEntry={true}
+                                            returnKeyType='done'
+                                            placeholder={'Enter your password'}
+                                            onChangeText={password => this.setState({ password })} />
+                                    </Item>
 
-                                            onPress={() => this.goToForgotPassword()}
-                                        >FORGOT PASSWORD?</Text>
+                                    <TouchableOpacity style={[Style.LoginStyles.ButtonStyle, Style.CommonStyles.centerStyle]} onPress={() => this.checkLoginConditions()} >
+                                        <Text style={{ color: '#000', fontSize: 14, color: '#fff' }}>Login</Text>
+                                    </TouchableOpacity>
+                                    <Text style={Style.LoginStyles.ForgotPasswordText}
+
+                                        onPress={() => this.goToForgotPassword()}
+                                    >FORGOT PASSWORD?</Text>
 
 
                                 </KeyboardAwareScrollView>
@@ -259,7 +303,7 @@ class Login extends Component {
                                             onChangeText={forgotPasswordEmail => this.setState({ forgotPasswordEmail })} />
                                     </Item>
 
-                                    <TouchableOpacity style={[Style.LoginStyles.ButtonStyle, Style.CommonStyles.centerStyle]} onPress={() => this.goToLogin()} >
+                                    <TouchableOpacity style={[Style.LoginStyles.ButtonStyle, Style.CommonStyles.centerStyle]} onPress={() => this.rediscoverPassword()} >
                                         <Text style={{ color: '#000', fontSize: 14, color: '#fff' }}>Rediscover Password</Text>
                                     </TouchableOpacity>
 
@@ -268,16 +312,7 @@ class Login extends Component {
                             </Animated.View>
 
                     }
-
-
-
-
-
-
                 </View>
-
-
-
             </AppComponent>
         )
     }
@@ -288,7 +323,8 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = (dispatch) => {
     return {
-        loginApi: (email, password) => dispatch(loginaction(email, password))
+        loginApi: (email, password) => dispatch(loginaction(email, password)),
+        getPassword: email => dispatch(forgotPassword(email))
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Login);;

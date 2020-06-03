@@ -10,6 +10,7 @@ import { TabNavigator } from './TabNavigation';
 import AddEmployee from '../containers/employees/AddEmployee';
 import Employee from '../containers/employees/Employee';
 import store from '../store/Store';
+import StoreOptions from '../containers/store/StoreOptions';
 
 
 
@@ -25,6 +26,7 @@ function AppNavigation() {
                 <Stack.Screen name='Tabs' component={TabNavigator} />
                 <Stack.Screen name='AddEmployee' component={AddEmployee} />
                 <Stack.Screen name='Employee' component={Employee} />
+                <Stack.Screen name='StoreOptions' component={StoreOptions} />
 
 
 

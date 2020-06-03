@@ -10,9 +10,11 @@ import { productsReducer } from "./ProductsReducer";
 import { cartReducer } from "./CartReducer";
 import { orderReducer } from "./OrderReducer";
 import { employeeReducer } from "./EmployeeReducer";
+import { forgotPassReducer } from "./forgotPasswordReducer";
 
 const AllReducers = combineReducers({
     LoginReducer,
+    forgotPassReducer,
     spinnerReducer,
     customerReducer,
     categoriesReducer,
