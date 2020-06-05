@@ -14,6 +14,7 @@ export const SearchBar = (props) => {
                     returnKeyType='done'
                     style={Style.Products.categories.searchBarInput}
                     {... props}
+                    
                 />
                 <Image source={Images.search} style={Style.Products.categories.searchImage} />
             </Item>

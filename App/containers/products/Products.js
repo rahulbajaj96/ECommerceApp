@@ -79,6 +79,21 @@ class Products extends Component {
             }
         }
     }
+    async searchProducts() {
+        const { searchValue ,Paramsinfo} = this.state
+        let formdata = new FormData();
+        formdata.append('search', searchValue);
+        formdata.append('category_id',Paramsinfo.category_id);
+        formdata.append('subcategory_id',Paramsinfo.subCategory_id);
+
+        let result = await ApiCallPost(`${BASE_URL}${API_URL.Search_product}`, formdata);
+        console.log('result ', JSON.stringify(result));
+        if (result != false) {
+            if (result.status == 1) {
+                this.setState({ productsList: result.data })
+            }
+        }
+    }
 
     render() {
         const { searchValue, modalVisibility, currentSelectedItem, productsList } = this.state
@@ -90,7 +105,7 @@ class Products extends Component {
                     <SearchBar
                         value={searchValue}
                         onChangeText={searchValue => this.setState({ searchValue })}
-
+                        onSubmitEditing={() => this.searchProducts()}
                     />
                     <Make_A_List
                         items={productsList}

@@ -78,6 +78,18 @@ class Categories extends Component {
         }
 
     }
+    async searchCategories() {
+        const { searchValue } = this.state
+        let formdata = new FormData();
+        formdata.append('search', searchValue);
+        let result = await ApiCallPost(`${BASE_URL}${API_URL.SearchCategory}`, formdata);
+        console.log('result ', JSON.stringify(result));
+        if (result != false) {
+            if (result.status == 1) {
+                this.setState({ categoryList: result.data })
+            }
+        }
+    }
     render() {
         const { searchValue, modalVisibility, currentSelectedItem, categoryList } = this.state
         const { spinnerReducer } = this.props
@@ -89,24 +101,24 @@ class Categories extends Component {
                     <SearchBar
                         value={searchValue}
                         onChangeText={searchValue => this.setState({ searchValue })}
+                        onSubmitEditing={() => this.searchCategories()}
+                    />
+
+
+
+
+                    <Make_A_List
+                        items={categoryList}
+                        extraData={this.state}
+                        onItemClicked={(item) => this.handleListItemCicked(item)}
+                        onAddPopUp={() => this.onAddPopUp()}
+                        crudValue={1}
+                        dotsClick={(item) => this.openModal(item)}
+                        api={true}
+                        tag='Categories'
 
                     />
-                 
-                         
-                            
 
-                            <Make_A_List
-                                items={categoryList}
-                                extraData={this.state}
-                                onItemClicked={(item) => this.handleListItemCicked(item)}
-                                onAddPopUp={() => this.onAddPopUp()}
-                                crudValue={1}
-                                dotsClick={(item) => this.openModal(item)}
-                                api={true}
-                                tag='Categories'
-
-                            />
-                   
 
                     {/* <Modal
                         isVisible={modalVisibility}

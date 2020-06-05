@@ -61,6 +61,19 @@ class SubCategories extends Component {
         this.setState({ modalVisibility: false })
 
     }
+    async searchSubCategories() {
+        const { searchValue ,category_info} = this.state
+        let formdata = new FormData();
+        formdata.append('search', searchValue);
+        formdata.append('category_id',category_info.id);
+        let result = await ApiCallPost(`${BASE_URL}${API_URL.Search_SubCategory}`, formdata);
+        console.log('result ', JSON.stringify(result));
+        if (result != false) {
+            if (result.status == 1) {
+                this.setState({ subcategoryList: result.data })
+            }
+        }
+    }
     async onDeletePressed() {
         const { currentSelectedItem, category_info } = this.state
         console.log('id to be deleted', currentSelectedItem.id)
@@ -88,7 +101,7 @@ class SubCategories extends Component {
                     <SearchBar
                         value={searchValue}
                         onChangeText={searchValue => this.setState({ searchValue })}
-
+                        onSubmitEditing={() => this.searchSubCategories()}
                     />
                     <Make_A_List
                         items={subcategoryList}

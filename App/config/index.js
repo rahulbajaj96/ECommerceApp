@@ -17,12 +17,14 @@ export const API_URL = {
     AddCategory: 'category/store',
     Edit_category: 'category/update',
     Delete_Category: 'category/destroy',
+    SearchCategory: 'category/search',
 
     //SubCategory
     SubCategory_List: 'subcategory/list',
     AddSubCategory: 'subcategory/store',
     Edit_SubCategory: 'subcategory/update',
     Delet_SubCategory: 'subcategory/destroy',
+    Search_SubCategory: 'subcategory/search',
 
 
     //Products
@@ -33,6 +35,7 @@ export const API_URL = {
     Edit_Products: 'product/update',
     Delete_Products: 'product/destroy',
     View_product: 'product/view',
+    Search_product: 'product/search',
 
     //Cart
     Add_to_cart: 'cart/store',
