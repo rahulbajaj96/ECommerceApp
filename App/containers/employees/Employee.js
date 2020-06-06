@@ -152,6 +152,18 @@ class Employee extends React.Component {
         const { navigation } = this.props
         navigation.navigate('AddEmployee', { id: 1, title: 'Add Employee', data: {} });
     }
+    async searchEmployees() {
+        const { searchedValue } = this.state
+        let formdata = new FormData();
+        formdata.append('search', searchedValue);
+        let result = await ApiCallPost(`${BASE_URL}${API_URL.EmployeeSearch}`, formdata);
+        console.log('result ', JSON.stringify(result));
+        if (result != false) {
+            if (result.status == 1) {
+                this.setState({ employeeList: result.data })
+            }
+        }
+    }
     render() {
         const { searchedValue, modalVisibilty, sortingArray, sortingOrder, modalEditDelete, currentSelectedItem, employeeList } = this.state
         const { navigation } = this.props
@@ -162,6 +174,7 @@ class Employee extends React.Component {
                 <SearchBar
                     value={searchedValue}
                     onChangeText={searchedValue => this.setState({ searchedValue })}
+                    onSubmitEditing={() => this.searchEmployees()}
                 />
                 <Modal isVisible={modalVisibilty}
                     onBackdropPress={() => this.setState({ modalVisibilty: false })}

@@ -48,7 +48,7 @@ class Customer extends React.Component {
     }
 
     renderOrderList = (item) => {
-        console.log('items customer',item.item)
+        console.log('items customer', item.item)
         const { prefixing_type, profile_pic, first_name, email, company_name, kvk_number, last_name } = item.item.get_customers
         // console.log('profile pic ', profile_pic);
         return (
@@ -145,12 +145,24 @@ class Customer extends React.Component {
 
     }
     openEditDelete = (item) => {
-        console.log('item >>>',item)
+        console.log('item >>>', item)
         this.setState({ modalEditDelete: true, currentSelectedItem: item })
     }
     navigateToAddCustomer = () => {
         const { navigation } = this.props
         navigation.navigate('AddCustomer', { id: 1, title: 'Add Customer', data: {} });
+    }
+    async searchCustomers() {
+        const { searchedValue } = this.state
+        let formdata = new FormData();
+        formdata.append('search', searchedValue);
+        let result = await ApiCallPost(`${BASE_URL}${API_URL.SearchCustomers}`, formdata);
+        console.log('result ', JSON.stringify(result));
+        if (result != false) {
+            if (result.status == 1) {
+                this.setState({ customerList: result.data })
+            }
+        }
     }
     render() {
         const { searchedValue, modalVisibilty, sortingArray, sortingOrder, modalEditDelete, currentSelectedItem, customerList } = this.state
@@ -161,6 +173,7 @@ class Customer extends React.Component {
                     value={searchedValue}
                     editable={customerList.length != 0 ? true : false}
                     onChangeText={searchedValue => this.setState({ searchedValue })}
+                    onSubmitEditing={() => this.searchCustomers()}
                 />
                 <Modal isVisible={modalVisibilty}
                     onBackdropPress={() => this.setState({ modalVisibilty: false })}

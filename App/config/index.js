@@ -11,6 +11,7 @@ export const API_URL = {
     Delete_Customer: 'deleteCustomer',
     Edit_Customer: 'updateCustomer',
     Sort_Customer: 'customerSort',
+    SearchCustomers: 'customerSearch',
 
     //Categories
     Categories_List: 'category',
@@ -53,5 +54,6 @@ export const API_URL = {
     Edit_Employee: 'updateWorker',
     Delete_Employee: 'deleteWorker',
     SortEmployee: 'workerSort',
+    EmployeeSearch:'workerSearch',
 
 }

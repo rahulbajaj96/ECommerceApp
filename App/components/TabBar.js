@@ -22,6 +22,22 @@ const TabBarImages = [
     }
 ]
 class TabBar extends React.Component {
+    goToroutes(route, index) {
+        if (index == 0) {
+            this.props.navigation.navigate('Orders',{screen: 'Order'})
+        }
+        if (index == 1) {
+            this.props.navigation.navigate('Customer',{screen: 'Customer'})
+        }
+        if (index == 2) {
+            this.props.navigation.navigate('Products',{screen: 'Categories'})
+        }
+        if (index == 3) {
+            this.props.navigation.navigate('More',)
+        }
+
+
+    }
     render() {
         const { routes, index } = this.props.state
         // console.log('this.props', this.props)
@@ -30,7 +46,7 @@ class TabBar extends React.Component {
 
         return (
 
-            <View style={{ flex: 0.1,  flexDirection: 'row',borderColor: '#DAE0E5',borderTopWidth:1 }}>
+            <View style={{ flex: 0.1, flexDirection: 'row', borderColor: '#DAE0E5', borderTopWidth: 1 }}>
                 {
                     routes.map((routes, i) =>
                         (
@@ -40,15 +56,12 @@ class TabBar extends React.Component {
                                 borderColor: '#000', borderWidth: 0, backgroundColor: index == i ? Colors.theme_color : '#EFF1F3',
                             }]}
                                 key={i}
-                                onPress={() => {
-                                    this.props.navigation.navigate(routes.name)
-
-                                }}
+                                onPress={() => this.goToroutes(routes, i)}
                                 disabled={index == i ? true : false}
                             >
 
                                 <Image source={index == i ? TabBarImages[i].activeImage : TabBarImages[i].inactiveImage} style={{ height: 35, width: 35, }} />
-                                <Text style={{ marginTop: -5, color: index == i ? '#fff' : '#000', fontSize: 10 ,marginTop:1}}>{routes.name}</Text>
+                                <Text style={{ marginTop: -5, color: index == i ? '#fff' : '#000', fontSize: 10, marginTop: 1 }}>{routes.name}</Text>
                             </TouchableOpacity>
 
                         ))
