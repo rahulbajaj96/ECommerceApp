@@ -23,6 +23,7 @@ class Products extends Component {
             // The screen is focused
             console.log('when screen is focused');
             // Call any action
+            this.setState({ searchValue: '' })
             this.get_products_list(route.params);
 
         });
@@ -92,6 +93,8 @@ class Products extends Component {
             if (result.status == 1) {
                 this.setState({ productsList: result.data })
             }
+            else  this.setState({ productsList: [] })
+            
         }
     }
 

@@ -21,6 +21,7 @@ class Categories extends Component {
             // The screen is focused
             console.log('when screen is focused');
             // Call any action
+            this.setState({ searchValue: '' })
             this.get_Categories();
 
         });
@@ -88,6 +89,7 @@ class Categories extends Component {
             if (result.status == 1) {
                 this.setState({ categoryList: result.data })
             }
+            else  this.setState({ categoryList: [] })
         }
     }
     render() {

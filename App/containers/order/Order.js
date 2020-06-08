@@ -51,16 +51,16 @@ class Order extends React.Component {
         this.setState({ modalEditDelete: true, modalTitle: 'Order' })
     }
     renderOrderList = (item) => {
-        const { get_customers, id, created_at } = item.item
+        const { get_customers, id, created_at, get_workers } = item.item
         return (
             <View style={Style.Orders.orderListItemView}>
                 <TouchableOpacity style={{ flex: 0.8, paddingHorizontal: 10 }}
                     onPress={() => this.props.navigation.navigate('OrderDetail', { order_id: id })}
                 >
-                    <Text style={[Style.Orders.orderCompanyName,{fontWeight:'bold'}]}>{get_customers.first_name}{get_customers.last_name}</Text>
+                    <Text style={[Style.Orders.orderCompanyName, { fontWeight: 'bold' }]}>{get_customers.first_name}{get_customers.last_name}</Text>
                     <Text style={Style.Orders.orderCompanyName}>{get_customers.company_name}</Text>
                     <Text style={{ marginVertical: 2, fontSize: 14, color: '#000' }}>{created_at}</Text>
-
+                    <Text style={[Style.Orders.orderCompanyName,{marginVertical:5}]}>Order made by :{get_workers.first_name}{get_workers.last_name}</Text>
 
                 </TouchableOpacity>
 

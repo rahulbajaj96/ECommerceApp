@@ -10,15 +10,29 @@ import { connect } from "react-redux";
 import { Make_A_List } from "../../components/Products";
 import { SearchBar } from "../../components/SearchBar";
 import { getCategoriesList } from "../../actions/categoriesactions";
+import { ApiCallPost } from "../../Services/ApiServices";
+import { BASE_URL, API_URL } from "../../config";
 
 class OrderCategories extends Component {
     state = { searchValue: '', categoryList: [] }
-
     componentDidMount() {
 
-        this.get_Categories();
-    }
+        const { navigation } = this.props
+        navigation.addListener('focus', () => {
+            // The screen is focused
+            console.log('when screen is focused');
+            // Call any action
+            this.setState({ searchValue: '' })
+            this.get_Categories();
 
+        });
+    }
+    componentWillUnmount() {
+        const { navigation } = this.props
+
+        console.log('componenet gone ')
+        navigation.removeListener('focus');
+    }
     handleListItemCicked = (item) => {
         const { navigation } = this.props
 
@@ -33,9 +47,21 @@ class OrderCategories extends Component {
             this.setState({ categoryList: categoriesReducer.category_list })
         }
     }
-
+    async searchCategories() {
+        const { searchValue } = this.state
+        let formdata = new FormData();
+        formdata.append('search', searchValue);
+        let result = await ApiCallPost(`${BASE_URL}${API_URL.SearchCategory}`, formdata);
+        console.log('result ', JSON.stringify(result));
+        if (result != false) {
+            if (result.status == 1) {
+                this.setState({ categoryList: result.data })
+            }
+            else this.setState({ categoryList: [] })
+        }
+    }
     render() {
-        const { searchValue,categoryList } = this.state
+        const { searchValue, categoryList } = this.state
         const { navigation } = this.props
 
         return (
@@ -46,7 +72,7 @@ class OrderCategories extends Component {
                     <SearchBar
                         value={searchValue}
                         onChangeText={searchValue => this.setState({ searchValue })}
-
+                        onSubmitEditing={() => this.searchCategories()}
                     />
 
                     <Make_A_List

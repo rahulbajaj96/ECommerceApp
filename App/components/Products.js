@@ -108,7 +108,7 @@ export const Make_A_List = (props) => {
                 props.items.length == 0
                     ?
                     <View style={[Style.CommonStyles.fullFlex, Style.CommonStyles.centerStyle,]}>
-                        <Text style={Style.CommonStyles.EmptyListTag}>{get_Empty_Tag(props.tag)}</Text>
+                        <Text style={Style.CommonStyles.EmptyListTag}>{props.addPopUp == false ? `No ${props.tag} found` : get_Empty_Tag(props.tag)}</Text>
                     </View>
                     :
 

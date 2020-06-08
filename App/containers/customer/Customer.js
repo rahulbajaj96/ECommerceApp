@@ -31,6 +31,7 @@ class Customer extends React.Component {
             // The screen is focused
             console.log('when screen is focused');
             // Call any action
+            this.setState({ searchedValue: '' })
             this.get_Customer_List();
 
         });
@@ -162,6 +163,7 @@ class Customer extends React.Component {
             if (result.status == 1) {
                 this.setState({ customerList: result.data })
             }
+            else this.setState({ customerList:[] })
         }
     }
     render() {
@@ -171,7 +173,7 @@ class Customer extends React.Component {
                 <Toolbar title='Customers' />
                 <SearchBar
                     value={searchedValue}
-                    editable={customerList.length != 0 ? true : false}
+                    // editable={customerList.length != 0 ? true : false}
                     onChangeText={searchedValue => this.setState({ searchedValue })}
                     onSubmitEditing={() => this.searchCustomers()}
                 />

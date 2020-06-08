@@ -19,6 +19,7 @@ class SubCategories extends Component {
             // The screen is focused
             console.log('when screen is focused');
             // Call any action
+            this.setState({ searchValue: '' })
             this.get_SubCategories(route.params.category_id.id);
 
         });
@@ -62,16 +63,18 @@ class SubCategories extends Component {
 
     }
     async searchSubCategories() {
-        const { searchValue ,category_info} = this.state
+        const { searchValue, category_info } = this.state
         let formdata = new FormData();
         formdata.append('search', searchValue);
-        formdata.append('category_id',category_info.id);
+        formdata.append('category_id', category_info.id);
         let result = await ApiCallPost(`${BASE_URL}${API_URL.Search_SubCategory}`, formdata);
         console.log('result ', JSON.stringify(result));
         if (result != false) {
             if (result.status == 1) {
                 this.setState({ subcategoryList: result.data })
             }
+            else this.setState({ subcategoryList: [] })
+
         }
     }
     async onDeletePressed() {

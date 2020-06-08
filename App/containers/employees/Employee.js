@@ -29,11 +29,10 @@ class Employee extends React.Component {
             // The screen is focused
             console.log('when screen is focused');
             // Call any action
+            this.setState({ searchedValue: '' })
             this.get_Employee_List();
 
         });
-
-
     }
     async get_Employee_List() {
 
@@ -115,9 +114,6 @@ class Employee extends React.Component {
 
             }
         }
-
-
-
     }
     onEditPressed = () => {
         const { navigation } = this.props
@@ -162,6 +158,8 @@ class Employee extends React.Component {
             if (result.status == 1) {
                 this.setState({ employeeList: result.data })
             }
+             else  this.setState({ employeeList: [] })
+               
         }
     }
     render() {

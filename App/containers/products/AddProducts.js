@@ -195,7 +195,7 @@ class AddProduct extends React.Component {
             })
             this.props.loader_Off();
         }
-      
+
     }
 
     async formMultipleSelectionParticularObject() {
@@ -345,13 +345,27 @@ class AddProduct extends React.Component {
         const { images_aaray } = this.state
         this.setState({ modalVisibility: true, selectedImage: images_aaray[0] })
     }
+    deleteImage = (index) => {
+        const { images_aaray, images_path_array } = this.state
+        images_aaray.splice(index, 1);
+        images_path_array.splice(index, 1);
+        this.setState({ images_aaray, images_path_array }, () => this.setState({ selectedImage: images_aaray[0], modalVisibility: images_aaray.length == 0 ? false : true }))
+    }
     renderPictures = (item) => {
         console.log('items ', item)
         const { selectedIndex } = this.state
         return (
-            <TouchableOpacity style={{ height: '100%', width: 100, marginHorizontal: 2, borderBottomColor: Colors.theme_color, borderBottomWidth: item.index == selectedIndex ? 2 : 0 }} onPress={() => this.pictureClicked(item)}>
-                <Image style={{ flex: 0.8, borderWidth: selectedIndex == item.index ? 2 : 0, borderColor: Colors.theme_color }} source={{ uri: item.item }} />
-            </TouchableOpacity>
+            <View style={{ height: '100%', width: 100, marginHorizontal: 2, borderBottomColor: Colors.theme_color, borderBottomWidth: item.index == selectedIndex ? 2 : 0 }} >
+                <View style={{ flex: 0.15, borderWidth: 0, alignItems: 'flex-end', justifyContent: 'flex-end', marginBottom: 5 }}>
+                    <TouchableOpacity onPress={() => this.deleteImage(item.index)}>
+                        <Image style={{ height: 15, width: 15 }} source={Images.cross} />
+                    </TouchableOpacity>
+                </View>
+                <TouchableOpacity onPress={() => this.pictureClicked(item)} style={{ flex: 0.7 }}>
+                    <Image style={{ flex: 1, borderWidth: selectedIndex == item.index ? 2 : 0, borderColor: Colors.theme_color }} source={{ uri: item.item }} />
+                </TouchableOpacity>
+
+            </View>
         )
     }
     async handleSaveProduct() {
@@ -400,7 +414,7 @@ class AddProduct extends React.Component {
         else if (Page_id == 2) {
             formData.append('product_id', product_id);
             console.log('formData od Edit Product ', JSON.stringify(formData));
-           
+
             var EditResponse = await ApiCallPost(`${BASE_URL}${API_URL.Edit_Products}`, formData);
             console.log('response Edit Category', EditResponse);
             if (EditResponse != false) {
@@ -456,14 +470,14 @@ class AddProduct extends React.Component {
                                     <Image style={Style.Products.AddProduct.ImageModal.crossSign} source={Images.cross} />
                                 </TouchableOpacity>
                             </View>
-                            <View style={{ flex: 0.6, justifyContent: 'center', paddingHorizontal: 10 }}>
+                            <View style={{ flex: 0.55, justifyContent: 'center', paddingHorizontal: 10 }}>
 
                                 <Image source={{ uri: selectedImage }} style={{ flex: 0.8, }} />
 
 
                             </View>
-                            <View style={{ flex: 0.1 }} />
-                            <View style={{ flex: 0.20, paddingBottom: 5 }}>
+                            <View style={{ flex: 0.08 }} />
+                            <View style={{ flex: 0.27, paddingBottom: 5 }}>
                                 {
                                     images_aaray.length != 0 ?
                                         <Text style={Style.Products.AddProduct.ImageModal.image_num}>{(selectedIndex) + 1}/{images_aaray.length}</Text>

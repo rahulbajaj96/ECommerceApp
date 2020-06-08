@@ -29,7 +29,7 @@ function AddEmployee(props) {
     const [PostalCode, setPostalCode] = useState('')
     const [Street, setStreet] = useState('')
     const [ImageUri, setImageUri] = useState('')
-    const [AANHEF, setAANHEF] = useState()
+    const [AANHEF, setAANHEF] = useState('')
     const [ImageUploaded, setImageUploaded] = useState(false)
     const navigation = useNavigation();
     const [ID, setID] = useState(0)
@@ -320,7 +320,6 @@ function AddEmployee(props) {
                         <ProductInput
                             label='Postal Code'
                             value={PostalCode}
-                            keyboardType='number-pad'
                             onChangeText={PostalCode => setPostalCode(PostalCode)} />
                     </View>
                 </View>
