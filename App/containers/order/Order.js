@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import Modal from "react-native-modal";
 import Images from '../../utils/Image'
 import { getOrderList } from '../../actions/orderaction'
+import { getUserType } from '../../helpers/InputValidations'
 
 class Order extends React.Component {
     constructor(props) {
@@ -20,7 +21,8 @@ class Order extends React.Component {
         modalVisibilty: false,
         sortingOrder: 0,
         sortingArray: [{ name: 'Date', value: 0 }, { name: 'Price', value: 1 }, { name: 'Company Name', value: 2 }],
-        modalEditDelete: false, modalTitle: ''
+        modalEditDelete: false, modalTitle: '',
+        userType: ''
     }
     componentDidMount() {
         const { navigation } = this.props
@@ -29,8 +31,13 @@ class Order extends React.Component {
             console.log('when screen is focused');
             // Call any action
             this.getorders();
-
+            this.getType();
         });
+    }
+    async getType() {
+        let userType = await getUserType();
+        console.log('userType', userType);
+        this.setState({ userType })
     }
     componentWillUnmount() {
         const { navigation } = this.props
@@ -52,6 +59,7 @@ class Order extends React.Component {
     }
     renderOrderList = (item) => {
         const { get_customers, id, created_at, get_workers } = item.item
+        const { userType } = this.state
         return (
             <View style={Style.Orders.orderListItemView}>
                 <TouchableOpacity style={{ flex: 0.8, paddingHorizontal: 10 }}
@@ -60,14 +68,14 @@ class Order extends React.Component {
                     <Text style={[Style.Orders.orderCompanyName, { fontWeight: 'bold' }]}>{get_customers.first_name}{get_customers.last_name}</Text>
                     <Text style={Style.Orders.orderCompanyName}>{get_customers.company_name}</Text>
                     <Text style={{ marginVertical: 2, fontSize: 14, color: '#000' }}>{created_at}</Text>
-                    <Text style={[Style.Orders.orderCompanyName,{marginVertical:5}]}>Order made by :{get_workers.first_name}{get_workers.last_name}</Text>
+                    <Text style={[Style.Orders.orderCompanyName, { marginVertical: 5 }]}>Order made by :{get_workers.first_name}{get_workers.last_name}</Text>
 
                 </TouchableOpacity>
 
                 <View style={[{ flex: 0.2, paddingVertical: 10, borderWidth: 0 }, Style.CommonStyles.centerStyle]}>
 
                     <TouchableOpacity style={[{ flex: 0.1, borderWidth: 0 }, Style.CommonStyles.centerStyle]}
-                        onPress={() => this.openEditDelete(item)}
+                        onPress={() => this.openEditDelete(item)} disabled={userType != 2}
                     >
                         <Image source={Images.dots} style={{ height: 30, width: 30, }} />
                     </TouchableOpacity>
@@ -102,7 +110,7 @@ class Order extends React.Component {
         navigation.navigate('OrderCategories')
     }
     render() {
-        const { searchedValue, modalVisibilty, sortingArray, sortingOrder, modalEditDelete, modalTitle, orders_array } = this.state
+        const { searchedValue, modalVisibilty, sortingArray, sortingOrder, modalEditDelete, modalTitle, orders_array, userType } = this.state
         return (
             <AppComponent>
                 <Toolbar title='Orders' />

@@ -9,9 +9,10 @@ import { getCategoriesList } from "../../actions/categoriesactions";
 import { connect } from "react-redux";
 import { API_URL, BASE_URL } from "../../config";
 import { ApiCallPost } from "../../Services/ApiServices";
+import { getUserType } from "../../helpers/InputValidations";
 
 class Categories extends Component {
-    state = { searchValue: '', modalVisibility: false, currentSelectedItem: '', categoryList: [] }
+    state = { searchValue: '', modalVisibility: false, currentSelectedItem: '', categoryList: [], userType: '' }
 
 
     componentDidMount() {
@@ -23,8 +24,13 @@ class Categories extends Component {
             // Call any action
             this.setState({ searchValue: '' })
             this.get_Categories();
-
+            this.getType();
         });
+    }
+    async getType() {
+        let userType = await getUserType();
+        console.log('userType', userType);
+        this.setState({userType})
     }
     async get_Categories() {
         await this.props.getCategories();
@@ -89,11 +95,11 @@ class Categories extends Component {
             if (result.status == 1) {
                 this.setState({ categoryList: result.data })
             }
-            else  this.setState({ categoryList: [] })
+            else this.setState({ categoryList: [] })
         }
     }
     render() {
-        const { searchValue, modalVisibility, currentSelectedItem, categoryList } = this.state
+        const { searchValue, modalVisibility, currentSelectedItem, categoryList,userType } = this.state
         const { spinnerReducer } = this.props
         return (
             <AppComponent>
@@ -148,7 +154,7 @@ class Categories extends Component {
                         onEditPressed={() => this.onEditPressed()}
                         onDeletePressed={() => this.onDeletePressed()}
                         modalTitle={currentSelectedItem.name}
-
+                        usertype={userType}
                     />
                     {/* <View style={Style.Products.categories.categoriesListView}>
                         <FlatList

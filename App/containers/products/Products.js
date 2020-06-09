@@ -10,10 +10,11 @@ import { connect } from "react-redux";
 import { getProductslist } from "../../actions/productsactions";
 import { BASE_URL, API_URL } from "../../config";
 import { ApiCallPost } from "../../Services/ApiServices";
+import { getUserType } from "../../helpers/InputValidations";
 
 
 class Products extends Component {
-    state = { searchValue: '', modalVisibility: false, currentSelectedItem: '', productsList: [], Paramsinfo: '' }
+    state = { searchValue: '', modalVisibility: false, currentSelectedItem: '', productsList: [], Paramsinfo: '', userType: '' }
 
     componentDidMount() {
         const { navigation, route } = this.props
@@ -25,9 +26,13 @@ class Products extends Component {
             // Call any action
             this.setState({ searchValue: '' })
             this.get_products_list(route.params);
-
+            this.getType();
         });
-
+    }
+    async getType() {
+        let userType = await getUserType();
+        console.log('userType', userType);
+        this.setState({ userType })
     }
     componentWillUnmount() {
         const { navigation } = this.props
@@ -81,11 +86,11 @@ class Products extends Component {
         }
     }
     async searchProducts() {
-        const { searchValue ,Paramsinfo} = this.state
+        const { searchValue, Paramsinfo } = this.state
         let formdata = new FormData();
         formdata.append('search', searchValue);
-        formdata.append('category_id',Paramsinfo.category_id);
-        formdata.append('subcategory_id',Paramsinfo.subCategory_id);
+        formdata.append('category_id', Paramsinfo.category_id);
+        formdata.append('subcategory_id', Paramsinfo.subCategory_id);
 
         let result = await ApiCallPost(`${BASE_URL}${API_URL.Search_product}`, formdata);
         console.log('result ', JSON.stringify(result));
@@ -93,13 +98,13 @@ class Products extends Component {
             if (result.status == 1) {
                 this.setState({ productsList: result.data })
             }
-            else  this.setState({ productsList: [] })
-            
+            else this.setState({ productsList: [] })
+
         }
     }
 
     render() {
-        const { searchValue, modalVisibility, currentSelectedItem, productsList } = this.state
+        const { searchValue, modalVisibility, currentSelectedItem, productsList ,userType} = this.state
         const { navigation } = this.props
         return (
             <AppComponent>
@@ -127,7 +132,7 @@ class Products extends Component {
                         onEditPressed={() => this.onEditPressed()}
                         onDeletePressed={() => this.onDeletePressed()}
                         modalTitle={currentSelectedItem.name}
-
+                        usertype={userType}
                     />
 
                 </View>

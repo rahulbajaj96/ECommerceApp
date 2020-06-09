@@ -116,10 +116,10 @@ function AddCustomer(props) {
     }
 
     async function handleSaveCustomer() {
-        if (!EmptyValidation(ImageUri)) {
-            Toast.show("Please select a Customer pic");
-            return;
-        }
+        // if (!EmptyValidation(ImageUri)) {
+        //     Toast.show("Please select a Customer pic");
+        //     return;
+        // }
         if (!EmptyValidation(AANHEF)) {
             Toast.show(Get_Message("AANHEF"));
             return;
@@ -241,7 +241,9 @@ function AddCustomer(props) {
 
     return (
         <AppComponent>
-            <Toolbar title={title} right={1} back={true} navigation={navigation} onSavePress={() => handleSaveCustomer()} />
+            <Toolbar title={title} right={1} back={true} navigation={navigation} onSavePress={() => handleSaveCustomer()}
+                customisedbackButton={true}
+            />
             <KeyboardAwareScrollView style={[Style.CommonStyles.fullFlex, { paddingHorizontal: '5%', paddingVertical: '5%' }]}>
                 <Spinner visible={spinner} />
 
@@ -317,26 +319,27 @@ function AddCustomer(props) {
                 </View>
 
                 <Text style={{ color: '#000', fontSize: 16, marginTop: 20, fontWeight: 'bold', }}>Address</Text>
+
                 <ProductInput
-                    label='Address'
-                    value={Address}
-                    onChangeText={Address => setAddress(Address)} />
-                <ProductInput
-                    label='Street and HouseNo.'
+                    label='Street'
                     value={Street}
                     onChangeText={street => setStreet(street)} />
+                <ProductInput
+                    label='House no.'
+                    value={Address}
+                    onChangeText={Address => setAddress(Address)} />
                 <View style={{ flexDirection: 'row', flex: 1, marginVertical: 10 }}>
-                    <View style={{ flex: 0.5, paddingRight: '5%' }}>
-                        <ProductInput
-                            label='City'
-                            value={city}
-                            onChangeText={city => setcity(city)} />
-                    </View>
                     <View style={{ flex: 0.5, paddingRight: '5%' }}>
                         <ProductInput
                             label='Postal Code'
                             value={PostalCode}
                             onChangeText={PostalCode => setPostalCode(PostalCode)} />
+                    </View>
+                    <View style={{ flex: 0.5, paddingRight: '5%' }}>
+                        <ProductInput
+                            label='City'
+                            value={city}
+                            onChangeText={city => setcity(city)} />
                     </View>
                 </View>
                 <View style={{ height: 50 }} />

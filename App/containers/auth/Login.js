@@ -70,9 +70,8 @@ class Login extends Component {
 
         get_From_AsyncStorage('@login_auth_response').then(result => {
             console.log('result', result)
-            if (result != null) 
-            {
-                var response =JSON.parse(result);
+            if (result != null) {
+                var response = JSON.parse(result);
                 this.navigateFromLogin(response.user_type);
             }
         });
@@ -97,7 +96,8 @@ class Login extends Component {
         const { navigation } = this.props
         //storeUser
         if (user_type == '2')
-            navigation.navigate('StoreOptions');
+            // navigation.navigate('StoreOptions');
+            navigation.navigate('Tabs', { screen: 'Products' });
         else if (user_type == '3')
             navigation.navigate('Tabs', { screen: 'Products' });
 
@@ -128,7 +128,7 @@ class Login extends Component {
             if (LoginReducer.response_from_login_Api.status == 1) {
 
                 await save_To_AsyncStorage('@login_auth_response', JSON.stringify(LoginReducer.response_from_login_Api.data));
-                SaveToken(LoginReducer.response_from_login_Api.data.token);
+                SaveToken(LoginReducer.response_from_login_Api.data.token, LoginReducer.response_from_login_Api.data.user_type);
                 Toast.show(LoginReducer.response_from_login_Api.message);
                 this.setState({ email: '', password: '' })
                 this.navigateFromLogin(LoginReducer.response_from_login_Api.data.user_type);

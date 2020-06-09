@@ -249,7 +249,9 @@ function AddCategory(props) {
     }
     return (
         <AppComponent>
-            <Toolbar title={title} back={true} navigation={navigation} right={1} onSavePress={() => handleSaveCategory()} />
+            <Toolbar title={title} back={true} navigation={navigation} right={1} onSavePress={() => handleSaveCategory()}
+                customisedbackButton={true}
+            />
             <Spinner visible={spinner} />
             <View style={[Style.CommonStyles.fullFlex,]}>
                 <KeyboardAwareScrollView style={{ paddingHorizontal: '5%' }}>

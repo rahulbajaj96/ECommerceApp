@@ -138,6 +138,11 @@ export const Make_A_List = (props) => {
 
 
 export const ModalView = (props) => {
+
+    // async function () {
+    //     console.log('customisedbackFunctionality',props.customisedbackButton)
+    //     props.customisedbackButton ? customisedback() : props.navigation.goBack()
+    // }
     return (
         <Modal
             // isVisible={modalVisibility}
@@ -154,11 +159,11 @@ export const ModalView = (props) => {
                     <Image source={Images.edit} style={{ height: 20, width: 20 }} />
 
                 </TouchableOpacity>
-                <TouchableOpacity style={Style.Products.categories.categoriesModal.modalItemView}
-                    onPress={() => props.onDeletePressed()}
+                <TouchableOpacity style={[Style.Products.categories.categoriesModal.modalItemView,{opacity:props.userType != 2 ? 0.5 :1}]}
+                    onPress={() => props.onDeletePressed()} disabled={props.userType != 2 }
                 >
-                    <Text style={{ fontSize: 18, color: '#000', marginRight: 5 }}>Delete</Text>
-                    <Image source={Images.trash} style={{ height: 25, width: 25 }} />
+                    <Text style={{ fontSize: 18, color: '#000', marginRight: 5,opacity:props.userType != 2 ? 0.2 :1, }}>Delete</Text>
+                    <Image source={Images.trash} style={{ height: 25, width: 25 ,opacity:props.userType != 2 ? 0.2 :1,}} />
 
                 </TouchableOpacity>
 

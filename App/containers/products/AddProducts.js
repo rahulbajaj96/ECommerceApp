@@ -441,7 +441,9 @@ class AddProduct extends React.Component {
         const { navigation } = this.props
         return (
             <AppComponent >
-                <Toolbar title={title} right={1} back={true} navigation={navigation} onSavePress={() => this.handleSaveProduct()} />
+                <Toolbar title={title} right={1} back={true} navigation={navigation} onSavePress={() => this.handleSaveProduct()}
+                 customisedbackButton={true}
+                />
                 <KeyboardAwareScrollView style={[Style.CommonStyles.fullFlex], { paddingHorizontal: '2%', paddingTop: '2%' }}>
 
                     <View style={Style.Products.AddProduct.ImagePickerView}>

@@ -1,4 +1,4 @@
-import { Text, View, Image, SafeAreaView, StatusBar, TouchableOpacity } from 'react-native';
+import { Text, View, Image, SafeAreaView, StatusBar, TouchableOpacity, Alert } from 'react-native';
 import Style from '../utils/Style';
 import * as React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
@@ -9,13 +9,30 @@ import Images from '../utils/Image';
  */
 
 const Toolbar = (props) => {
+    const customisedback = () => {
+        Alert.alert(
+            '',
+            ' Are you sure you want to discard the changes?',
+            [
+                { text: 'Yes', onPress: () => props.navigation.goBack(), style: 'cancel' },
+                {
+                    text: 'No', onPress: () => console.log('no'), style: 'cancel'
+                },
+            ],
+            { cancelable: false }
+        )
+    }
+    const performBack = () => {
+        console.log('customisedbackFunctionality',props.customisedbackButton)
+        props.customisedbackButton ? customisedback() : props.navigation.goBack()
+    }
     return (
         <LinearGradient style={Style.Toolbar.toolbarView} colors={['#2e1786', '#5453C7']} start={{ x: 0.1, y: 0.1 }} end={{ x: 1, y: 1 }}>
 
             <View style={{ flex: 0.2, justifyContent: 'center', paddingLeft: 8 }}>
                 {
                     props.back ?
-                        <TouchableOpacity style={[{ width: 30, height: 30 }, Style.CommonStyles.centerStyle]} onPress={() => props.navigation.goBack()}>
+                        <TouchableOpacity style={[{ width: 30, height: 30 }, Style.CommonStyles.centerStyle]} onPress={() => performBack()}>
                             <Image source={Images.back_arrow} style={{ width: 22, height: 22, }} />
                         </TouchableOpacity>
                         :

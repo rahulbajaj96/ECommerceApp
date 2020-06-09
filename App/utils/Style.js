@@ -118,7 +118,7 @@ export default {
     },
     CheckOut:{
         checkoutView:{backgroundColor:'#fff',borderRadius:10,borderColor:Colors.theme_color,borderWidth:1,padding: '5%',marginBottom:'10%'},
-        checkoutButton: { width: '60%', height: '10%', marginHorizontal: '20%', backgroundColor: Colors.theme_color, borderRadius: 20, marginTop: '10%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: '2%' },
+        checkoutButton: { width: '60%', height: '20%', marginHorizontal: '20%', backgroundColor: Colors.theme_color, borderRadius: 20, marginTop: '10%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: '2%' },
     },
     More: {
         logoutButton: { height: 50, width: '60%', backgroundColor: Colors.theme_color, flexDirection: 'row', marginVertical: 2, marginHorizontal: '20%', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 10, borderRadius: 25, marginTop: '40%' },

@@ -12,7 +12,7 @@ import { getCustomerList } from '../../actions/customeractions'
 import Colors from '../../utils/Colors'
 import { ApiCallPost } from '../../Services/ApiServices'
 import { BASE_URL, API_URL, PIC_URL } from '../../config'
-import { get_Empty_Tag } from '../../helpers/InputValidations'
+import { get_Empty_Tag, getUserType } from '../../helpers/InputValidations'
 
 
 class Customer extends React.Component {
@@ -22,7 +22,8 @@ class Customer extends React.Component {
         sortingArray: [{ name: 'Date', value: 0, key: 'created_at' }, { name: 'Company Name', value: 2, key: 'company_name' }],
         modalEditDelete: false,
         currentSelectedItem: '',
-        customerList: []
+        customerList: [],
+        userType:''
     }
     componentDidMount() {
         console.log('reload prop', this.props.reload)
@@ -34,9 +35,13 @@ class Customer extends React.Component {
             this.setState({ searchedValue: '' })
             this.get_Customer_List();
 
+            this.getType();
         });
-        // this.get_Customer_List();
-
+    }
+    async getType() {
+        let userType = await getUserType();
+        console.log('userType', userType);
+        this.setState({ userType })
     }
     async get_Customer_List() {
 
@@ -167,7 +172,7 @@ class Customer extends React.Component {
         }
     }
     render() {
-        const { searchedValue, modalVisibilty, sortingArray, sortingOrder, modalEditDelete, currentSelectedItem, customerList } = this.state
+        const { searchedValue, modalVisibilty, sortingArray, sortingOrder, modalEditDelete, currentSelectedItem, customerList ,userType} = this.state
         return (
             <AppComponent>
                 <Toolbar title='Customers' />
@@ -229,7 +234,7 @@ class Customer extends React.Component {
                     onEditPressed={() => this.onEditPressed()}
                     onDeletePressed={() => this.onDeletePressed()}
                     modalTitle={`${currentSelectedItem.first_name} ${currentSelectedItem.last_name}`}
-
+                    usertype={userType}
                 />
 
             </AppComponent>

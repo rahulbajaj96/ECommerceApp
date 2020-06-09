@@ -8,9 +8,10 @@ import { Make_A_List, ModalView } from "../../components/Products";
 import { getSubCategoriesList } from "../../actions/subcategoriesactions";
 import { BASE_URL, API_URL } from "../../config";
 import { ApiCallPost } from "../../Services/ApiServices";
+import { getUserType } from "../../helpers/InputValidations";
 
 class SubCategories extends Component {
-    state = { searchValue: '', modalVisibility: false, currentSelectedItem: '', subcategoryList: [], category_info: '' }
+    state = { searchValue: '', modalVisibility: false, currentSelectedItem: '', subcategoryList: [], category_info: '', userType: '' }
     componentDidMount() {
         const { navigation, route } = this.props
         console.log('this.props.category', route.params.category_id);
@@ -21,8 +22,13 @@ class SubCategories extends Component {
             // Call any action
             this.setState({ searchValue: '' })
             this.get_SubCategories(route.params.category_id.id);
-
+            this.getType();
         });
+    }
+    async getType() {
+        let userType = await getUserType();
+        console.log('userType', userType);
+        this.setState({ userType })
     }
     async get_SubCategories(id) {
         // const {category_info} = this.state
@@ -95,7 +101,7 @@ class SubCategories extends Component {
 
     }
     render() {
-        const { searchValue, modalVisibility, currentSelectedItem, subcategoryList } = this.state
+        const { searchValue, modalVisibility, currentSelectedItem, subcategoryList, userType } = this.state
         const { navigation } = this.props
         return (
             <AppComponent>
@@ -125,8 +131,7 @@ class SubCategories extends Component {
                         onEditPressed={() => this.onEditPressed()}
                         onDeletePressed={() => this.onDeletePressed()}
                         modalTitle={currentSelectedItem.name}
-
-
+                        usertype={userType}
                     />
 
                 </View>

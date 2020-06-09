@@ -20,6 +20,8 @@ const Images = {
     edit: require('../app_assests/Images/AppMain/edit.png'),
     eye: require('../app_assests/Images/AppMain/eye.png'),
     employee: require('../app_assests/Images/AppMain/Manage.png'),
+    home: require('../app_assests/Images/AppMain/home.png'),
+
 
     //tab_Images
     order_black: require('../app_assests/Images/TabImages/black_order.png'),
