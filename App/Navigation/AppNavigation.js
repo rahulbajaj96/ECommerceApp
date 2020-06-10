@@ -21,7 +21,7 @@ function AppNavigation() {
     return (
         <Provider store={store}>
         <NavigationContainer>
-            <Stack.Navigator initialRouteName='OrderProductDetail' headerMode='none'>
+            <Stack.Navigator initialRouteName='Login' headerMode='none'>
                 <Stack.Screen name='Login' component={Login} />
                 <Stack.Screen name='Tabs' component={TabNavigator} />
                 <Stack.Screen name='AddEmployee' component={AddEmployee} />

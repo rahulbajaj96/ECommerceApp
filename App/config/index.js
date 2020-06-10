@@ -31,6 +31,9 @@ export const API_URL = {
     //Products
     Product_Sizes: 'productsize',
     Product_Colors: 'productcolor',
+    AddColor: 'productcolor/store',
+    AddSize: 'productsize/store',
+
     AddProduct: 'product/store',
     Product_List: 'product/list',
     Edit_Products: 'product/update',
@@ -54,6 +57,6 @@ export const API_URL = {
     Edit_Employee: 'updateWorker',
     Delete_Employee: 'deleteWorker',
     SortEmployee: 'workerSort',
-    EmployeeSearch:'workerSearch',
+    EmployeeSearch: 'workerSearch',
 
 }

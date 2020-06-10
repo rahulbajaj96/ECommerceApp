@@ -143,7 +143,7 @@ class OrderProductDetail extends React.Component {
         }
         for (let i = color_current_Value; i < loopValue; i++) {
             views.push(
-                <TouchableOpacity style={{ flex: 0.20, backgroundColor: colors_available[i].hash_color, margin: 5, borderWidth: current_selected_color == i ? 2 : 0, borderColor: current_selected_color == i ? Colors.theme_color : null, padding: 2, }} key={i} disabled={current_selected_color == i} onPress={() => this.colorSelected(i)} />
+                <TouchableOpacity style={{ flex: 0.20,  backgroundColor: colors_available[i].hash_color == null ?''+colors_available[i].color: colors_available[i].hash_color, margin: 5, borderWidth: current_selected_color == i ? 2 : 0, borderColor: current_selected_color == i ? Colors.theme_color : null, padding: 2, }} key={i} disabled={current_selected_color == i} onPress={() => this.colorSelected(i)} />
             )
         }
         return views;

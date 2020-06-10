@@ -53,7 +53,11 @@ class AddProduct extends React.Component {
         sizes_available: [],
         categories_available: [],
         subcategories_available: [],
-        images_path_array: []
+        images_path_array: [],
+
+        size_color_modal: false,
+        newSize_Color: '',
+        current_size_color: 0
 
     }
 
@@ -73,8 +77,9 @@ class AddProduct extends React.Component {
      * @method get_product_color provides u the colors from api and sets to spinner
      */
     async get_product_color() {
-        const { colors_available } = this.state
+        let { colors_available } = this.state
         await this.props.getColors();
+        colors_available = []
         const { product_color_reducer } = this.props
         for (let i = 0; i < product_color_reducer.colors_available.length; i++) {
             colors_available.push(product_color_reducer.colors_available[i].color);
@@ -88,8 +93,9 @@ class AddProduct extends React.Component {
      * @method getSizes() get the sizes from the API and save to @params {*} size_available
      */
     async get_product_sizes() {
-        const { sizes_available } = this.state
+        let { sizes_available } = this.state
         await this.props.getSizes();
+        sizes_available = []
         const { product_size_reducer } = this.props
         for (let i = 0; i < product_size_reducer.sizes_available.length; i++) {
             sizes_available.push(product_size_reducer.sizes_available[i].size);
@@ -436,13 +442,52 @@ class AddProduct extends React.Component {
 
 
     }
+    AddSize_color = (id) => {
+        const { newSize_Color } = this.state
+        if (id == 1)
+            this.AddColor(newSize_Color);
+        else
+            this.AddSize(newSize_Color);
+
+    }
+    async AddColor(color) {
+        let formData = new FormData();
+        formData.append('color', color);
+        let responseAddColor = await ApiCallPost(`${BASE_URL}${API_URL.AddColor}`, formData);
+        console.log('responseof Add Color', responseAddColor);
+        if (responseAddColor != false) {
+            if (responseAddColor.status == 1) {
+                this.setState({ size_color_modal: false })
+                this.get_product_color();
+            }
+            else
+                setTimeout(() => {
+                    Toast.show(responseAddColor.message)
+                }, 500);
+        }
+    }
+    async AddSize(size) {
+        let formData = new FormData();
+        formData.append('size', size);
+        let responseAddSize = await ApiCallPost(`${BASE_URL}${API_URL.AddSize}`, formData);
+        console.log('response of AddSize', responseAddSize);
+        if (responseAddSize != false) {
+            if (responseAddSize.status == 1) {
+                this.setState({ size_color_modal: false })
+                this.get_product_sizes();
+            }
+            setTimeout(() => {
+                Toast.show(responseAddSize.message)
+            }, 500);
+        }
+    }
     render() {
-        const { productName, articlenum, purchasePrice, sellingPrice, multipleSelection, modalVisibility, selectedImage, selectedIndex, title, Category, SubCategory, colors_available, sizes_available, categories_available, subcategories_available, images_aaray } = this.state
+        const { productName, articlenum, purchasePrice, sellingPrice, multipleSelection, modalVisibility, selectedImage, selectedIndex, title, Category, SubCategory, colors_available, sizes_available, categories_available, subcategories_available, images_aaray, size_color_modal, newSize_Color, current_size_color } = this.state
         const { navigation } = this.props
         return (
             <AppComponent >
                 <Toolbar title={title} right={1} back={true} navigation={navigation} onSavePress={() => this.handleSaveProduct()}
-                 customisedbackButton={true}
+                    customisedbackButton={true}
                 />
                 <KeyboardAwareScrollView style={[Style.CommonStyles.fullFlex], { paddingHorizontal: '2%', paddingTop: '2%' }}>
 
@@ -534,6 +579,14 @@ class AddProduct extends React.Component {
                                 onChangeText={sellingPrice => this.setState({ sellingPrice })} />
                         </View>
                     </View>
+                    <View style={{ height: 60,  flexDirection: 'row', marginHorizontal: '5%', justifyContent: 'space-between' ,alignItems:'center',marginBottom:15}}>
+                        <TouchableOpacity style={[{ height: 50, width: '40%', borderRadius: 25, backgroundColor: Colors.theme_color }, Style.CommonStyles.centerStyle]}  onPress={() => this.setState({ size_color_modal: true, current_size_color: 1 })}>
+                            <Text style={{ fontSize: 14, color: Colors.white }}>Add Color</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[{ height: 50, width: '40%', borderRadius: 25, backgroundColor: Colors.theme_color }, Style.CommonStyles.centerStyle]}  onPress={() => this.setState({ size_color_modal: true, current_size_color: 2 })}>
+                            <Text style={{ fontSize: 14, color: Colors.white }}>Add Size</Text>
+                        </TouchableOpacity>
+                    </View>
 
                     {
                         multipleSelection.map((particularSet, i) => (
@@ -566,8 +619,39 @@ class AddProduct extends React.Component {
                             </View>
                         ))
                     }
+                    <Modal isVisible={size_color_modal} style={{}}
+                        backdropColor='#000'
+                        backdropOpacity={0.8}
+                    >
+                        <View style={{ height: 280, width: '100%', backgroundColor: '#fff', borderRadius: 5 }}>
+                            <View style={{ flex: 0.1, alignItems: 'flex-end', justifyContent: 'center', paddingHorizontal: 10, marginTop: 10 }}>
+                                <TouchableOpacity onPress={() => this.setState({ size_color_modal: false })}
+                                    style={[Style.Products.AddProduct.ImageModal.crossSignTouch, Style.CommonStyles.centerStyle]}
+                                >
+                                    <Image style={{ height: 20, width: 20 }} source={Images.cross} />
+                                </TouchableOpacity>
+                            </View>
+                            <View style={{ flex: 0.8, borderWidth: 0, paddingHorizontal: '5%', paddingTop: 10 }}>
+                                <Text style={{ fontSize: 24, color: Colors.theme_color, marginVertical: '4%', marginHorizontal: 10 }}>Add the {current_size_color == 1 ? 'color' : 'size'} you want to add </Text>
+                                <TextInput
+                                    style={{ fontSize: 18, borderBottomWidth: 1, borderBottomColor: '#000', marginVertical: '2%', paddingBottom: 5, marginHorizontal: 10, }}
+                                    placeholder={'Name'}
+                                    value={newSize_Color}
+                                    onChangeText={newSize_Color => this.setState({ newSize_Color })}
+
+                                />
+                                <TouchableOpacity style={[{ width: '50%', marginHorizontal: '25%', borderRadius: 25, height: 50, backgroundColor: Colors.theme_color, marginTop: '8%' }, Style.CommonStyles.centerStyle]} onPress={() => this.AddSize_color(current_size_color)}>
+                                    <Text style={{ fontSize: 15, color: Colors.white, }}>Add</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <View style={{ flex: 0.08 }} />
+
+
+                        </View>
+                    </Modal>
                     <View style={{ justifyContent: 'flex-end', width: '100%', paddingVertical: 5, alignItems: 'flex-end' }}>
-                        <TouchableOpacity onPress={() => this.addMore()}>
+                        <TouchableOpacity
+                            onPress={() => this.addMore()} >
                             <Image source={Images.add_pop_up} style={Style.Products.categories.addPopUpImage} />
 
                         </TouchableOpacity>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, TouchableOpacity, Image, Alert } from 'react-native'
+import { Text, View, TouchableOpacity, Image, Alert, Linking } from 'react-native'
 import Modal from "react-native-modal";
 import AppComponent from '../../components/AppComponent';
 import Toolbar from '../../components/Toolbar';
@@ -73,7 +73,12 @@ class Bill_Checkout extends React.Component {
         console.log('response', order_response);
         if (order_response != false) {
             if (order_response.status == 1) {
-                this.setState({ viewChange: true })
+
+                Linking.openURL(order_response.data)
+                setTimeout(() => {
+                    this.setState({ viewChange: true })
+                }, 500);
+
                 Toast.show('Order Created');
                 // navigation.navigate('Order');
             }
@@ -92,30 +97,34 @@ class Bill_Checkout extends React.Component {
                         <Text style={{ fontSize: 22, color: '#000', }}>Your Order Contains : </Text>
                         <Text style={{ fontSize: 18, color: '#000', marginVertical: 2 }}>Total Items : {route.params.checkoutArray.length}</Text>
                         <Text style={{ fontSize: 18, color: '#000', }}>Total Price : ${route.params.total_price}</Text>
-                        <Text style={{ fontSize: 18, color: '#000', }}>Customer Name : {selected_customer}</Text>
+                        {
+                            viewChange ?
+                                <Text style={{ fontSize: 18, color: '#000', }}>Customer Name : {selected_customer}</Text>
+                                : null
+                        }
                     </View>
                     {
                         viewChange ?
                             <View style={[{ flex: 0.7, }, Style.CommonStyles.centerStyle]}>
                                 <Text style={{ fontSize: 20 }}>Your Order was Successfully Placed .</Text>
                                 <TouchableOpacity style={[{ marginVertical: 10, height: 120, width: 120 }, Style.CommonStyles.centerStyle]}
-                                // onPress={() => navigation.navigate('Order')}
+                                onPress={() => navigation.navigate('Order')}
                                 >
                                     <Image source={Images.home} style={{ height: 100, width: 100, }} />
                                 </TouchableOpacity>
 
                             </View>
                             :
-                            <View style={{flex:0.7}}>
-                            <DropDown
-                                options={customer_array}
-                                defaultValue='Select a Customer'
-                                onSelect={(index, value) => this.setState({ selected_customer: value })}
-                            />
-                            <TouchableOpacity style={[Style.CheckOut.checkoutButton]} onPress={() => this.checkBill()}>
-                                <Text style={Style.Cart.checkoutText}>Place Order</Text>
-                                <Image style={Style.Cart.checkoutImage} source={Images.right_white_arrow} />
-                            </TouchableOpacity>
+                            <View style={{ flex: 0.7 }}>
+                                <DropDown
+                                    options={customer_array}
+                                    defaultValue='Select a Customer'
+                                    onSelect={(index, value) => this.setState({ selected_customer: value })}
+                                />
+                                <TouchableOpacity style={[Style.CheckOut.checkoutButton]} onPress={() => this.checkBill()}>
+                                    <Text style={Style.Cart.checkoutText}>Place Order</Text>
+                                    <Image style={Style.Cart.checkoutImage} source={Images.right_white_arrow} />
+                                </TouchableOpacity>
                             </View>
                     }
 

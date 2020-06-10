@@ -73,8 +73,17 @@ function AddCustomer(props) {
         setAddress(propData.address)
         setAANHEF(propData.prefixing_type)
         setCustomer_id(propData.id)
-        setImageUri(propData.profile_pic)
-        setImageUploaded(true)
+        if(propData.profile_pic ==  null)
+        {
+            setImageUri('')
+            setImageUploaded(false)
+        }
+        else
+        {
+            setImageUri(propData.profile_pic)
+            setImageUploaded(true)
+        }
+       
     }
     function goToImagePicker() {
 
@@ -205,7 +214,9 @@ function AddCustomer(props) {
 
                     }
                     else {
-                        Toast.show(response.message)
+                        setTimeout(() => {
+                            Toast.show(response.message)
+                        }, 500);
                     }
             }
             else {
@@ -227,7 +238,9 @@ function AddCustomer(props) {
 
                     }
                     else {
-                        Toast.show(responseEdit.message)
+                        setTimeout(() => {
+                            Toast.show(responseEdit.message)
+                        }, 500);
                     }
 
             }
