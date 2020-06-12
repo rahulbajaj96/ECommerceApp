@@ -457,7 +457,7 @@ class AddProduct extends React.Component {
         console.log('responseof Add Color', responseAddColor);
         if (responseAddColor != false) {
             if (responseAddColor.status == 1) {
-                this.setState({ size_color_modal: false })
+                this.setState({ size_color_modal: false, newSize_Color: '' })
                 this.get_product_color();
             }
             else
@@ -473,7 +473,7 @@ class AddProduct extends React.Component {
         console.log('response of AddSize', responseAddSize);
         if (responseAddSize != false) {
             if (responseAddSize.status == 1) {
-                this.setState({ size_color_modal: false })
+                this.setState({ size_color_modal: false, newSize_Color: '' })
                 this.get_product_sizes();
             }
             setTimeout(() => {
@@ -579,11 +579,11 @@ class AddProduct extends React.Component {
                                 onChangeText={sellingPrice => this.setState({ sellingPrice })} />
                         </View>
                     </View>
-                    <View style={{ height: 60,  flexDirection: 'row', marginHorizontal: '5%', justifyContent: 'space-between' ,alignItems:'center',marginBottom:15}}>
-                        <TouchableOpacity style={[{ height: 50, width: '40%', borderRadius: 25, backgroundColor: Colors.theme_color }, Style.CommonStyles.centerStyle]}  onPress={() => this.setState({ size_color_modal: true, current_size_color: 1 })}>
+                    <View style={{ height: 60, flexDirection: 'row', marginHorizontal: '5%', justifyContent: 'space-between', alignItems: 'center', marginBottom: 15 }}>
+                        <TouchableOpacity style={[{ height: 50, width: '40%', borderRadius: 25, backgroundColor: Colors.theme_color }, Style.CommonStyles.centerStyle]} onPress={() => this.setState({ size_color_modal: true, current_size_color: 1 , newSize_Color: ''})}>
                             <Text style={{ fontSize: 14, color: Colors.white }}>Add Color</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[{ height: 50, width: '40%', borderRadius: 25, backgroundColor: Colors.theme_color }, Style.CommonStyles.centerStyle]}  onPress={() => this.setState({ size_color_modal: true, current_size_color: 2 })}>
+                        <TouchableOpacity style={[{ height: 50, width: '40%', borderRadius: 25, backgroundColor: Colors.theme_color }, Style.CommonStyles.centerStyle]} onPress={() => this.setState({ size_color_modal: true, current_size_color: 2 , newSize_Color: ''})}>
                             <Text style={{ fontSize: 14, color: Colors.white }}>Add Size</Text>
                         </TouchableOpacity>
                     </View>
