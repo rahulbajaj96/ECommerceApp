@@ -1,4 +1,4 @@
-import { Text, View, FlatList, Image, TouchableOpacity } from "react-native";
+import { Text, View, FlatList, Image, TouchableOpacity ,Keyboard} from "react-native";
 import React, { Component } from "react";
 
 import { Item, Input } from 'native-base';
@@ -50,6 +50,7 @@ class OrderCategories extends Component {
     async searchCategories() {
         const { searchValue } = this.state
         let formdata = new FormData();
+        Keyboard.dismiss();
         formdata.append('search', searchValue);
         let result = await ApiCallPost(`${BASE_URL}${API_URL.SearchCategory}`, formdata);
         console.log('result ', JSON.stringify(result));
@@ -73,6 +74,7 @@ class OrderCategories extends Component {
                         value={searchValue}
                         onChangeText={searchValue => this.setState({ searchValue })}
                         onSubmitEditing={() => this.searchCategories()}
+                        onSearch={() => this.searchCategories()}
                     />
 
                     <Make_A_List

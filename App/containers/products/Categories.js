@@ -110,6 +110,7 @@ class Categories extends Component {
                         value={searchValue}
                         onChangeText={searchValue => this.setState({ searchValue })}
                         onSubmitEditing={() => this.searchCategories()}
+                        onSearch={() => this.searchCategories()}
                     />
 
 

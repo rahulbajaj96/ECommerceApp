@@ -57,7 +57,9 @@ class AddProduct extends React.Component {
 
         size_color_modal: false,
         newSize_Color: '',
-        current_size_color: 0
+        current_size_color: 0,
+
+        discard: false
 
     }
 
@@ -69,6 +71,8 @@ class AddProduct extends React.Component {
         await this.get_product_sizes();
         await this.setPropData(this.props.route.params)
         this.get_Categories_Available();
+        this.get_SubCategories_Available();
+
 
 
     }
@@ -112,19 +116,20 @@ class AddProduct extends React.Component {
         // console.log('categories_available', categories_available);
         this.setState({ categories_available })
     }
-    async get_Categories_Available() {
-        const { categories_available } = this.state
-        const { categoriesReducer } = this.props
-        for (let i = 0; i < categoriesReducer.category_list.length; i++) {
-            categories_available.push(categoriesReducer.category_list[i].name)
+    async get_SubCategories_Available() {
+        const { subcategories_available } = this.state
+        const { subcategoriesReducer } = this.props
+        for (let i = 0; i < subcategoriesReducer.subcategory_list.length; i++) {
+            subcategories_available.push(subcategoriesReducer.subcategory_list[i].name)
         }
         // console.log('categories_available', categories_available);
-        this.setState({ categories_available })
+        this.setState({ subcategories_available })
     }
     async get_SubCategory(category_id) {
-        const { subcategories_available } = this.state
+        let { subcategories_available } = this.state
         await this.props.getSubCategories(category_id);
         const { subcategoriesReducer } = this.props
+        subcategories_available = []
         // console.log('reducer data', categoriesReducer);
         for (let i = 0; i < subcategoriesReducer.subcategory_list_based_on_category.length; i++) {
             subcategories_available.push(subcategoriesReducer.subcategory_list_based_on_category[i].name)
@@ -175,7 +180,7 @@ class AddProduct extends React.Component {
             }
 
             console.log('multiple Selection Data', multipleSelection);
-
+            this.get_SubCategory(propData.data.category_id);
             this.setState({
                 Category_id: propData.data.category_id,
                 SubCategory_id: propData.data.subcategory_id,
@@ -227,7 +232,7 @@ class AddProduct extends React.Component {
         multipleSelection[main_index].product_color_id = '' + color_selected.id;
         multipleSelection[main_index].product_color_name = value;
 
-        this.setState({ multipleSelection })
+        this.setState({ multipleSelection }, () => this.handleDiscard())
 
     }
 
@@ -246,20 +251,20 @@ class AddProduct extends React.Component {
         multipleSelection[main_index].size_id = '' + size_selected.id;
         multipleSelection[main_index].size_name = value
 
-        this.setState({ multipleSelection })
+        this.setState({ multipleSelection }, () => this.handleDiscard())
 
     }
 
     async SelectCategory(index, value) {
         const { categoriesReducer } = this.props
         let category_selected = await getCategoryParamsFromName(categoriesReducer.category_list, value)
-        this.setState({ Category_id: category_selected.id, Category: value })
+        this.setState({ Category_id: category_selected.id, Category: value, SubCategory_id: '', SubCategory: '' }, () => this.handleDiscard())
         this.get_SubCategory(category_selected.id);
     }
     async SelectSubCategory(index, value) {
         const { subcategoriesReducer } = this.props
         let subcategory_selected = await getCategoryParamsFromName(subcategoriesReducer.subcategory_list_based_on_category, value)
-        this.setState({ SubCategory_id: subcategory_selected.id, SubCategory: value })
+        this.setState({ SubCategory_id: subcategory_selected.id, SubCategory: value }, () => this.handleDiscard())
     }
 
     /**
@@ -306,7 +311,7 @@ class AddProduct extends React.Component {
                     name: 'ABC',
                     type: response.type, uri: response.uri
                 })
-                this.setState({ images_aaray, images_path_array })
+                this.setState({ images_aaray, images_path_array }, () => this.handleDiscard())
             }
 
         });
@@ -331,7 +336,7 @@ class AddProduct extends React.Component {
                     name: 'ABC',
                     type: response.type, uri: response.uri
                 })
-                this.setState({ images_aaray, images_path_array })
+                this.setState({ images_aaray, images_path_array }, () => this.handleDiscard())
             }
 
         });
@@ -355,7 +360,7 @@ class AddProduct extends React.Component {
         const { images_aaray, images_path_array } = this.state
         images_aaray.splice(index, 1);
         images_path_array.splice(index, 1);
-        this.setState({ images_aaray, images_path_array }, () => this.setState({ selectedImage: images_aaray[0], modalVisibility: images_aaray.length == 0 ? false : true }))
+        this.setState({ images_aaray, images_path_array }, () => this.setState({ selectedImage: images_aaray[0], modalVisibility: images_aaray.length == 0 ? false : true }, () => this.handleDiscard()))
     }
     renderPictures = (item) => {
         console.log('items ', item)
@@ -481,13 +486,26 @@ class AddProduct extends React.Component {
             }, 500);
         }
     }
+    handleDiscard() {
+        const { productName, articlenum, purchasePrice, sellingPrice, multipleSelection, modalVisibility, selectedImage, selectedIndex, title, Category, SubCategory, colors_available, sizes_available, categories_available, subcategories_available, images_aaray, size_color_modal, newSize_Color, current_size_color, discard } = this.state
+        /**
+         * 
+         * */
+        if (productName == '' && articlenum == '' && sellingPrice == '' && purchasePrice == '' && Category == '' && SubCategory == 'Select a SubCategory' && images_aaray.length == 0 && multipleSelection[0].product_color_name == '' && multipleSelection[0].size_name == '' && multipleSelection[0].quantity == '' && multipleSelection.length == 1) {
+            console.log('simple back')
+            this.setState({ discard: false })
+        }
+        else {
+            this.setState({ discard: true })
+        }
+    }
     render() {
-        const { productName, articlenum, purchasePrice, sellingPrice, multipleSelection, modalVisibility, selectedImage, selectedIndex, title, Category, SubCategory, colors_available, sizes_available, categories_available, subcategories_available, images_aaray, size_color_modal, newSize_Color, current_size_color } = this.state
+        const { productName, articlenum, purchasePrice, sellingPrice, multipleSelection, modalVisibility, selectedImage, selectedIndex, title, Category, SubCategory, colors_available, sizes_available, categories_available, subcategories_available, images_aaray, size_color_modal, newSize_Color, current_size_color, discard } = this.state
         const { navigation } = this.props
         return (
             <AppComponent >
                 <Toolbar title={title} right={1} back={true} navigation={navigation} onSavePress={() => this.handleSaveProduct()}
-                    customisedbackButton={true}
+                    customisedbackButton={discard}
                 />
                 <KeyboardAwareScrollView style={[Style.CommonStyles.fullFlex], { paddingHorizontal: '2%', paddingTop: '2%' }}>
 
@@ -556,11 +574,13 @@ class AddProduct extends React.Component {
                     <ProductInput
                         label='Product Name'
                         value={productName}
-                        onChangeText={productName => this.setState({ productName })} />
+                        onChangeText={productName => this.setState({ productName }, () => this.handleDiscard())} />
                     <ProductInput
                         label='Article Number'
                         value={articlenum}
-                        onChangeText={articlenum => this.setState({ articlenum })} />
+                        maxLength={8}
+                        keyboardType='numeric'
+                        onChangeText={articlenum => this.setState({ articlenum }, () => this.handleDiscard())} />
                     <View style={{ flexDirection: 'row', flex: 1, marginVertical: 10 }}>
                         <View style={{ flex: 0.5, paddingRight: '5%' }}>
                             <ProductInput
@@ -568,7 +588,7 @@ class AddProduct extends React.Component {
                                 value={purchasePrice}
                                 maxLength={10}
                                 keyboardType='number-pad'
-                                onChangeText={purchasePrice => this.setState({ purchasePrice })} />
+                                onChangeText={purchasePrice => this.setState({ purchasePrice }, () => this.handleDiscard())} />
                         </View>
                         <View style={{ flex: 0.5, paddingRight: '5%' }}>
                             <ProductInput
@@ -576,14 +596,14 @@ class AddProduct extends React.Component {
                                 value={sellingPrice}
                                 maxLength={10}
                                 keyboardType='number-pad'
-                                onChangeText={sellingPrice => this.setState({ sellingPrice })} />
+                                onChangeText={sellingPrice => this.setState({ sellingPrice }, () => this.handleDiscard())} />
                         </View>
                     </View>
                     <View style={{ height: 60, flexDirection: 'row', marginHorizontal: '5%', justifyContent: 'space-between', alignItems: 'center', marginBottom: 15 }}>
-                        <TouchableOpacity style={[{ height: 50, width: '40%', borderRadius: 25, backgroundColor: Colors.theme_color }, Style.CommonStyles.centerStyle]} onPress={() => this.setState({ size_color_modal: true, current_size_color: 1 , newSize_Color: ''})}>
+                        <TouchableOpacity style={[{ height: 50, width: '40%', borderRadius: 25, backgroundColor: Colors.theme_color }, Style.CommonStyles.centerStyle]} onPress={() => this.setState({ size_color_modal: true, current_size_color: 1, newSize_Color: '' })}>
                             <Text style={{ fontSize: 14, color: Colors.white }}>Add Color</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[{ height: 50, width: '40%', borderRadius: 25, backgroundColor: Colors.theme_color }, Style.CommonStyles.centerStyle]} onPress={() => this.setState({ size_color_modal: true, current_size_color: 2 , newSize_Color: ''})}>
+                        <TouchableOpacity style={[{ height: 50, width: '40%', borderRadius: 25, backgroundColor: Colors.theme_color }, Style.CommonStyles.centerStyle]} onPress={() => this.setState({ size_color_modal: true, current_size_color: 2, newSize_Color: '' })}>
                             <Text style={{ fontSize: 14, color: Colors.white }}>Add Size</Text>
                         </TouchableOpacity>
                     </View>

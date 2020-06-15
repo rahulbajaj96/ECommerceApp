@@ -111,6 +111,7 @@ class SubCategories extends Component {
                         value={searchValue}
                         onChangeText={searchValue => this.setState({ searchValue })}
                         onSubmitEditing={() => this.searchSubCategories()}
+                        onSearch={() => this.searchSubCategories()}
                     />
                     <Make_A_List
                         items={subcategoryList}

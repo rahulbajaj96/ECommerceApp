@@ -116,10 +116,10 @@ function AddEmployee(props) {
         });
     }
     async function handleSaveCustomer() {
-        if (!EmptyValidation(ImageUri)) {
-            Toast.show("Please select a Customer pic");
-            return;
-        }
+        // if (!EmptyValidation(ImageUri)) {
+        //     Toast.show("Please select a Employee pic");
+        //     return;
+        // }
         if (!EmptyValidation(AANHEF)) {
             Toast.show(Get_Message("AANHEF"));
             return;

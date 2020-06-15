@@ -68,10 +68,10 @@ export default {
             inputStyle: { fontSize: 14, },
             itemStyle: { marginVertical: 5 },
             DropDown: {
-                dropdownViewStyle: { flexDirection: 'row', width: '100%', height: 50, borderBottomWidth: 0.8, borderBottomColor: '#c6c6ca', marginVertical: 5 },
-                dropDownStyle: { borderWidth: 0, width: '95%', height: '100%', justifyContent: 'center', },
+                dropdownViewStyle: { flexDirection: 'row', width: '100%', height: 50, borderBottomWidth: 0.8, borderBottomColor: '#c6c6ca', marginVertical: 5, },
+                dropDownStyle: { borderWidth: 0, width: '95%', height: '100%', justifyContent: 'center',},
                 default_Value_text: { color: Colors.theme_color, paddingHorizontal: 5, fontSize: 14, },
-                dropdownItemStyle: { width: '80%' },
+                dropdownItemStyle: { width: '80%', },
                 dropdown_TextStyle: { color: '#000', fontSize: 16 },
             },
             ImagePickerView: { height: 100, width: '100%', borderWidth: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', },

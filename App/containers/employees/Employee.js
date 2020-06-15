@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, FlatList, Image, TouchableOpacity } from 'react-native'
+import { Text, View, FlatList, Image, TouchableOpacity,Keyboard } from 'react-native'
 import AppComponent from '../../components/AppComponent'
 import Toolbar from '../../components/Toolbar'
 import { SearchBar } from '../../components/SearchBar'
@@ -151,6 +151,7 @@ class Employee extends React.Component {
     async searchEmployees() {
         const { searchedValue } = this.state
         let formdata = new FormData();
+        Keyboard.dismiss();
         formdata.append('search', searchedValue);
         let result = await ApiCallPost(`${BASE_URL}${API_URL.EmployeeSearch}`, formdata);
         console.log('result ', JSON.stringify(result));
@@ -158,8 +159,8 @@ class Employee extends React.Component {
             if (result.status == 1) {
                 this.setState({ employeeList: result.data })
             }
-             else  this.setState({ employeeList: [] })
-               
+            else this.setState({ employeeList: [] })
+
         }
     }
     render() {
@@ -173,6 +174,7 @@ class Employee extends React.Component {
                     value={searchedValue}
                     onChangeText={searchedValue => this.setState({ searchedValue })}
                     onSubmitEditing={() => this.searchEmployees()}
+                    onSearch={() => this.searchEmployees()}
                 />
                 <Modal isVisible={modalVisibilty}
                     onBackdropPress={() => this.setState({ modalVisibilty: false })}

@@ -1,5 +1,5 @@
 import Style from "../utils/Style"
-import { Image,View } from "react-native";
+import { Image, View, TouchableOpacity, Keyboard } from "react-native";
 import { Item, Input } from 'native-base';
 import Images from "../utils/Image"
 import React from 'react';
@@ -13,10 +13,12 @@ export const SearchBar = (props) => {
                     placeholder='Search'
                     returnKeyType='done'
                     style={Style.Products.categories.searchBarInput}
-                    {... props}
-                    
+                    {...props}
+
                 />
-                <Image source={Images.search} style={Style.Products.categories.searchImage} />
+                <TouchableOpacity onPress={() => { Keyboard.dismiss(), props.onSearch() }}>
+                    <Image source={Images.search} style={Style.Products.categories.searchImage} />
+                </TouchableOpacity>
             </Item>
         </View>
     )

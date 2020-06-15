@@ -99,7 +99,7 @@ class Bill_Checkout extends React.Component {
                         <Text style={{ fontSize: 18, color: '#000', }}>Total Price : ${route.params.total_price}</Text>
                         {
                             viewChange ?
-                                <Text style={{ fontSize: 18, color: '#000', }}>Customer Name : {selected_customer}</Text>
+                                <Text style={{ fontSize: 18, color: '#000', }}>Company Name : {selected_customer}</Text>
                                 : null
                         }
                     </View>

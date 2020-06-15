@@ -243,7 +243,7 @@ class OrderProductDetail extends React.Component {
             if (responseAddToCart.status == 1) {
                 Alert.alert(
                     '',
-                    'This product has been addes to cart.Do you want to add more?',
+                    'This product has been added to cart.Do you want to add more?',
                     [
                         { text: 'Yes', onPress: () => this.performYesCall(product_id), style: 'cancel' },
                         {

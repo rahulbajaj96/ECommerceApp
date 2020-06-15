@@ -8,7 +8,7 @@ import { connect } from "react-redux";
 import Modal from "react-native-modal";
 import Images from '../../utils/Image'
 import { getOrderList } from '../../actions/orderaction'
-import { getUserType } from '../../helpers/InputValidations'
+import { getUserType, get_Empty_Tag } from '../../helpers/InputValidations'
 
 class Order extends React.Component {
     constructor(props) {
@@ -65,10 +65,10 @@ class Order extends React.Component {
                 <TouchableOpacity style={{ flex: 0.8, paddingHorizontal: 10 }}
                     onPress={() => this.props.navigation.navigate('OrderDetail', { order_id: id })}
                 >
-                    <Text style={[Style.Orders.orderCompanyName, { fontWeight: 'bold' }]}>{get_customers.first_name}{get_customers.last_name}</Text>
+                    <Text style={[Style.Orders.orderCompanyName, { fontWeight: 'bold' }]}>{get_customers.first_name} {get_customers.last_name}</Text>
                     <Text style={Style.Orders.orderCompanyName}>{get_customers.company_name}</Text>
                     <Text style={{ marginVertical: 2, fontSize: 14, color: '#000' }}>{created_at}</Text>
-                    <Text style={[Style.Orders.orderCompanyName, { marginVertical: 5 }]}>Order made by :{get_workers.first_name}{get_workers.last_name}</Text>
+                    <Text style={[Style.Orders.orderCompanyName, { marginVertical: 5 }]}>Order made by : {get_workers.first_name} {get_workers.last_name}</Text>
 
                 </TouchableOpacity>
 
@@ -77,7 +77,7 @@ class Order extends React.Component {
                     <TouchableOpacity style={[{ flex: 0.1, borderWidth: 0 }, Style.CommonStyles.centerStyle]}
                         onPress={() => this.openEditDelete(item)} disabled={userType != 2}
                     >
-                        <Image source={Images.dots} style={{ height: 30, width: 30, }} />
+                        <Image source={userType != 2 ? Images.dots : Images.right_aarow} style={{ height: userType != 2 ? 30 : 15, width: userType != 2 ?30 :15, }} />
                     </TouchableOpacity>
 
 
@@ -138,7 +138,7 @@ class Order extends React.Component {
                 </Modal>
 
                 <View style={{ flexDirection: 'row', flex: 0.1, alignItems: 'center', justifyContent: 'flex-end', paddingHorizontal: '2%' }}>
-                    <TouchableOpacity style={[Style.CommonStyles.centerStyle, { height: 50, width: 50, marginHorizontal: 5 }]} onPress={() => this.setState({ modalVisibilty: true })}>
+                    <TouchableOpacity style={[Style.CommonStyles.centerStyle, { height: 50, width: 50, marginHorizontal: 5 }]} onPress={() => this.setState({ modalVisibilty: true })} disabled={orders_array.length == 0}>
                         <Image style={{ height: 45, width: 45 }} source={Images.sort} />
                     </TouchableOpacity>
                     <TouchableOpacity style={[Style.CommonStyles.centerStyle, { height: 55, width: 55, }]}
@@ -148,13 +148,20 @@ class Order extends React.Component {
                     </TouchableOpacity>
                 </View>
                 <View style={{ flex: 0.8, }}>
-                    <FlatList
-                        data={orders_array}
-                        renderItem={item => this.renderOrderList(item)}
-                        extraData={this.state}
-                        keyExtractor={(item, index) => index.toString()}
-                    />
+                    {
+                        orders_array.length == 0 ?
+                            <View style={[Style.CommonStyles.fullFlex, Style.CommonStyles.centerStyle,]}>
+                                <Text style={Style.CommonStyles.EmptyListTag}>{get_Empty_Tag('Orders')}</Text>
+                            </View>
+                            :
 
+                            <FlatList
+                                data={orders_array}
+                                renderItem={item => this.renderOrderList(item)}
+                                extraData={this.state}
+                                keyExtractor={(item, index) => index.toString()}
+                            />
+                    }
                 </View>
                 <Modal isVisible={modalEditDelete}
                     onBackdropPress={() => this.setState({ modalEditDelete: false })}

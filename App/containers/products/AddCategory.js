@@ -19,7 +19,7 @@ import { BASE_URL, API_URL } from '../../config';
 import { SPINNER_ON, SPINNER_OFF } from '../../constants/ReduxConstants';
 
 function AddCategory(props) {
-    const [Category_name, setCategory_name] = useState("")
+    const [Category_name, setCategory_name] = useState('')
     const navigation = useNavigation();
     const [category_image, setcategory_image] = useState('')
     const [image_picked, setimage_picked] = useState(false)
@@ -32,7 +32,7 @@ function AddCategory(props) {
     const [PAGE_ID, setPAGE_ID] = useState(0)
     const [Category_ID, setCategory_ID] = useState('')
     const [Subcategory_ID, setSubcategory_ID] = useState('')
-
+    const [discard, setdiscard] = useState(false)
 
     const dispatch = useDispatch();
     const { spinner } = useSelector(state => ({
@@ -146,23 +146,23 @@ function AddCategory(props) {
     }
     async function handleSaveCategory() {
         if (!EmptyValidation(Category_name)) {
-            Toast.show(Get_Message('Category name'));
+            Toast.show(Get_Message('Name'));
             return;
         }
         if (!EmptyValidation(CategoryDescription)) {
-            Toast.show(Get_Message('Category description'));
+            Toast.show(Get_Message('description'));
             return;
         }
         else {
             let formdata = new FormData();
             formdata.append('name', Category_name);
             formdata.append('description', CategoryDescription);
-
+            dispatch({ type: SPINNER_ON })
             if (PAGE_ID == 0) {
                 formdata.append('image', PhotoPath);
                 console.log('Add Category Api Call')
                 console.log('formdata of Add Ctaegory ', formdata);
-                dispatch({ type: SPINNER_ON })
+
                 var response = await ApiCallPost(`${BASE_URL}${API_URL.AddCategory}`, formdata);
                 console.log('response Add Category', response);
                 if (response != false) {
@@ -247,10 +247,35 @@ function AddCategory(props) {
         }
 
     }
+    const handleDiscard = () => {
+        if (PAGE_ID == 0 || PAGE_ID == 1) {
+            console.log('Category_name', Category_name, Category_name.length)
+            console.log('CategoryDescription', CategoryDescription, CategoryDescription.length)
+
+            if (Category_name == '' && CategoryDescription == '' && category_image == '')
+                setdiscard(false)
+            else
+                setdiscard(true)
+        }
+        else
+            setdiscard(true)
+    }
+    useEffect(() => {
+        handleDiscard()
+    }, [Category_name, CategoryDescription])
+    const Category_names = (value) => {
+        console.log(value.length)
+        setCategory_name(value)
+        // handleDiscard();
+    }
+    const Category_desc = (value) => {
+        setCategoryDescription(value)
+        // handleDiscard();
+    }
     return (
         <AppComponent>
             <Toolbar title={title} back={true} navigation={navigation} right={1} onSavePress={() => handleSaveCategory()}
-                customisedbackButton={true}
+                customisedbackButton={discard}
             />
             <Spinner visible={spinner} />
             <View style={[Style.CommonStyles.fullFlex,]}>
@@ -286,14 +311,14 @@ function AddCategory(props) {
 
                     <TextInput
                         value={Category_name}
-                        onChangeText={value => setCategory_name(value)}
+                        onChangeText={value => Category_names(value)}
                         style={{ height: 50, borderWidth: 1, width: '80%', fontSize: 14, marginVertical: 20, borderColor: Colors.theme_color, paddingLeft: 10 }}
                         placeholder={placeholder + ' Name'}
                     />
 
                     <Textarea rowSpan={6} bordered placeholder={placeholder + ' Description'}
                         value={CategoryDescription}
-                        onChangeText={CategoryDescription => setCategoryDescription(CategoryDescription)}
+                        onChangeText={CategoryDescription => Category_desc(CategoryDescription)}
                         style={{ color: '#000', fontSize: 14, borderWidth: 1, borderColor: Colors.theme_color }}
 
                     />

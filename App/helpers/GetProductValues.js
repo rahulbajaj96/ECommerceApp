@@ -54,7 +54,7 @@ export async function getSizeParamsFromID(sizes_array, size_selected) {
     }
     return size_selected_params;
 }
-export function getCategoryParamsFromName(category_array, category_selected) {
+export async function getCategoryParamsFromName(category_array, category_selected) {
     let category_selected_params = '';
     for (let i = 0; i < category_array.length; i++) {
         if (category_array[i].name == category_selected) {

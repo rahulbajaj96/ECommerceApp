@@ -31,11 +31,12 @@ function AddCustomer(props) {
     const [AANHEF, setAANHEF] = useState('')
     const [ImageUploaded, setImageUploaded] = useState(false)
     const navigation = useNavigation();
-    const [ID, setID] = useState(0)
+    const [ID, setID] = useState(1)
     const [Address, setAddress] = useState('')
     const [title, settitle] = useState('')
     const [Customer_id, setCustomer_id] = useState('')
     const [photoPath, setphotoPath] = useState('')
+    const [discard, setdiscard] = useState(false)
 
     const dispatch = useDispatch();
     const { spinner } = useSelector(state => ({
@@ -73,17 +74,15 @@ function AddCustomer(props) {
         setAddress(propData.address)
         setAANHEF(propData.prefixing_type)
         setCustomer_id(propData.id)
-        if(propData.profile_pic ==  null)
-        {
+        if (propData.profile_pic == null) {
             setImageUri('')
             setImageUploaded(false)
         }
-        else
-        {
+        else {
             setImageUri(propData.profile_pic)
             setImageUploaded(true)
         }
-       
+
     }
     function goToImagePicker() {
 
@@ -250,12 +249,26 @@ function AddCustomer(props) {
 
         }
     }
-
+    useEffect(() => {
+        handleDiscard()
+    }, [ImageUploaded, AANHEF, first_name, last_name, company_name, KVKNum, email, phone, Street, Address, PostalCode, city])
+    const handleDiscard = () => {
+        if (ID == 1) {
+            console.log('ImageUploaded', ImageUploaded, 'AANHEF', AANHEF.length, 'first_name', first_name.length,'last name:',last_name.length)
+            console.log('company',company_name.length,'kvk',KVKNum.length)
+            if (ImageUploaded == false && AANHEF == '' && first_name == '' && last_name == '' && company_name == '' && KVKNum == '' && email == '' && phone == '' && Street == '' && Address == '' && PostalCode == '' && city == '')
+                setdiscard(false)
+            else
+                setdiscard(true)
+        }
+        else
+            setdiscard(true)
+    }
 
     return (
         <AppComponent>
             <Toolbar title={title} right={1} back={true} navigation={navigation} onSavePress={() => handleSaveCustomer()}
-                customisedbackButton={true}
+                customisedbackButton={discard}
             />
             <KeyboardAwareScrollView style={[Style.CommonStyles.fullFlex, { paddingHorizontal: '5%', paddingVertical: '5%' }]}>
                 <Spinner visible={spinner} />
@@ -277,10 +290,7 @@ function AddCustomer(props) {
                     defaultValue={AANHEF == '' ? 'AANHEF' : AANHEF}
                     onSelect={(index, value) => setAANHEF(value)}
                 />
-                {/* <ProductInput
-                    label='AANHEF'
-                    value={AANHEF}
-                    onChangeText={AANHEF => setAANHEF(AANHEF)} /> */}
+
                 <View style={{ flexDirection: 'row', flex: 1, marginVertical: 10 }}>
                     <View style={{ flex: 0.5, paddingRight: '5%' }}>
                         <ProductInput

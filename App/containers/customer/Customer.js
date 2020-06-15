@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, FlatList, Image, TouchableOpacity } from 'react-native'
+import { Text, View, FlatList, Image, TouchableOpacity, Keyboard } from 'react-native'
 import AppComponent from '../../components/AppComponent'
 import Toolbar from '../../components/Toolbar'
 import { SearchBar } from '../../components/SearchBar'
@@ -23,7 +23,7 @@ class Customer extends React.Component {
         modalEditDelete: false,
         currentSelectedItem: '',
         customerList: [],
-        userType:''
+        userType: ''
     }
     componentDidMount() {
         console.log('reload prop', this.props.reload)
@@ -65,7 +65,7 @@ class Customer extends React.Component {
                 <View style={{ flex: 0.6, paddingHorizontal: 10, marginVertical: 5 }}>
                     <Text style={{ marginVertical: 2, fontSize: 14, color: '#000' }}>Name: <Text style={{ color: Colors.theme_color }}> {prefixing_type} {first_name} {last_name}</Text></Text>
                     <Text style={{ marginVertical: 2, fontSize: 14, color: '#000' }}>Company: <Text style={{ color: Colors.theme_color }}>{company_name}</Text></Text>
-                    <Text style={{ marginVertical: 2, fontSize: 14, color: '#000' }}>KVK : <Text style={{ color: Colors.theme_color }}> {kvk_number}</Text></Text>
+                    <Text style={{ marginVertical: 2, fontSize: 14, color: '#000' }}>KVK: <Text style={{ color: Colors.theme_color }}> {kvk_number}</Text></Text>
                     <Text style={{ marginVertical: 2, fontSize: 12, color: Colors.theme_color }}>{email}</Text>
 
                 </View>
@@ -160,6 +160,7 @@ class Customer extends React.Component {
     }
     async searchCustomers() {
         const { searchedValue } = this.state
+        Keyboard.dismiss();
         let formdata = new FormData();
         formdata.append('search', searchedValue);
         let result = await ApiCallPost(`${BASE_URL}${API_URL.SearchCustomers}`, formdata);
@@ -168,11 +169,11 @@ class Customer extends React.Component {
             if (result.status == 1) {
                 this.setState({ customerList: result.data })
             }
-            else this.setState({ customerList:[] })
+            else this.setState({ customerList: [] })
         }
     }
     render() {
-        const { searchedValue, modalVisibilty, sortingArray, sortingOrder, modalEditDelete, currentSelectedItem, customerList ,userType} = this.state
+        const { searchedValue, modalVisibilty, sortingArray, sortingOrder, modalEditDelete, currentSelectedItem, customerList, userType } = this.state
         return (
             <AppComponent>
                 <Toolbar title='Customers' />
@@ -181,6 +182,7 @@ class Customer extends React.Component {
                     // editable={customerList.length != 0 ? true : false}
                     onChangeText={searchedValue => this.setState({ searchedValue })}
                     onSubmitEditing={() => this.searchCustomers()}
+                    onSearch={() => this.searchCustomers()}
                 />
                 <Modal isVisible={modalVisibilty}
                     onBackdropPress={() => this.setState({ modalVisibilty: false })}
