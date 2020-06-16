@@ -159,11 +159,11 @@ export const ModalView = (props) => {
                     <Image source={Images.edit} style={{ height: 20, width: 20 }} />
 
                 </TouchableOpacity>
-                <TouchableOpacity style={[Style.Products.categories.categoriesModal.modalItemView,{opacity:props.userType != 2 ? 0.5 :1}]}
-                    onPress={() => props.onDeletePressed()} disabled={props.userType != 2 }
+                <TouchableOpacity style={[Style.Products.categories.categoriesModal.modalItemView,{opacity:props.usertype != 2 ? 0.5 :1}]}
+                    onPress={() => props.onDeletePressed()} disabled={props.usertype != '2' }
                 >
-                    <Text style={{ fontSize: 18, color: '#000', marginRight: 5,opacity:props.userType != 2 ? 0.2 :1, }}>Delete</Text>
-                    <Image source={Images.trash} style={{ height: 25, width: 25 ,opacity:props.userType != 2 ? 0.2 :1,}} />
+                    <Text style={{ fontSize: 18, color: '#000', marginRight: 5,opacity:props.usertype != '2' ? 0.2 :1, }}>Delete</Text>
+                    <Image source={Images.trash} style={{ height: 25, width: 25 ,opacity:props.usertype != '2' ? 0.2 :1,}} />
 
                 </TouchableOpacity>
 

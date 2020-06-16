@@ -32,11 +32,12 @@ function AddEmployee(props) {
     const [AANHEF, setAANHEF] = useState('')
     const [ImageUploaded, setImageUploaded] = useState(false)
     const navigation = useNavigation();
-    const [ID, setID] = useState(0)
+    const [ID, setID] = useState(1)
     const [Address, setAddress] = useState('')
     const [title, settitle] = useState('')
     const [Customer_id, setCustomer_id] = useState('')
     const [photoPath, setphotoPath] = useState('')
+    const [discard, setdiscard] = useState(false)
 
     const dispatch = useDispatch();
     const { spinner } = useSelector(state => ({
@@ -236,9 +237,24 @@ function AddEmployee(props) {
             }
         }
     }
+    useEffect(() => {
+        handleDiscard()
+    }, [ImageUploaded, AANHEF, first_name, last_name, company_name, KVKNum, email, phone, Street, Address, PostalCode, city])
+    const handleDiscard = () => {
+        if (ID == 1) {
+            console.log('ImageUploaded', ImageUploaded, 'AANHEF', AANHEF.length, 'first_name', first_name.length,'last name:',last_name.length)
+            console.log('company',company_name.length,'kvk',KVKNum.length)
+            if (ImageUploaded == false && AANHEF == '' && first_name == '' && last_name == '' && company_name == '' && KVKNum == '' && email == '' && phone == '' && Street == '' && Address == '' && PostalCode == '' && city == '')
+                setdiscard(false)
+            else
+                setdiscard(true)
+        }
+        else
+            setdiscard(true)
+    }
     return (
         <AppComponent>
-            <Toolbar title={title} right={1} back={true} navigation={navigation} onSavePress={() => handleSaveCustomer()} />
+            <Toolbar title={title} right={1} back={true} navigation={navigation} onSavePress={() => handleSaveCustomer()}   customisedbackButton={discard} />
             <KeyboardAwareScrollView style={[Style.CommonStyles.fullFlex, { paddingHorizontal: '5%', paddingVertical: '5%' }]}>
                 <Spinner visible={spinner} />
                 <View style={[Style.Customers.AddCustomer.Customer_image_view_main]}>
@@ -286,6 +302,7 @@ function AddEmployee(props) {
                     label='KVK number'
                     value={KVKNum}
                     maxLength={8}
+                    keyboardType='numeric'
                     onChangeText={KVKNum => setKVKNum(KVKNum)} />
 
                 <ProductInput

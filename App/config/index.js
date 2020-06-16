@@ -50,6 +50,8 @@ export const API_URL = {
     Create_order: 'order/store',
     OrderList: 'order/list',
     viewOrder: 'order/show',
+    Sort_Order: 'order/sort',
+    Search_Order: 'order/search',
 
     //Employees
     Employee_List: 'workerList',

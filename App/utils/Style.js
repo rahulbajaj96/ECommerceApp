@@ -30,7 +30,8 @@ export default {
         AuthItemStyle: { width: '100%', height: 70, borderBottomColor: '#DEDEDE', borderWidth: 2, marginVertical: 5, },
         AuthItemLabel: { color: Colors.theme_color, marginVertical: 10, fontSize: 12, fontWeight: 'bold' },
         AuthItemTextInput: { borderColor: Colors.black, borderWidth: 0, fontSize: 14, marginLeft: -2, marginTop: -8, paddingBottom: 4, paddingLeft: 2 },
-        ForgotPasswordText: { color: Colors.grey, fontSize: 12, position: 'absolute', right: '5%', bottom:'-25%',zIndex:1 }
+        ForgotPasswordText: { color: Colors.grey, fontSize: 12, position: 'absolute', right: '5%', bottom:'-15%',zIndex:1 },
+        ForgotPasswordTextAndroid: { color: Colors.grey, fontSize: 12, position: 'absolute', right: '5%', bottom:'5%',zIndex:1 }
 
     },
     Toolbar: {
@@ -96,11 +97,11 @@ export default {
     },
     Orders: {
         SortingModal: {
-            Sortingview: { flex: 0.5, backgroundColor: Colors.white, },
+            Sortingview: { flex: 0.4, backgroundColor: Colors.white, },
             SortByView: { paddingVertical: 15, backgroundColor: Colors.theme_color, },
             SortByText: { fontSize: 20, color: Colors.white },
             sortsItems: { flex: 1, flexDirection: 'row', paddingVertical: '5%', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: '3%', borderBottomColor: Colors.black },
-            sortItemTextColor: { color: Colors.black, fontSize: 14, },
+            sortItemTextColor: { color: Colors.black, fontSize: 16, },
             radioButton: { borderWidth: 1, borderColor: '#000', height: 20, width: 20, borderRadius: 10, backgroundColor: Colors.theme_color }
         },
         orderCompanyName:{ marginVertical: 2, fontSize: 16, color: Colors.theme_color ,},

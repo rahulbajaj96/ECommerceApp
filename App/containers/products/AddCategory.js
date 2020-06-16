@@ -262,7 +262,7 @@ function AddCategory(props) {
     }
     useEffect(() => {
         handleDiscard()
-    }, [Category_name, CategoryDescription])
+    }, [Category_name, CategoryDescription,category_image])
     const Category_names = (value) => {
         console.log(value.length)
         setCategory_name(value)

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, FlatList, Image, TouchableOpacity,Keyboard } from 'react-native'
+import { Text, View, FlatList, Image, TouchableOpacity, Keyboard } from 'react-native'
 import AppComponent from '../../components/AppComponent'
 import Toolbar from '../../components/Toolbar'
 import { SearchBar } from '../../components/SearchBar'
@@ -228,7 +228,7 @@ class Employee extends React.Component {
                     onEditPressed={() => this.onEditPressed()}
                     onDeletePressed={() => this.onDeletePressed()}
                     modalTitle={`${currentSelectedItem.first_name} ${currentSelectedItem.last_name}`}
-
+                    usertype={2}
                 />
 
             </AppComponent>

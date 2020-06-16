@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, FlatList, Image, TouchableOpacity } from 'react-native'
+import { Text, View, FlatList, Image, TouchableOpacity, } from 'react-native'
 import AppComponent from '../../components/AppComponent'
 import Toolbar from '../../components/Toolbar'
 import { SearchBar } from '../../components/SearchBar'
@@ -9,6 +9,8 @@ import Modal from "react-native-modal";
 import Images from '../../utils/Image'
 import { getOrderList } from '../../actions/orderaction'
 import { getUserType, get_Empty_Tag } from '../../helpers/InputValidations'
+import { BASE_URL, API_URL } from '../../config'
+import { ApiCallPost } from '../../Services/ApiServices'
 
 class Order extends React.Component {
     constructor(props) {
@@ -20,7 +22,7 @@ class Order extends React.Component {
         orders_array: [],
         modalVisibilty: false,
         sortingOrder: 0,
-        sortingArray: [{ name: 'Date', value: 0 }, { name: 'Price', value: 1 }, { name: 'Company Name', value: 2 }],
+        sortingArray: [{ name: 'Date', value: 0, key: 'created_at' }, { name: 'Company Name', value: 2, key: 'company_name' }],
         modalEditDelete: false, modalTitle: '',
         userType: ''
     }
@@ -75,9 +77,9 @@ class Order extends React.Component {
                 <View style={[{ flex: 0.2, paddingVertical: 10, borderWidth: 0 }, Style.CommonStyles.centerStyle]}>
 
                     <TouchableOpacity style={[{ flex: 0.1, borderWidth: 0 }, Style.CommonStyles.centerStyle]}
-                        onPress={() => this.openEditDelete(item)} disabled={userType != 2}
+                        onPress={() => this.openEditDelete(item)} disabled={userType != '2'}
                     >
-                        <Image source={userType != 2 ? Images.dots : Images.right_aarow} style={{ height: userType != 2 ? 30 : 15, width: userType != 2 ?30 :15, }} />
+                        <Image source={userType == '2' ? Images.dots : Images.right_aarow} style={{ height: userType == '2' ? 30 : 15, width: userType == '2' ? 30 : 15, }} />
                     </TouchableOpacity>
 
 
@@ -86,10 +88,28 @@ class Order extends React.Component {
             </View>
         )
     }
+    async getSortedArray(item) {
+        this.setState({ sortingOrder: item.value })
+        console.log('value', item.key);
+        let formdata = new FormData();
+        formdata.append('sort', item.key);
+        console.log('formdata of sorting Customers', formdata);
+        var response = await ApiCallPost(`${BASE_URL}${API_URL.Sort_Order}`, formdata);
+
+        if (response != false) {
+            if (response.status == 1) {
+                console.log('Orders Successfully Sorted wrto ' + item.key + 'and data is \n' + JSON.stringify(response.data));
+                this.setState({ orders_array: response.data, modalVisibilty: false });
+            }
+            else {
+
+            }
+        }
+    }
     renderSorts = (item) => {
         const { sortingOrder, sortingArray } = this.state
         return (
-            <TouchableOpacity style={[{ borderBottomWidth: item.index == (sortingArray.length - 1) ? 0 : 0.5, }, Style.Orders.SortingModal.sortsItems]} onPress={() => this.setState({ sortingOrder: item.item.value })}>
+            <TouchableOpacity style={[{ borderBottomWidth: item.index == (sortingArray.length - 1) ? 0 : 0.5, }, Style.Orders.SortingModal.sortsItems]} onPress={() => this.getSortedArray(item.item)}>
                 <Text style={Style.Orders.SortingModal.sortItemTextColor}>{item.item.name}</Text>
                 {
                     item.item.value == sortingOrder
@@ -105,6 +125,19 @@ class Order extends React.Component {
     onDeletePressed = () => {
 
     }
+    async searchOrders() {
+        const { searchedValue } = this.state
+        let formdata = new FormData();
+        formdata.append('search', searchedValue);
+        let result = await ApiCallPost(`${BASE_URL}${API_URL.Search_Order}`, formdata);
+        console.log('result ', JSON.stringify(result));
+        if (result != false) {
+            if (result.status == 1) {
+                this.setState({ orders_array: result.data })
+            }
+            else this.setState({ orders_array: [] })
+        }
+    }
     navigateToNewOrder = () => {
         const { navigation } = this.props
         navigation.navigate('OrderCategories')
@@ -117,6 +150,8 @@ class Order extends React.Component {
                 <SearchBar
                     value={searchedValue}
                     onChangeText={searchedValue => this.setState({ searchedValue })}
+                    onSubmitEditing={() => this.searchOrders()}
+                    onSearch={() => this.searchOrders()}
                 />
                 <Modal isVisible={modalVisibilty}
                     onBackdropPress={() => this.setState({ modalVisibilty: false })}
