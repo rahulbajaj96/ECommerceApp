@@ -24,7 +24,8 @@ class Order extends React.Component {
         sortingOrder: 0,
         sortingArray: [{ name: 'Date', value: 0, key: 'created_at' }, { name: 'Company Name', value: 2, key: 'company_name' }],
         modalEditDelete: false, modalTitle: '',
-        userType: ''
+        userType: '',
+        currentSelectedItem:''
     }
     componentDidMount() {
         const { navigation } = this.props
@@ -57,7 +58,7 @@ class Order extends React.Component {
 
     }
     openEditDelete = (item) => {
-        this.setState({ modalEditDelete: true, modalTitle: 'Order' })
+        this.setState({ modalEditDelete: true, modalTitle: 'Order by '+item.item.company_name , currentSelectedItem: item.item})
     }
     renderOrderList = (item) => {
         const { get_customers, id, created_at, get_workers } = item.item
@@ -77,7 +78,7 @@ class Order extends React.Component {
                 <View style={[{ flex: 0.2, paddingVertical: 10, borderWidth: 0 }, Style.CommonStyles.centerStyle]}>
 
                     <TouchableOpacity style={[{ flex: 0.1, borderWidth: 0 }, Style.CommonStyles.centerStyle]}
-                        onPress={() => this.openEditDelete(item)} disabled={userType != '2'}
+                        onPress={() => userType == '2'? this.openEditDelete(item) :this.props.navigation.navigate('OrderDetail', { order_id: id }) } 
                     >
                         <Image source={userType == '2' ? Images.dots : Images.right_aarow} style={{ height: userType == '2' ? 30 : 15, width: userType == '2' ? 30 : 15, }} />
                     </TouchableOpacity>
@@ -122,8 +123,21 @@ class Order extends React.Component {
         )
 
     }
-    onDeletePressed = () => {
+    async onDeletePressed() {
+        const { currentSelectedItem } = this.state
+        console.log('id to be deleted', currentSelectedItem.id)
+        let formdata = new FormData();
+        formdata.append('order_id', currentSelectedItem.id);
 
+        let response = await ApiCallPost(`${BASE_URL}${API_URL.Delete_order}`, formdata);
+        console.log('Order Deleted', response);
+        if (response != false) {
+            if (response.status == 1) {
+                console.log('Order Deleted', response);
+                this.setState({ modalEditDelete: false })
+                this.getorders();
+            }
+        }
     }
     async searchOrders() {
         const { searchedValue } = this.state

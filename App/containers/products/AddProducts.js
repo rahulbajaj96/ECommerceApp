@@ -259,7 +259,9 @@ class AddProduct extends React.Component {
         const { categoriesReducer } = this.props
         let category_selected = await getCategoryParamsFromName(categoriesReducer.category_list, value)
         this.setState({ Category_id: category_selected.id, Category: value, SubCategory_id: '', SubCategory: '' }, () => this.handleDiscard())
+        setTimeout(() => {
         this.get_SubCategory(category_selected.id);
+        }, 200);
     }
     async SelectSubCategory(index, value) {
         const { subcategoriesReducer } = this.props

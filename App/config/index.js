@@ -52,6 +52,7 @@ export const API_URL = {
     viewOrder: 'order/show',
     Sort_Order: 'order/sort',
     Search_Order: 'order/search',
+    Delete_order: 'order/delete',
 
     //Employees
     Employee_List: 'workerList',

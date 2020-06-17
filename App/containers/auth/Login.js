@@ -238,7 +238,7 @@ class Login extends Component {
 
 
                             }]}>
-                                <View style={{ flex: 1, paddingHorizontal: '7%', }}>
+                                <KeyboardAwareScrollView style={{ flex: 1, paddingHorizontal: '7%', }}>
                                     <Animated.Text style={{ fontSize: 20, color: '#000', textAlign: 'center', marginTop: 10 }}>Login</Animated.Text>
 
                                     <Item stackedLabel style={Style.LoginStyles.AuthItemStyle}>
@@ -273,7 +273,7 @@ class Login extends Component {
                                     >FORGOT PASSWORD?</Text>
 
 
-                                </View>
+                                </KeyboardAwareScrollView>
                             </Animated.View>
 
                             :
@@ -288,7 +288,7 @@ class Login extends Component {
 
 
                             }]}>
-                                <View style={{ flex: 1, paddingHorizontal: '7%', }}>
+                                <KeyboardAwareScrollView style={{ flex: 1, paddingHorizontal: '7%', }}>
                                     <Animated.Text style={{ fontSize: 20, color: '#000', textAlign: 'center', marginTop: 10 }}>Forgot Password</Animated.Text>
                                     <Text style={Style.LoginStyles.forgotInst}> * Enter a email on which new password wil be sent</Text>
                                     <Item stackedLabel style={Style.LoginStyles.AuthItemStyle}>
@@ -308,7 +308,7 @@ class Login extends Component {
                                     </TouchableOpacity>
 
                                     <Text style={Platform.OS === 'android' ? Style.LoginStyles.ForgotPasswordTextAndroid : Style.LoginStyles.ForgotPasswordText} onPress={() => this.goToLogin()} >Back to Login!</Text>
-                                </View>
+                                </KeyboardAwareScrollView>
                             </Animated.View>
 
                     }
