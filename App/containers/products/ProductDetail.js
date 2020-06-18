@@ -30,7 +30,8 @@ class ProductDetail extends React.Component {
         product_images: [],
         colors_available: [],
         sizes_available: [],
-        pieces_available: ''
+        pieces_available: '',
+        sale_price: '',
 
     }
     /**
@@ -102,7 +103,8 @@ class ProductDetail extends React.Component {
             this.setState({
                 articleNum: response.article_no, product_name: response.name, category_name: response.category_name,
                 Subcategory_name: response.subcategory_name, product_images,
-                colors_available: productsReducer.product_detail_api_response.data.colors
+                colors_available: productsReducer.product_detail_api_response.data.colors,
+                sale_price: response.sale_price,
 
             }
                 , () => this.setColors_Sizes())
@@ -221,7 +223,7 @@ class ProductDetail extends React.Component {
 
     render() {
         const { navigation } = this.props
-        const { color_current_Value, size_initialValue, colors_Left_button_enabled, colors_Right_button_enabled, size_left_button_enabled, size_right_button_enabled, articleNum, product_name, product_images, category_name, Subcategory_name, pieces_available, colors_available, sizes_available } = this.state
+        const { color_current_Value, size_initialValue, colors_Left_button_enabled, colors_Right_button_enabled, size_left_button_enabled, size_right_button_enabled, articleNum, product_name, product_images, category_name, Subcategory_name, pieces_available, colors_available, sizes_available, sale_price } = this.state
         return (
             <AppComponent>
                 <Toolbar title='Product Detail' back={true} navigation={navigation} />
@@ -243,6 +245,7 @@ class ProductDetail extends React.Component {
                         <View style={Style.CommonStyles.borderStyle} />
                         <Text style={Style.Products.ProductDetail.articleNum}>Article Number : <Text style={{ color: Colors.theme_color }}>{articleNum}</Text></Text>
                         <Text style={Style.Products.ProductDetail.articleNum}>Product Name : <Text style={{ color: Colors.theme_color }}>{product_name}</Text></Text>
+                        <Text style={Style.Products.ProductDetail.articleNum}>Product Price : <Text style={{ color: Colors.theme_color }}>${sale_price}</Text></Text>
                         <View style={Style.CommonStyles.borderStyle} />
 
 

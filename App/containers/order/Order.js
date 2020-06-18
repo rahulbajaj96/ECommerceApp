@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, FlatList, Image, TouchableOpacity, } from 'react-native'
+import { Text, View, FlatList, Image, TouchableOpacity, Alert } from 'react-native'
 import AppComponent from '../../components/AppComponent'
 import Toolbar from '../../components/Toolbar'
 import { SearchBar } from '../../components/SearchBar'
@@ -25,7 +25,7 @@ class Order extends React.Component {
         sortingArray: [{ name: 'Date', value: 0, key: 'created_at' }, { name: 'Company Name', value: 2, key: 'company_name' }],
         modalEditDelete: false, modalTitle: '',
         userType: '',
-        currentSelectedItem:''
+        currentSelectedItem: ''
     }
     componentDidMount() {
         const { navigation } = this.props
@@ -58,7 +58,7 @@ class Order extends React.Component {
 
     }
     openEditDelete = (item) => {
-        this.setState({ modalEditDelete: true, modalTitle: 'Order by '+item.item.company_name , currentSelectedItem: item.item})
+        this.setState({ modalEditDelete: true, modalTitle: 'Order by ' + item.item.company_name, currentSelectedItem: item.item })
     }
     renderOrderList = (item) => {
         const { get_customers, id, created_at, get_workers } = item.item
@@ -78,7 +78,7 @@ class Order extends React.Component {
                 <View style={[{ flex: 0.2, paddingVertical: 10, borderWidth: 0 }, Style.CommonStyles.centerStyle]}>
 
                     <TouchableOpacity style={[{ flex: 0.1, borderWidth: 0 }, Style.CommonStyles.centerStyle]}
-                        onPress={() => userType == '2'? this.openEditDelete(item) :this.props.navigation.navigate('OrderDetail', { order_id: id }) } 
+                        onPress={() => userType == '2' ? this.openEditDelete(item) : this.props.navigation.navigate('OrderDetail', { order_id: id })}
                     >
                         <Image source={userType == '2' ? Images.dots : Images.right_aarow} style={{ height: userType == '2' ? 30 : 15, width: userType == '2' ? 30 : 15, }} />
                     </TouchableOpacity>
@@ -122,6 +122,24 @@ class Order extends React.Component {
             </TouchableOpacity>
         )
 
+    }
+    showAlert() {
+        Alert.alert(
+            '',
+            'Are you sure you want to delete this Order?',
+            [
+                {
+                    text: 'Yes', onPress: () => {
+                        this.onDeletePressed()
+                    }, style: 'cancel'
+                },
+                {
+                    text: 'No', onPress: () =>
+                        this.setState({ modalEditDelete: false })
+                },
+            ],
+            { cancelable: false }
+        )
     }
     async onDeletePressed() {
         const { currentSelectedItem } = this.state
@@ -220,7 +238,7 @@ class Order extends React.Component {
                         <Text style={Style.Products.categories.categoriesModal.modalHeading}>{modalTitle}</Text>
 
                         <TouchableOpacity style={[Style.Products.categories.categoriesModal.modalItemView, { borderWidth: 0 }]}
-                            onPress={() => this.onDeletePressed()}
+                            onPress={() => this.showAlert()}
                         >
                             <Text style={{ fontSize: 18, color: '#000', marginRight: 5 }}>Delete</Text>
                             <Image source={Images.trash} style={{ height: 25, width: 25 }} />

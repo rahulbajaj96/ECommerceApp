@@ -17,7 +17,7 @@ class Bill_Checkout extends React.Component {
     state = {
         bill_print_enabled: false,
         customer_array: [],
-        selected_customer: '',
+        selected_customer: 'Select a Customer',
         viewChange: false
 
 
@@ -87,7 +87,7 @@ class Bill_Checkout extends React.Component {
 
     }
     render() {
-        const { bill_print_enabled, customer_array, selected_customer, viewChange } = this.state
+        const { bill_print_enabled, customer_array, selected_customer, viewChange ,} = this.state
         const { navigation, route } = this.props
         return (
             <AppComponent>
@@ -118,7 +118,7 @@ class Bill_Checkout extends React.Component {
                             <View style={{ flex: 0.7 }}>
                                 <DropDown
                                     options={customer_array}
-                                    defaultValue='Select a Customer'
+                                    defaultValue={selected_customer}
                                     onSelect={(index, value) => this.setState({ selected_customer: value })}
                                 />
                                 <TouchableOpacity style={[Style.CheckOut.checkoutButton]} onPress={() => this.checkBill()}>

@@ -46,8 +46,8 @@ function MoreOptions(props) {
         <AppComponent>
             <Toolbar title={'More'} />
             <View style={Style.CommonStyles.fullFlex}>
-                <MoreItems label='Privacy policy' label_image={Images.privacy_policy} onClick={() => console.log('clicked')} />
-                <MoreItems label='About Us' label_image={Images.about_us} onClick={() => console.log('clicked')} />
+                <MoreItems label='Privacy policy' label_image={Images.privacy_policy} onClick={() => navigation.navigate('PrivacyPolicy')} />
+                <MoreItems label='About Us' label_image={Images.about_us} onClick={() => navigation.navigate('AboutUs')} />
                 {/* <MoreItems label='Cart' label_image={Images.cart} onClick={() => console.log('clicked')} /> */}
                 {
                     usertype == 2

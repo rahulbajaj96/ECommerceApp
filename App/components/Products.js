@@ -6,7 +6,7 @@ import Images from '../utils/Image';
 import ModalDropdown from 'react-native-modal-dropdown';
 import Modal from "react-native-modal";
 
-import { Text, Image, TouchableOpacity, View, TextInput, ScrollView, FlatList } from 'react-native'
+import { Text, Image, TouchableOpacity, View, TextInput, ScrollView, FlatList, Alert } from 'react-native'
 import { get_Empty_Tag } from '../helpers/InputValidations';
 
 export const ProductInput = (props) => {
@@ -139,10 +139,24 @@ export const Make_A_List = (props) => {
 
 export const ModalView = (props) => {
 
-    // async function () {
-    //     console.log('customisedbackFunctionality',props.customisedbackButton)
-    //     props.customisedbackButton ? customisedback() : props.navigation.goBack()
-    // }
+    function showAlert() {
+        Alert.alert(
+            '',
+            `Are you sure you want to delete ${props.modalTitle}?`,
+            [
+                {
+                    text: 'Yes', onPress: () => {
+                        props.onDeletePressed()
+                    }, style: 'cancel'
+                },
+                {
+                    text: 'No', onPress: () =>
+                        console.log('no')
+                },
+            ],
+            { cancelable: false }
+        )
+    }
     return (
         <Modal
             // isVisible={modalVisibility}
@@ -159,11 +173,11 @@ export const ModalView = (props) => {
                     <Image source={Images.edit} style={{ height: 20, width: 20 }} />
 
                 </TouchableOpacity>
-                <TouchableOpacity style={[Style.Products.categories.categoriesModal.modalItemView,{opacity:props.usertype != 2 ? 0.5 :1}]}
-                    onPress={() => props.onDeletePressed()} disabled={props.usertype != '2' }
+                <TouchableOpacity style={[Style.Products.categories.categoriesModal.modalItemView, { opacity: props.usertype != 2 ? 0.5 : 1 }]}
+                    onPress={() => showAlert()} disabled={props.usertype != '2'}
                 >
-                    <Text style={{ fontSize: 18, color: '#000', marginRight: 5,opacity:props.usertype != '2' ? 0.2 :1, }}>Delete</Text>
-                    <Image source={Images.trash} style={{ height: 25, width: 25 ,opacity:props.usertype != '2' ? 0.2 :1,}} />
+                    <Text style={{ fontSize: 18, color: '#000', marginRight: 5, opacity: props.usertype != '2' ? 0.2 : 1, }}>Delete</Text>
+                    <Image source={Images.trash} style={{ height: 25, width: 25, opacity: props.usertype != '2' ? 0.2 : 1, }} />
 
                 </TouchableOpacity>
 

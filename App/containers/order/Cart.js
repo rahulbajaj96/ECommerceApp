@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, Image, TouchableOpacity, FlatList } from 'react-native';
+import { Text, View, Image, TouchableOpacity, FlatList, Alert } from 'react-native';
 import AppComponent from '../../components/AppComponent';
 import Toolbar from '../../components/Toolbar';
 import Style from '../../utils/Style';
@@ -22,6 +22,9 @@ class Cart extends React.Component {
         const { cartReducer } = this.props
         if (cartReducer.cart_list_response.status == 1) {
             this.setState({ cart: cartReducer.cart_list })
+        }
+        else if (cartReducer.cart_list_response.status == 0) {
+            this.setState({ cart: [] })
         }
     }
 
@@ -54,7 +57,7 @@ class Cart extends React.Component {
                     <Text style={Style.Cart.price}>Price:{total_amount}</Text>
                 </View>
                 <TouchableOpacity style={[{ position: 'absolute', right: 0, top: 0, height: 40, width: 40, }, Style.CommonStyles.centerStyle]}
-                    onPress={() => this.deleteItemFromCart(item)}
+                    onPress={() => this.showAlert(item)}
                 >
                     <Image source={Images.delete} style={{ height: 15, width: 15 }} />
                 </TouchableOpacity>
@@ -62,6 +65,23 @@ class Cart extends React.Component {
 
 
             </View>
+        )
+    }
+    showAlert = (item) => {
+        Alert.alert(
+            '',
+            `Are you sure you want to delete this ${item.item.product_name}?`,
+            [
+                {
+                    text: 'Yes', onPress: () => {
+                        this.deleteItemFromCart(item)
+                    }, style: 'cancel'
+                },
+                {
+                    text: 'No', onPress: () => { }
+                },
+            ],
+            { cancelable: false }
         )
     }
     async deleteItemFromCart(item) {
@@ -99,7 +119,7 @@ class Cart extends React.Component {
         const { cart } = this.state
         return (
             <AppComponent>
-                <Toolbar title='Cart' right={1} back={true} navigation={navigation} onSavePress={() => this.goToCheckout()} />
+                <Toolbar title='Cart' right={cart.length != 0 ? 1 : null} back={true} navigation={navigation} onSavePress={() => this.goToCheckout()} />
                 <View style={{ flex: 1 }}>
                     {
                         cart.length != 0
@@ -112,7 +132,10 @@ class Cart extends React.Component {
                                 keyExtractor={(item, index) => index.toString()}
                             />
                             :
-                            null
+                            <View style={[{ flex: 1 ,backgroundColor:'#fff'}, Style.CommonStyles.centerStyle]}>
+                                <Image style={{ height: 200, width: 200,marginBottom:15 }} source={Images.empty_cart} />
+                                <Text style={Style.CommonStyles.EmptyListTag}>Your Cart is Empty. Please add some items to cart to continue.</Text>
+                            </View>
                     }
 
 

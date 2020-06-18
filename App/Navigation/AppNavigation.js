@@ -11,6 +11,8 @@ import AddEmployee from '../containers/employees/AddEmployee';
 import Employee from '../containers/employees/Employee';
 import store from '../store/Store';
 import StoreOptions from '../containers/store/StoreOptions';
+import PrivacyPolicy from '../containers/more/PrivacyPolicy';
+import AboutUs from '../containers/more/AboutUs';
 
 
 
@@ -20,21 +22,22 @@ function AppNavigation() {
 
     return (
         <Provider store={store}>
-        <NavigationContainer>
-            <Stack.Navigator initialRouteName='Login' headerMode='none'>
-                <Stack.Screen name='Login' component={Login} />
-                <Stack.Screen name='Tabs' component={TabNavigator} />
-                <Stack.Screen name='AddEmployee' component={AddEmployee} />
-                <Stack.Screen name='Employee' component={Employee} />
-                <Stack.Screen name='StoreOptions' component={StoreOptions} />
+            <NavigationContainer>
+                <Stack.Navigator initialRouteName='Login' headerMode='none'>
+                    <Stack.Screen name='Login' component={Login} />
+                    <Stack.Screen name='Tabs' component={TabNavigator} />
+                    <Stack.Screen name='AddEmployee' component={AddEmployee} />
+                    <Stack.Screen name='Employee' component={Employee} />
+                    <Stack.Screen name='StoreOptions' component={StoreOptions} />
+                    <Stack.Screen name='PrivacyPolicy' component={PrivacyPolicy} />
+                    <Stack.Screen name='AboutUs' component={AboutUs} />
 
 
+                    {/* <TabNavigator /> */}
 
-                {/* <TabNavigator /> */}
 
-
-            </Stack.Navigator>
-        </NavigationContainer>
+                </Stack.Navigator>
+            </NavigationContainer>
         </Provider>
     )
 }

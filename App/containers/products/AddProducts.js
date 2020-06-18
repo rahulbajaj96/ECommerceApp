@@ -19,6 +19,7 @@ import { getSubCategoriesList_On_category } from '../../actions/subcategoriesact
 import { ApiCallPost } from '../../Services/ApiServices'
 import { BASE_URL, API_URL } from '../../config'
 import { SPINNER_ON, SPINNER_OFF } from '../../constants/ReduxConstants'
+import { EmptyValidation, Get_Message } from '../../helpers/InputValidations'
 const colors = ['red', 'green', 'yellow', 'orange']
 const sizes = ['Small', 'Medium', 'Large', 'X-Large']
 let images_aaray = ['https://via.placeholder.com/600/66b7d2', 'https://via.placeholder.com/600/51aa97', 'https://via.placeholder.com/600/51aa97']
@@ -71,7 +72,7 @@ class AddProduct extends React.Component {
         await this.get_product_sizes();
         await this.setPropData(this.props.route.params)
         this.get_Categories_Available();
-        this.get_SubCategories_Available();
+
 
 
 
@@ -146,6 +147,7 @@ class AddProduct extends React.Component {
     async setPropData(propData) {
         if (propData.id == 1) {
             this.setState({ Page_id: propData.id })
+            await this.get_SubCategories_Available();
         }
         if (propData.id == 2) {
             let { multipleSelection, images_aaray, images_path_array } = this.state
@@ -180,7 +182,9 @@ class AddProduct extends React.Component {
             }
 
             console.log('multiple Selection Data', multipleSelection);
-            this.get_SubCategory(propData.data.category_id);
+            console.log('propData', propData.data);
+
+            await this.get_SubCategory(propData.data.category_id);
             this.setState({
                 Category_id: propData.data.category_id,
                 SubCategory_id: propData.data.subcategory_id,
@@ -260,7 +264,7 @@ class AddProduct extends React.Component {
         let category_selected = await getCategoryParamsFromName(categoriesReducer.category_list, value)
         this.setState({ Category_id: category_selected.id, Category: value, SubCategory_id: '', SubCategory: '' }, () => this.handleDiscard())
         setTimeout(() => {
-        this.get_SubCategory(category_selected.id);
+            this.get_SubCategory(category_selected.id);
         }, 200);
     }
     async SelectSubCategory(index, value) {
@@ -384,6 +388,48 @@ class AddProduct extends React.Component {
     async handleSaveProduct() {
         const { productName, articlenum, purchasePrice, sellingPrice, Category_id, SubCategory_id, multipleSelection, images_path_array, Page_id, product_id } = this.state
         const { navigation } = this.props
+        if (!EmptyValidation(Category_id)) {
+            Toast.show('Please select a Category');
+            return;
+        }
+        if (!EmptyValidation(SubCategory_id)) {
+            Toast.show('Please select a Subcategory');
+            return;
+        }
+        if (!EmptyValidation(productName)) {
+            Toast.show(Get_Message('Product Name'));
+            return;
+        }
+        if (!EmptyValidation(articlenum)) {
+            Toast.show(Get_Message('Article Number'));
+            return;
+        }
+        if (!EmptyValidation(purchasePrice)) {
+            Toast.show(Get_Message('Purchase Price'));
+            return;
+        }
+        if (!EmptyValidation(sellingPrice)) {
+            Toast.show(Get_Message('Selling Price'));
+            return;
+        }
+        if (images_path_array.length == 0) {
+            Toast.show('Please upload at least one image ');
+            return;
+        }
+        for (let i = 0; i < multipleSelection.length; i++) {
+            if (multipleSelection[i].product_color_id == '') {
+                Toast.show('Please select the required Color');
+                return;
+            }
+            if (multipleSelection[i].size_id == '') {
+                Toast.show('Please select the required Size');
+                return;
+            }
+            if (multipleSelection[i].quantity == 0) {
+                Toast.show('Please Enter the valid Quantity');
+                return;
+            }
+        }
         this.props.loader_On();
         let variationsarray = []
         for (let i = 0; i < multipleSelection.length; i++) {
@@ -502,8 +548,10 @@ class AddProduct extends React.Component {
         }
     }
     render() {
-        const { productName, articlenum, purchasePrice, sellingPrice, multipleSelection, modalVisibility, selectedImage, selectedIndex, title, Category, SubCategory, colors_available, sizes_available, categories_available, subcategories_available, images_aaray, size_color_modal, newSize_Color, current_size_color, discard } = this.state
+        const { productName, articlenum, purchasePrice, sellingPrice, multipleSelection, modalVisibility, selectedImage, selectedIndex, title, Category, SubCategory, colors_available, sizes_available, categories_available, subcategories_available, images_aaray, size_color_modal, newSize_Color, current_size_color, discard, SubCategory_id } = this.state
         const { navigation } = this.props
+        console.log('SubCategory', SubCategory)
+
         return (
             <AppComponent >
                 <Toolbar title={title} right={1} back={true} navigation={navigation} onSavePress={() => this.handleSaveProduct()}
@@ -630,7 +678,7 @@ class AddProduct extends React.Component {
                                         <ProductInput
                                             label='Number of Pieces'
                                             value={particularSet.quantity}
-                                            maxLength={10}
+                                            maxLength={6}
                                             keyboardType='number-pad'
                                             onChangeText={purchasePrice => this.setPrice(purchasePrice, i)} />
                                     </View>
@@ -659,6 +707,7 @@ class AddProduct extends React.Component {
                                     style={{ fontSize: 18, borderBottomWidth: 1, borderBottomColor: '#000', marginVertical: '2%', paddingBottom: 5, marginHorizontal: 10, }}
                                     placeholder={'Name'}
                                     value={newSize_Color}
+                                    returnKeyType='done'
                                     onChangeText={newSize_Color => this.setState({ newSize_Color })}
 
                                 />

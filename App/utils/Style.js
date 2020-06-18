@@ -8,7 +8,7 @@ export default {
         SafeAreaStyle: { height: STATUSBAR_HEIGHT, backgroundColor: Colors.theme_color },
         borderStyle: { borderWidth: 1, borderColor: Colors.black, opacity: 0.1, },
         paddingBottomStyle: { height: 30 },
-        EmptyListTag: { color: Colors.theme_color, fontSize: 22,marginHorizontal:'15%',textAlign:'center' }
+        EmptyListTag: { color: Colors.theme_color, fontSize: 22, marginHorizontal: '15%', textAlign: 'center' }
 
     },
     LoginStyles: {
@@ -26,12 +26,12 @@ export default {
         ForgotPassView: {
             width: '80%', height: DEVICE_HEIGHT * 0.4, borderWidth: 0, marginHorizontal: '10%', zIndex: 1, marginTop: '-15%', backgroundColor: Colors.white, borderRadius: 10, elevation: 3, position: 'absolute',
         },
-        forgotInst: { fontSize: 9, color: Colors.grey, marginTop:10,marginBottom:10 },
+        forgotInst: { fontSize: 9, color: Colors.grey, marginTop: 10, marginBottom: 10 },
         AuthItemStyle: { width: '100%', height: 70, borderBottomColor: '#DEDEDE', borderWidth: 2, marginVertical: 5, },
         AuthItemLabel: { color: Colors.theme_color, marginVertical: 10, fontSize: 12, fontWeight: 'bold' },
         AuthItemTextInput: { borderColor: Colors.black, borderWidth: 0, fontSize: 14, marginLeft: -2, marginTop: -8, paddingBottom: 4, paddingLeft: 2 },
-        ForgotPasswordText: { color: Colors.grey, fontSize: 12, position: 'absolute', right: '5%', bottom:'-15%',zIndex:1 },
-        ForgotPasswordTextAndroid: { color: Colors.grey, fontSize: 12, position: 'absolute', right: '5%', bottom:'5%',zIndex:1 }
+        ForgotPasswordText: { color: Colors.grey, fontSize: 12, position: 'absolute', right: '5%', bottom: '-15%', zIndex: 1 },
+        ForgotPasswordTextAndroid: { color: Colors.grey, fontSize: 12, position: 'absolute', right: '5%', bottom: '5%', zIndex: 1 }
 
     },
     Toolbar: {
@@ -70,7 +70,7 @@ export default {
             itemStyle: { marginVertical: 5 },
             DropDown: {
                 dropdownViewStyle: { flexDirection: 'row', width: '100%', height: 50, borderBottomWidth: 0.8, borderBottomColor: '#c6c6ca', marginVertical: 5, },
-                dropDownStyle: { borderWidth: 0, width: '95%', height: '100%', justifyContent: 'center',},
+                dropDownStyle: { borderWidth: 0, width: '95%', height: '100%', justifyContent: 'center', },
                 default_Value_text: { color: Colors.theme_color, paddingHorizontal: 5, fontSize: 14, },
                 dropdownItemStyle: { width: '80%', },
                 dropdown_TextStyle: { color: '#000', fontSize: 16 },
@@ -104,7 +104,7 @@ export default {
             sortItemTextColor: { color: Colors.black, fontSize: 16, },
             radioButton: { borderWidth: 1, borderColor: '#000', height: 20, width: 20, borderRadius: 10, backgroundColor: Colors.theme_color }
         },
-        orderCompanyName:{ marginVertical: 2, fontSize: 16, color: Colors.theme_color ,},
+        orderCompanyName: { marginVertical: 2, fontSize: 16, color: Colors.theme_color, },
         viewBill: { fontSize: 14, color: Colors.theme_color, },
         orderListItemView: { flex: 1, flexDirection: 'row', marginVertical: 5, borderBottomWidth: 1, borderBottomColor: Colors.black, paddingLeft: 10 }
     },
@@ -117,8 +117,8 @@ export default {
         articlenumber: { fontSize: 16, color: '#000', marginVertical: 2 },
         price: { fontSize: 14, color: 'red', marginVertical: 2 }
     },
-    CheckOut:{
-        checkoutView:{backgroundColor:'#fff',borderRadius:10,borderColor:Colors.theme_color,borderWidth:1,padding: '5%',marginBottom:'10%'},
+    CheckOut: {
+        checkoutView: { backgroundColor: '#fff', borderRadius: 10, borderColor: Colors.theme_color, borderWidth: 1, padding: '5%', marginBottom: '10%' },
         checkoutButton: { width: '60%', height: '20%', marginHorizontal: '20%', backgroundColor: Colors.theme_color, borderRadius: 20, marginTop: '10%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: '2%' },
     },
     More: {
@@ -127,7 +127,11 @@ export default {
         logoutImage: { height: 20, width: 20 },
         moreItemView: { height: 50, width: '100%', flexDirection: 'row', marginVertical: 2, borderBottomColor: Colors.black, borderBottomWidth: 0.2 },
         label_View: { flex: 0.7, flexDirection: 'row', alignItems: 'center', paddingLeft: '5%' },
-        label_text: { marginLeft: 10, color: '#000', fontSize: 16, }
+        label_text: { marginLeft: 10, color: '#000', fontSize: 16, },
+        PrivacyPolicy: {
+            textStyle:{fontSize:16,color:Colors.theme_color,textAlign:'justify',},
+            viewStyle:{ flex: 1,  borderWidth: 2, borderRadius: 10, borderColor: '#aa90dd',  }
+        }
 
     }
 }

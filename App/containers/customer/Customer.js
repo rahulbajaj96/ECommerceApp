@@ -133,6 +133,24 @@ class Customer extends React.Component {
         console.log('componenet gone ')
         navigation.removeListener('focus');
     }
+    showAlert() {
+        Alert.alert(
+            '',
+            'Are you sure you want to delete this Order?',
+            [
+                {
+                    text: 'Yes', onPress: () => {
+                        this.onDeletePressed()
+                    }, style: 'cancel'
+                },
+                {
+                    text: 'No', onPress: () =>
+                        this.setState({ modalEditDelete: false })
+                },
+            ],
+            { cancelable: false }
+        )
+    }
     async onDeletePressed() {
         const { currentSelectedItem } = this.state
         console.log('id to be deleted', currentSelectedItem.id)
