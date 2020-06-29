@@ -198,9 +198,9 @@ function AddEmployee(props) {
 
                 if (response != false)
                     if (response.status == 1) {
-
-                        Toast.show(response.message)
-                        // navigation.popToTop()
+                        setTimeout(() => {
+                            Toast.show(response.message)
+                        }, 500);
                         navigation.navigate('Employee', { reload: true });
                         // dispatch(getCustomerList())
 
@@ -222,9 +222,9 @@ function AddEmployee(props) {
                 dispatch({ type: SPINNER_OFF })
                 if (responseEdit != false)
                     if (responseEdit.status == 1) {
-
-                        Toast.show(responseEdit.message)
-                        // navigation.popToTop()
+                        setTimeout(() => {
+                            Toast.show(responseEdit.message)
+                        }, 500);
                         navigation.navigate('Employee', { reload: true });
                         // dispatch(getCustomerList())
 
@@ -242,8 +242,8 @@ function AddEmployee(props) {
     }, [ImageUploaded, AANHEF, first_name, last_name, company_name, KVKNum, email, phone, Street, Address, PostalCode, city])
     const handleDiscard = () => {
         if (ID == 1) {
-            console.log('ImageUploaded', ImageUploaded, 'AANHEF', AANHEF.length, 'first_name', first_name.length,'last name:',last_name.length)
-            console.log('company',company_name.length,'kvk',KVKNum.length)
+            console.log('ImageUploaded', ImageUploaded, 'AANHEF', AANHEF.length, 'first_name', first_name.length, 'last name:', last_name.length)
+            console.log('company', company_name.length, 'kvk', KVKNum.length)
             if (ImageUploaded == false && AANHEF == '' && first_name == '' && last_name == '' && company_name == '' && KVKNum == '' && email == '' && phone == '' && Street == '' && Address == '' && PostalCode == '' && city == '')
                 setdiscard(false)
             else
@@ -254,7 +254,7 @@ function AddEmployee(props) {
     }
     return (
         <AppComponent>
-            <Toolbar title={title} right={1} back={true} navigation={navigation} onSavePress={() => handleSaveCustomer()}   customisedbackButton={discard} />
+            <Toolbar title={title} right={1} back={true} navigation={navigation} onSavePress={() => handleSaveCustomer()} customisedbackButton={discard} />
             <KeyboardAwareScrollView style={[Style.CommonStyles.fullFlex, { paddingHorizontal: '5%', paddingVertical: '5%' }]}>
                 <Spinner visible={spinner} />
                 <View style={[Style.Customers.AddCustomer.Customer_image_view_main]}>

@@ -11,6 +11,7 @@ import { getProductDetail } from '../../actions/productsactions';
 import { ApiCallPost } from '../../Services/ApiServices';
 import { BASE_URL, API_URL } from '../../config';
 import Toast from 'react-native-simple-toast';
+import Modal from "react-native-modal";
 
 
 let color_codes = ['#3A137C', '#BBF11D', '#F1371D', '#1D3AF1', '#1DF1EB', '#1DF12D', '#F19A1D', '#E11DF1']
@@ -40,7 +41,9 @@ class OrderProductDetail extends React.Component {
         pieces_available: '',
         sale_price: '',
         quantity: 0,
-        cartButton: false
+        cartButton: false,
+        quantity_modal: false,
+        quantity_modal_value: 0
 
     }
     /**
@@ -143,7 +146,10 @@ class OrderProductDetail extends React.Component {
         }
         for (let i = color_current_Value; i < loopValue; i++) {
             views.push(
-                <TouchableOpacity style={{ flex: 0.20,  backgroundColor: colors_available[i].hash_color == null ?''+colors_available[i].color: colors_available[i].hash_color, margin: 5, borderWidth: current_selected_color == i ? 2 : 0, borderColor: current_selected_color == i ? Colors.theme_color : null, padding: 2, }} key={i} disabled={current_selected_color == i} onPress={() => this.colorSelected(i)} />
+                <View style={{ flex: 0.20, margin: 5, padding: 2, borderWidth: 0, justifyContent: 'center' }}>
+                    <TouchableOpacity style={{ flex: 1, backgroundColor: colors_available[i].hash_color == null ? '' + colors_available[i].color : colors_available[i].hash_color, borderWidth: current_selected_color == i ? 2 : 0, borderColor: current_selected_color == i ? Colors.theme_color : null, }} key={i} disabled={current_selected_color == i} onPress={() => this.colorSelected(i)} />
+                    <Text style={{ marginVertical: 2, color: '#000', fontSize: 12, textAlign: 'center' }}>{colors_available[i].color}</Text>
+                </View>
             )
         }
         return views;
@@ -271,16 +277,27 @@ class OrderProductDetail extends React.Component {
         this.props.navigation.navigate('Cart');
     }
     IncerementQuantity = () => {
-        let { quantity } = this.state
-        this.setState({ quantity: ++quantity })
+        let { quantity,quantity_modal_value } = this.state
+        this.setState({ quantity: ++quantity,quantity_modal_value:++quantity_modal_value})
     }
     decerementQuantity = () => {
-        let { quantity } = this.state
-        this.setState({ quantity: --quantity })
+        let { quantity ,quantity_modal_value} = this.state
+        this.setState({ quantity: --quantity ,quantity_modal_value:--quantity_modal_value})
+    }
+    setQuantity = () => {
+        const { pieces_available, quantity_modal_value } = this.state
+        console.log('quantity_modal_value', quantity_modal_value)
+        if (parseInt(quantity_modal_value) > pieces_available) {
+            Toast.show('Quantity value cannot be more than ' + pieces_available);
+            return
+        }
+        else {
+            this.setState({ quantity: parseInt(quantity_modal_value), quantity_modal: false })
+        }
     }
     render() {
         const { navigation } = this.props
-        const { color_current_Value, size_initialValue, colors_Left_button_enabled, colors_Right_button_enabled, size_left_button_enabled, size_right_button_enabled, articleNum, product_name, product_images, category_name, Subcategory_name, pieces_available, sale_price, quantity, sizes_available, colors_available, cartButton } = this.state
+        const { color_current_Value, size_initialValue, colors_Left_button_enabled, colors_Right_button_enabled, size_left_button_enabled, size_right_button_enabled, articleNum, product_name, product_images, category_name, Subcategory_name, pieces_available, sale_price, quantity, sizes_available, colors_available, cartButton, quantity_modal_value, quantity_modal } = this.state
         return (
             <AppComponent>
                 <Toolbar title='Product Detail' back={true} navigation={navigation} />
@@ -312,7 +329,7 @@ class OrderProductDetail extends React.Component {
 
                         <Text style={Style.Products.ProductDetail.PropertiesStyle}>Colors Available </Text>
 
-                        <View style={[{ marginBottom: 20 }, Style.Products.ProductDetail.colorsTrayStyle]}>
+                        <View style={[{ marginBottom: 20 }, Style.Products.ProductDetail.colorsTrayStyle, { height: 80 }]}>
 
                             <TouchableOpacity style={[{ flex: 0.1, opacity: colors_Left_button_enabled ? 1 : 0.2, }, Style.CommonStyles.centerStyle]}
                                 disabled={!colors_Left_button_enabled}
@@ -375,7 +392,7 @@ class OrderProductDetail extends React.Component {
                             <TouchableOpacity onPress={() => this.decerementQuantity()} disabled={quantity == 0 ? true : false} >
                                 <Image style={{ height: 22, width: 22, marginHorizontal: 5 }} source={Images.delete} />
                             </TouchableOpacity>
-                            <Text style={{ fontSize: 20 }}>{quantity}</Text>
+                            <Text style={{ fontSize: 20 }} onPress={() => this.setState({ quantity_modal: true })}>{quantity}</Text>
                             <TouchableOpacity onPress={() => this.IncerementQuantity()} disabled={quantity == pieces_available ? true : false}>
                                 <Image style={{ height: 22, width: 22, marginHorizontal: 5 }} source={Images.add} />
                             </TouchableOpacity>
@@ -398,7 +415,39 @@ class OrderProductDetail extends React.Component {
 
 
                         </View>
+                        <Modal isVisible={quantity_modal} style={{}}
+                            backdropColor='#000'
+                            backdropOpacity={0.8}
+                            onBackdropPress={() => console.log('nothing Happens')}
+                        >
+                            <View style={{ height: 280, width: '100%', backgroundColor: '#fff', borderRadius: 5 }}>
+                                <View style={{ flex: 0.1, alignItems: 'flex-end', justifyContent: 'center', paddingHorizontal: 10, marginTop: 10 }}>
+                                    <TouchableOpacity onPress={() => this.setState({ quantity_modal: false, quantity_modal_value: 0 })}
+                                        style={[Style.Products.AddProduct.ImageModal.crossSignTouch, Style.CommonStyles.centerStyle]}
+                                    >
+                                        <Image style={{ height: 20, width: 20 }} source={Images.cross} />
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={{ flex: 0.8, borderWidth: 0, paddingHorizontal: '5%', paddingTop: 10 }}>
+                                    <Text style={{ fontSize: 24, color: Colors.theme_color, marginVertical: '4%', marginHorizontal: 10 }}>Please add the Quantity you want to have. </Text>
+                                    <TextInput
+                                        style={{ fontSize: 18, borderBottomWidth: 1, borderBottomColor: '#000', marginVertical: '2%', paddingBottom: 5, marginHorizontal: 10, }}
+                                        placeholder={'Quantity'}
+                                        value={'' + quantity_modal_value}
+                                        returnKeyType='done'
+                                        keyboardType='numeric'
+                                        onChangeText={quantity_modal_value => this.setState({ quantity_modal_value })}
 
+                                    />
+                                    <TouchableOpacity style={[{ width: '50%', marginHorizontal: '25%', borderRadius: 25, height: 50, backgroundColor: Colors.theme_color, marginTop: '8%' }, Style.CommonStyles.centerStyle]} onPress={() => this.setQuantity()}>
+                                        <Text style={{ fontSize: 15, color: Colors.white, }}>Add</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={{ flex: 0.08 }} />
+
+
+                            </View>
+                        </Modal>
 
                         <View style={Style.CommonStyles.paddingBottomStyle} />
                     </ScrollView>

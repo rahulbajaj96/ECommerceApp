@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, TextInput, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, Image, ScrollView, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import AppComponent from '../../components/AppComponent';
 import Toolbar from '../../components/Toolbar';
 import { useNavigation } from '@react-navigation/native';
@@ -154,6 +154,7 @@ function AddCategory(props) {
             return;
         }
         else {
+            Keyboard.dismiss();
             let formdata = new FormData();
             formdata.append('name', Category_name);
             formdata.append('description', CategoryDescription);
@@ -167,12 +168,15 @@ function AddCategory(props) {
                 console.log('response Add Category', response);
                 if (response != false) {
                     if (response.status == 1) {
-                        Toast.show(response.message)
-                        // navigation.popToTop()
+                        setTimeout(() => {
+                            Toast.show(response.message)
+                        }, 500);
                         navigation.navigate('Categories');
                     }
                     else {
-                        Toast.show(response.message)
+                        setTimeout(() => {
+                            Toast.show(response.message)
+                        }, 500);
                     }
                     dispatch({ type: SPINNER_OFF })
 
@@ -187,12 +191,15 @@ function AddCategory(props) {
                 console.log('response Edit Category', response);
                 if (response != false) {
                     if (response.status == 1) {
-                        Toast.show(response.message)
-                        // navigation.popToTop()
+                        setTimeout(() => {
+                            Toast.show(response.message)
+                        }, 500);
                         navigation.navigate('Categories');
                     }
                     else {
-                        Toast.show(response.message)
+                        setTimeout(() => {
+                            Toast.show(response.message)
+                        }, 500);
                     }
                     dispatch({ type: SPINNER_OFF })
 
@@ -208,12 +215,15 @@ function AddCategory(props) {
                 console.log('response', response)
                 if (response != false) {
                     if (response.status == 1) {
-                        Toast.show(response.message)
-                        // navigation.popToTop()
+                        setTimeout(() => {
+                            Toast.show(response.message)
+                        }, 500);
                         navigation.navigate('SubCategories', { category_id: props.route.params.data })
                     }
                     else {
-                        Toast.show(response.message)
+                        setTimeout(() => {
+                            Toast.show(response.message)
+                        }, 500);
                     }
                     dispatch({ type: SPINNER_OFF })
 
@@ -231,12 +241,15 @@ function AddCategory(props) {
                 console.log('response', response)
                 if (response != false) {
                     if (response.status == 1) {
-                        Toast.show(response.message)
-                        // navigation.popToTop()
+                        setTimeout(() => {
+                            Toast.show(response.message)
+                        }, 500);
                         navigation.navigate('SubCategories', { category_id: props.route.params.data })
                     }
                     else {
-                        Toast.show(response.message)
+                        setTimeout(() => {
+                            Toast.show(response.message)
+                        }, 500);
                     }
                     dispatch({ type: SPINNER_OFF })
 
@@ -262,7 +275,7 @@ function AddCategory(props) {
     }
     useEffect(() => {
         handleDiscard()
-    }, [Category_name, CategoryDescription,category_image])
+    }, [Category_name, CategoryDescription, category_image])
     const Category_names = (value) => {
         console.log(value.length)
         setCategory_name(value)
@@ -281,48 +294,51 @@ function AddCategory(props) {
             <View style={[Style.CommonStyles.fullFlex,]}>
                 <KeyboardAwareScrollView style={{ paddingHorizontal: '5%' }}>
 
+                    <TouchableWithoutFeedback style={[Style.CommonStyles.fullFlex,]} onPress={() => Keyboard.dismiss()}>
+                    <View style={[Style.CommonStyles.fullFlex,]}>
+                        {
+                            image_picked
+                                ?
+                                <TouchableOpacity style={[Style.Products.AddCategory.addCategoryImageStyle,]} onPress={() => openImage()}>
+                                    <Image style={{ flex: 1 }} source={{ uri: category_image }} />
+                                </TouchableOpacity>
+                                :
+                                <View style={[Style.Products.AddCategory.addCategoryImageStyle,]}>
+                                    <View style={[Style.CommonStyles.fullFlex, Style.CommonStyles.centerStyle]}>
+                                        <Text style={[Style.Products.AddCategory.CategoryImageText, { fontSize: 30 }]} onPress={() => openImage()}>+</Text>
 
-
-                    {
-                        image_picked
-                            ?
-                            <TouchableOpacity style={[Style.Products.AddCategory.addCategoryImageStyle,]} onPress={() => openImage()}>
-                                <Image style={{ flex: 1 }} source={{ uri: category_image }} />
-                            </TouchableOpacity>
-                            :
-                            <View style={[Style.Products.AddCategory.addCategoryImageStyle,]}>
-                                <View style={[Style.CommonStyles.fullFlex, Style.CommonStyles.centerStyle]}>
-                                    <Text style={[Style.Products.AddCategory.CategoryImageText, { fontSize: 30 }]} onPress={() => openImage()}>+</Text>
-
-                                    <Text style={Style.Products.AddCategory.CategoryImageText}>ADD IMAGE</Text>
+                                        <Text style={Style.Products.AddCategory.CategoryImageText}>ADD IMAGE</Text>
+                                    </View>
                                 </View>
-                            </View>
-                    }
+                        }
 
 
-                    {
-                        SubCategoryEnabled
-                            ?
-                            <Text style={{ fontSize: 16, color: '#000', marginVertical: 10, marginLeft: 10 }}>{parentName}</Text>
-                            :
-                            null
+                        {
+                            SubCategoryEnabled
+                                ?
+                                <Text style={{ fontSize: 16, color: '#000', marginVertical: 10, marginLeft: 10 }}>{parentName}</Text>
+                                :
+                                null
 
-                    }
+                        }
 
-                    <TextInput
-                        value={Category_name}
-                        onChangeText={value => Category_names(value)}
-                        style={{ height: 50, borderWidth: 1, width: '80%', fontSize: 14, marginVertical: 20, borderColor: Colors.theme_color, paddingLeft: 10 }}
-                        placeholder={placeholder + ' Name'}
-                    />
+                        <TextInput
+                            value={Category_name}
+                            returnKeyType='done'
+                            onChangeText={value => Category_names(value)}
+                            style={{ height: 50, borderWidth: 1, width: '80%', fontSize: 14, marginVertical: 20, borderColor: Colors.theme_color, paddingLeft: 10 }}
+                            placeholder={placeholder + ' Name'}
+                        />
 
-                    <Textarea rowSpan={6} bordered placeholder={placeholder + ' Description'}
-                        value={CategoryDescription}
-                        onChangeText={CategoryDescription => Category_desc(CategoryDescription)}
-                        style={{ color: '#000', fontSize: 14, borderWidth: 1, borderColor: Colors.theme_color }}
+                        <Textarea rowSpan={6} bordered placeholder={placeholder + ' Description'}
+                            value={CategoryDescription}
+                            returnKeyType='done'
+                            onChangeText={CategoryDescription => Category_desc(CategoryDescription)}
+                            style={{ color: '#000', fontSize: 14, borderWidth: 1, borderColor: Colors.theme_color }}
 
-                    />
-
+                        />
+                        </View>
+                    </TouchableWithoutFeedback>
                 </KeyboardAwareScrollView>
             </View>
 

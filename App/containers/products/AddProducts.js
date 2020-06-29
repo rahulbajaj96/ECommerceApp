@@ -294,6 +294,11 @@ class AddProduct extends React.Component {
         multipleSelection[multipleSelection.length] = { product_color_id: '', size_id: '', quantity: '', product_color_name: '', size_name: '' }
         this.setState({ multipleSelection })
     }
+    deleteMore(i) {
+        const { multipleSelection } = this.state
+        multipleSelection.splice(i, 1);
+        this.setState({ multipleSelection })
+    }
     check() {
         const { multipleSelection } = this.state
         console.log('multiple ', multipleSelection)
@@ -457,15 +462,17 @@ class AddProduct extends React.Component {
             console.log('response Add Category', response);
             if (response != false) {
                 if (response.status == 1) {
-
-                    Toast.show(response.message)
-                    // navigation.popToTop()
+                    setTimeout(() => {
+                        Toast.show(response.message)
+                    }, 500);
                     this.props.loader_Off();
                     navigation.navigate('Productss', { category_id: Category_id, subCategory_id: SubCategory_id });
                 }
                 else {
                     this.props.loader_Off();
-                    Toast.show(response.message)
+                    setTimeout(() => {
+                        Toast.show(response.message)
+                    }, 500);
                 }
 
             }
@@ -478,14 +485,17 @@ class AddProduct extends React.Component {
             console.log('response Edit Category', EditResponse);
             if (EditResponse != false) {
                 if (EditResponse.status == 1) {
-
-                    Toast.show(EditResponse.message)
+                    setTimeout(() => {
+                        Toast.show(EditResponse.message)
+                    }, 500);
                     this.props.loader_Off();
                     // navigation.popToTop()
                     navigation.navigate('Productss', { category_id: Category_id, subCategory_id: SubCategory_id });
                 }
                 else {
-                    Toast.show(EditResponse.message)
+                    setTimeout(() => {
+                        Toast.show(EditResponse.message)
+                    }, 500);
                     this.props.loader_Off();
                 }
 
@@ -661,7 +671,21 @@ class AddProduct extends React.Component {
                     {
                         multipleSelection.map((particularSet, i) => (
                             <View>
+                                {
+                                    i != 0
+                                        ?
 
+
+                                        <View style={{ justifyContent: 'flex-end', width: '100%', paddingVertical: 5, alignItems: 'flex-end' }}>
+                                            <TouchableOpacity
+                                                onPress={() => this.deleteMore(i)} >
+                                                <Image source={Images.cancel} style={Style.Products.categories.addPopUpImage} />
+
+                                            </TouchableOpacity>
+                                        </View>
+                                        : null
+
+                                }
                                 <DropDown
                                     options={colors_available}
                                     defaultValue={particularSet.product_color_name != '' ? particularSet.product_color_name : 'Select a Color'}

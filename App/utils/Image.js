@@ -22,7 +22,7 @@ const Images = {
     employee: require('../app_assests/Images/AppMain/Manage.png'),
     home: require('../app_assests/Images/AppMain/home.png'),
     empty_cart: require('../app_assests/Images/AppMain/emptycart.png'),
-
+    cancel: require('../app_assests/Images/AppMain/cancel.png'),
 
     //tab_Images
     order_black: require('../app_assests/Images/TabImages/black_order.png'),

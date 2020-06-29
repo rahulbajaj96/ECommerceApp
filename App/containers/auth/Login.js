@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, TouchableOpacity, Image, Animated, Easing, Platform } from "react-native";
+import { View, Text, TouchableOpacity, Image, Animated, Easing, Platform, Keyboard } from "react-native";
 import LinearGradient from 'react-native-linear-gradient';
 import { Item, Input, Label } from 'native-base';
 import Style from "../../utils/Style";
@@ -104,7 +104,7 @@ class Login extends Component {
     }
     async checkLoginConditions() {
         const { email, password, loginStatus } = this.state
-
+        Keyboard.dismiss()
         console.log(email);
         console.log(password);
         if (EmptyValidation(email) == false) {
@@ -129,7 +129,9 @@ class Login extends Component {
 
                 await save_To_AsyncStorage('@login_auth_response', JSON.stringify(LoginReducer.response_from_login_Api.data));
                 SaveToken(LoginReducer.response_from_login_Api.data.token, LoginReducer.response_from_login_Api.data.user_type);
-                Toast.show(LoginReducer.response_from_login_Api.message);
+                setTimeout(() => {
+                    Toast.show(LoginReducer.response_from_login_Api.message);
+                }, 500);
                 this.setState({ email: '', password: '' })
                 this.navigateFromLogin(LoginReducer.response_from_login_Api.data.user_type);
                 // this.props.navigation.navigate('Tabs', {
@@ -142,7 +144,6 @@ class Login extends Component {
             else {
                 setTimeout(() => {
                     Toast.show(LoginReducer.response_from_login_Api.message);
-
                 }, 500);
             }
 
@@ -238,7 +239,7 @@ class Login extends Component {
 
 
                             }]}>
-                                <View style={{ flex: 1, paddingHorizontal: '7%', }}>
+                                <KeyboardAwareScrollView style={{ flex: 1, paddingHorizontal: '7%', }}>
                                     <Animated.Text style={{ fontSize: 20, color: '#000', textAlign: 'center', marginTop: 10 }}>Login</Animated.Text>
 
                                     <Item stackedLabel style={Style.LoginStyles.AuthItemStyle}>
@@ -273,7 +274,7 @@ class Login extends Component {
                                     >FORGOT PASSWORD?</Text>
 
 
-                                </View>
+                                </KeyboardAwareScrollView>
                             </Animated.View>
 
                             :
@@ -288,7 +289,7 @@ class Login extends Component {
 
 
                             }]}>
-                                <View style={{ flex: 1, paddingHorizontal: '7%', }}>
+                                <KeyboardAwareScrollView style={{ flex: 1, paddingHorizontal: '7%', }}>
                                     <Animated.Text style={{ fontSize: 20, color: '#000', textAlign: 'center', marginTop: 10 }}>Forgot Password</Animated.Text>
                                     <Text style={Style.LoginStyles.forgotInst}> * Enter a email on which new password wil be sent</Text>
                                     <Item stackedLabel style={Style.LoginStyles.AuthItemStyle}>
@@ -308,7 +309,7 @@ class Login extends Component {
                                     </TouchableOpacity>
 
                                     <Text style={Platform.OS === 'android' ? Style.LoginStyles.ForgotPasswordTextAndroid : Style.LoginStyles.ForgotPasswordText} onPress={() => this.goToLogin()} >Back to Login!</Text>
-                                </View>
+                                </KeyboardAwareScrollView>
                             </Animated.View>
 
                     }

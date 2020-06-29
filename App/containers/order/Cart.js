@@ -92,11 +92,15 @@ class Cart extends React.Component {
         console.log('result', updatedCartList);
         if (updatedCartList != false) {
             if (updatedCartList.status == 1) {
+                setTimeout(() => {
                 Toast.show(updatedCartList.message);
+                }, 500);
                 this.getCart();
             }
             else {
+                setTimeout(() => {
                 Toast.show(updatedCartList.message);
+                }, 500);
             }
         }
 

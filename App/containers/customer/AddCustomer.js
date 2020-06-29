@@ -17,6 +17,7 @@ import { BASE_URL, API_URL } from '../../config';
 import { SPINNER_ON, SPINNER_OFF } from '../../constants/ReduxConstants';
 import { getCustomerList } from '../../actions/customeractions';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { set } from 'react-native-reanimated';
 function AddCustomer(props) {
     const [first_name, setfirst_name] = useState('')
     const [last_name, setlast_name] = useState('')
@@ -128,6 +129,7 @@ function AddCustomer(props) {
         //     Toast.show("Please select a Customer pic");
         //     return;
         // }
+
         if (!EmptyValidation(AANHEF)) {
             Toast.show(Get_Message("AANHEF"));
             return;
@@ -205,11 +207,35 @@ function AddCustomer(props) {
 
                 if (response != false)
                     if (response.status == 1) {
+                        setTimeout(() => {
+                            Toast.show(response.message)
+                        }, 500);
+                        console.log('props.route.params.data', props.route.params.data)
+                        if (props.route.params.data.back == 2) {
+                            navigation.navigate('Orders', {
+                                screen: 'Bill_Checkout',
+                            });
 
-                        Toast.show(response.message)
-                        // navigation.popToTop()
-                        navigation.navigate('Customer', { reload: true });
-                        dispatch(getCustomerList())
+                        }
+                        else {
+                            navigation.navigate('Customer', { reload: true });
+                        }
+                        setAANHEF('')
+                        setfirst_name('')
+                        setlast_name('')
+                        setAddress('')
+                        setphone('')
+                        setemail('')
+                        setphotoPath('')
+                        setImageUri('')
+                        setKVKNum('')
+                        setPostalCode('')
+                        setcity('')
+                        // dispatch(getCustomerList())
+                        setcompany_name('')
+                        setStreet('')
+                        setdiscard(false)
+
 
                     }
                     else {
@@ -229,9 +255,10 @@ function AddCustomer(props) {
                 dispatch({ type: SPINNER_OFF })
                 if (responseEdit != false)
                     if (responseEdit.status == 1) {
+                        setTimeout(() => {
+                            Toast.show(responseEdit.message)
 
-                        Toast.show(responseEdit.message)
-                        // navigation.popToTop()
+                        }, 500);
                         navigation.navigate('Customer', { reload: true });
                         dispatch(getCustomerList())
 
@@ -254,8 +281,8 @@ function AddCustomer(props) {
     }, [ImageUploaded, AANHEF, first_name, last_name, company_name, KVKNum, email, phone, Street, Address, PostalCode, city])
     const handleDiscard = () => {
         if (ID == 1) {
-            console.log('ImageUploaded', ImageUploaded, 'AANHEF', AANHEF.length, 'first_name', first_name.length,'last name:',last_name.length)
-            console.log('company',company_name.length,'kvk',KVKNum.length)
+            console.log('ImageUploaded', ImageUploaded, 'AANHEF', AANHEF.length, 'first_name', first_name.length, 'last name:', last_name.length)
+            console.log('company', company_name.length, 'kvk', KVKNum.length)
             if (ImageUploaded == false && AANHEF == '' && first_name == '' && last_name == '' && company_name == '' && KVKNum == '' && email == '' && phone == '' && Street == '' && Address == '' && PostalCode == '' && city == '')
                 setdiscard(false)
             else
@@ -264,11 +291,36 @@ function AddCustomer(props) {
         else
             setdiscard(true)
     }
+    const handleback = () => {
+        console.log('here', props.route.params)
+        if (props.route.params.data.back == 2) {
+            navigation.navigate('Orders', {
+                screen: 'Bill_Checkout',
+            });
+            
+        }
+        else { navigation.navigate('Customer'); }
 
+        setAANHEF('')
+        setfirst_name('')
+        setlast_name('')
+        setAddress('')
+        setphone('')
+        setemail('')
+        setphotoPath('')
+        setImageUri('')
+        setKVKNum('')
+        setPostalCode('')
+        setcity('')
+        // dispatch(getCustomerList())
+        setcompany_name('')
+        setStreet('')
+        setdiscard(false)
+    }
     return (
         <AppComponent>
             <Toolbar title={title} right={1} back={true} navigation={navigation} onSavePress={() => handleSaveCustomer()}
-                customisedbackButton={discard}
+                customisedbackButton={discard} customisedBackAction={() => handleback()} customBackAction={true}
             />
             <KeyboardAwareScrollView style={[Style.CommonStyles.fullFlex, { paddingHorizontal: '5%', paddingVertical: '5%' }]}>
                 <Spinner visible={spinner} />

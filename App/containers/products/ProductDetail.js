@@ -135,10 +135,13 @@ class ProductDetail extends React.Component {
         else {
             loopValue = (color_current_Value + 5)
         }
-       
+
         for (let i = color_current_Value; i < loopValue; i++) {
             views.push(
-                <TouchableOpacity style={{ flex: 0.20, backgroundColor: colors_available[i].hash_color == null ?''+colors_available[i].color: colors_available[i].hash_color, margin: 5, borderWidth: current_selected_color == i ? 2 : 0, borderColor: current_selected_color == i ? Colors.theme_color : null, padding: 2, }} key={i} disabled={current_selected_color == i} onPress={() => this.colorSelected(i)} />
+                <View style={{ flex: 0.20, margin: 5, padding: 2, borderWidth: 0,justifyContent:'center' }}>
+                    <TouchableOpacity style={{ flex: 1, backgroundColor: colors_available[i].hash_color == null ? '' + colors_available[i].color : colors_available[i].hash_color, borderWidth: current_selected_color == i ? 2 : 0, borderColor: current_selected_color == i ? Colors.theme_color : null, }} key={i} disabled={current_selected_color == i} onPress={() => this.colorSelected(i)} />
+                    <Text style={{ marginVertical: 2, color: '#000', fontSize: 12 ,textAlign:'center'}}>{colors_available[i].color}</Text>
+                </View>
             )
         }
         return views;
@@ -252,7 +255,7 @@ class ProductDetail extends React.Component {
 
                         <Text style={Style.Products.ProductDetail.PropertiesStyle}>Colors Available </Text>
 
-                        <View style={[{ marginBottom: 20 }, Style.Products.ProductDetail.colorsTrayStyle]}>
+                        <View style={[Style.Products.ProductDetail.colorsTrayStyle,{ marginBottom: 20,height:80 }, ]}>
 
                             <TouchableOpacity style={[{ flex: 0.1, opacity: colors_Left_button_enabled ? 1 : 0.2, }, Style.CommonStyles.centerStyle]}
                                 disabled={!colors_Left_button_enabled}
@@ -267,7 +270,7 @@ class ProductDetail extends React.Component {
                                         this.renderView()
                                         : null
                                 }
-                               
+
                             </View>
                             <TouchableOpacity style={[{ flex: 0.1, opacity: colors_Right_button_enabled ? 1 : 0.2, }, Style.CommonStyles.centerStyle]}
                                 onPress={() => this.changeColor(1)}
@@ -291,12 +294,12 @@ class ProductDetail extends React.Component {
                             <View style={{ flex: 0.8, flexDirection: 'row' }}>
                                 {
                                     sizes_available.length != 0
-                                    ?
-                                    this.renderSizes()
-                                    :
-                                    null
+                                        ?
+                                        this.renderSizes()
+                                        :
+                                        null
                                 }
-                               
+
                             </View>
                             <TouchableOpacity style={[{ flex: 0.1, opacity: size_right_button_enabled ? 1 : 0.2 }, Style.CommonStyles.centerStyle]}
                                 onPress={() => this.changeSize(1)}

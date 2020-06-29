@@ -14,7 +14,7 @@ const Toolbar = (props) => {
             '',
             ' Are you sure you want to discard the changes?',
             [
-                { text: 'Yes', onPress: () => props.navigation.goBack(), style: 'cancel' },
+                { text: 'Yes', onPress: () => props.customBackAction ? props.customisedBackAction() : props.navigation.goBack(), style: 'cancel' },
                 {
                     text: 'No', onPress: () => console.log('no'), style: 'cancel'
                 },
@@ -23,8 +23,8 @@ const Toolbar = (props) => {
         )
     }
     const performBack = () => {
-        console.log('customisedbackFunctionality',props.customisedbackButton)
-        props.customisedbackButton ? customisedback() : props.navigation.goBack()
+        console.log('customisedbackFunctionality', props.customisedbackButton)
+        props.customisedbackButton ? customisedback() :  props.customBackAction ? props.customisedBackAction() :props.navigation.goBack()
     }
     return (
         <LinearGradient style={Style.Toolbar.toolbarView} colors={['#2e1786', '#5453C7']} start={{ x: 0.1, y: 0.1 }} end={{ x: 1, y: 1 }}>

@@ -24,14 +24,29 @@ class Bill_Checkout extends React.Component {
     }
     componentDidMount() {
         const { route } = this.props
+        const { navigation } = this.props
+        navigation.addListener('focus', () => {
+            // The screen is focused
+            console.log('when screen is focused');
+            // Call any action
+            this.getCustomers();
+
+        });
         console.log('checkoutarray', JSON.stringify(route.params.checkoutArray))
         console.log('price', route.params.total_price)
-        this.getCustomers();
+
+    }
+    componentWillUnmount() {
+        const { navigation } = this.props
+
+        console.log('componenet gone ')
+        navigation.removeListener('focus');
     }
     async getCustomers() {
         await this.props.get_customer_list();
         const { customerReducer } = this.props
-        const { customer_array } = this.state
+        let { customer_array } = this.state
+        customer_array= []
         console.log('customer reducer', customerReducer)
         if (customerReducer.customer_list_response.status == 1) {
             let customers = customerReducer.customer_list;
@@ -43,7 +58,7 @@ class Bill_Checkout extends React.Component {
     }
 
     checkBill() {
-        if (this.state.selected_customer == '') {
+        if (this.state.selected_customer == 'Select a Customer') {
             Toast.show('Please select a customer');
             return;
         }
@@ -73,21 +88,33 @@ class Bill_Checkout extends React.Component {
         console.log('response', order_response);
         if (order_response != false) {
             if (order_response.status == 1) {
-
+                setTimeout(() => {
+                    Toast.show('Order Created');
+                }, 500);
                 Linking.openURL(order_response.data)
                 setTimeout(() => {
+
                     this.setState({ viewChange: true })
                 }, 500);
 
-                Toast.show('Order Created');
+
                 // navigation.navigate('Order');
             }
         }
 
 
     }
+    goToAddCustomer() {
+        const { navigation } = this.props
+        //  {
+        //     screen: 'Products'
+        //     // , params: {
+        //     //     screen: 'AddProduct'
+        //     // }
+        navigation.navigate('Customer', { screen: 'AddCustomer', params: { id: 1, title: 'Add Customer', data: { back: 2 } } })
+    }
     render() {
-        const { bill_print_enabled, customer_array, selected_customer, viewChange ,} = this.state
+        const { bill_print_enabled, customer_array, selected_customer, viewChange, } = this.state
         const { navigation, route } = this.props
         return (
             <AppComponent>
@@ -108,7 +135,7 @@ class Bill_Checkout extends React.Component {
                             <View style={[{ flex: 0.7, }, Style.CommonStyles.centerStyle]}>
                                 <Text style={{ fontSize: 20 }}>Your Order was Successfully Placed .</Text>
                                 <TouchableOpacity style={[{ marginVertical: 10, height: 120, width: 120 }, Style.CommonStyles.centerStyle]}
-                                onPress={() => navigation.navigate('Order')}
+                                    onPress={() => navigation.navigate('Order')}
                                 >
                                     <Image source={Images.home} style={{ height: 100, width: 100, }} />
                                 </TouchableOpacity>
@@ -116,6 +143,14 @@ class Bill_Checkout extends React.Component {
                             </View>
                             :
                             <View style={{ flex: 0.7 }}>
+                                <View style={{ justifyContent: 'flex-end', width: '100%', paddingVertical: 5, alignItems: 'flex-end', marginVertical: 5 }}>
+                                    <Text style={{ color: '#000', fontSize: 12 }}>Tap on + plus button To Add Customer</Text>
+                                    <TouchableOpacity
+                                        onPress={() => this.goToAddCustomer()} >
+                                        <Image source={Images.add_pop_up} style={Style.Products.categories.addPopUpImage} />
+
+                                    </TouchableOpacity>
+                                </View>
                                 <DropDown
                                     options={customer_array}
                                     defaultValue={selected_customer}
