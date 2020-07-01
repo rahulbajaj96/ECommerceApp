@@ -277,12 +277,12 @@ class OrderProductDetail extends React.Component {
         this.props.navigation.navigate('Cart');
     }
     IncerementQuantity = () => {
-        let { quantity,quantity_modal_value } = this.state
-        this.setState({ quantity: ++quantity,quantity_modal_value:++quantity_modal_value})
+        let { quantity, quantity_modal_value } = this.state
+        this.setState({ quantity: ++quantity, quantity_modal_value: ++quantity_modal_value })
     }
     decerementQuantity = () => {
-        let { quantity ,quantity_modal_value} = this.state
-        this.setState({ quantity: --quantity ,quantity_modal_value:--quantity_modal_value})
+        let { quantity, quantity_modal_value } = this.state
+        this.setState({ quantity: --quantity, quantity_modal_value: --quantity_modal_value })
     }
     setQuantity = () => {
         const { pieces_available, quantity_modal_value } = this.state
@@ -388,14 +388,27 @@ class OrderProductDetail extends React.Component {
 
                         <Text style={[Style.Products.ProductDetail.PropertiesStyle, { fontSize: 18 }]}>Quantity</Text>
 
-                        <View style={{ flexDirection: 'row', height: 30, width: '30%', alignItems: 'center', justifyContent: 'space-between', borderWidth: 0, }}>
-                            <TouchableOpacity onPress={() => this.decerementQuantity()} disabled={quantity == 0 ? true : false} >
-                                <Image style={{ height: 22, width: 22, marginHorizontal: 5 }} source={Images.delete} />
-                            </TouchableOpacity>
-                            <Text style={{ fontSize: 20 }} onPress={() => this.setState({ quantity_modal: true })}>{quantity}</Text>
-                            <TouchableOpacity onPress={() => this.IncerementQuantity()} disabled={quantity == pieces_available ? true : false}>
-                                <Image style={{ height: 22, width: 22, marginHorizontal: 5 }} source={Images.add} />
-                            </TouchableOpacity>
+                        <View style={{ flexDirection: 'row', height: 30, width: '100%', alignItems: 'center', justifyContent: 'space-between', borderWidth: 0, }}>
+                            <View style={{ flexDirection: 'row', flex: 0.35, alignItems: 'center', justifyContent: 'space-between', borderWidth: 0, }}>
+                                <TouchableOpacity onPress={() => this.decerementQuantity()} disabled={quantity == 0 ? true : false} >
+                                    <Image style={{ height: 22, width: 22, marginHorizontal: 5 }} source={Images.delete} />
+                                </TouchableOpacity>
+                                <Text style={{ fontSize: 20 }} onPress={() => this.setState({ quantity_modal: true })}>{quantity}</Text>
+                                <TouchableOpacity onPress={() => this.IncerementQuantity()} disabled={quantity == pieces_available ? true : false}>
+                                    <Image style={{ height: 22, width: 22, marginHorizontal: 5 }} source={Images.add} />
+                                </TouchableOpacity>
+                            </View>
+
+                            <View style={{ flex: 0.6, paddingHorizontal: '10%',alignItems:'center' }}>
+                                <Text style={{ fontSize: 14, color: '#000', }}>
+                                    Click on Quantity value
+                                </Text>
+                                <Text style={{ fontSize: 14, color: '#000', }}>
+                                   to add manually
+                                </Text>
+                            </View>
+
+
                         </View>
                         <Text style={[Style.Products.ProductDetail.PropertiesStyle, { fontSize: 18, marginTop: 10 }]}>Total Cost :<Text style={{ color: Colors.theme_color }}>
                             ${quantity * sale_price}</Text></Text>
