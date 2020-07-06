@@ -59,7 +59,8 @@ class Products extends Component {
     }
     AddProducts = () => {
         const { navigation } = this.props
-        navigation.navigate('AddProduct', { id: 1, title: 'Add Product', data: {} })
+        const { Paramsinfo } = this.state
+        navigation.navigate('AddProduct', { id: 1, title: 'Add Product', data: Paramsinfo })
     }
     onEditPressed = () => {
         const { navigation } = this.props
@@ -104,7 +105,7 @@ class Products extends Component {
     }
 
     render() {
-        const { searchValue, modalVisibility, currentSelectedItem, productsList ,userType} = this.state
+        const { searchValue, modalVisibility, currentSelectedItem, productsList, userType } = this.state
         const { navigation } = this.props
         return (
             <AppComponent>
@@ -134,6 +135,7 @@ class Products extends Component {
                         onDeletePressed={() => this.onDeletePressed()}
                         modalTitle={currentSelectedItem.name}
                         usertype={userType}
+                        content={null}
                     />
 
                 </View>

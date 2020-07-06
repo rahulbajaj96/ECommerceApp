@@ -156,6 +156,7 @@ class Categories extends Component {
                         onDeletePressed={() => this.onDeletePressed()}
                         modalTitle={currentSelectedItem.name}
                         usertype={userType}
+                        content='Subcategoies/Products'
                     />
                     {/* <View style={Style.Products.categories.categoriesListView}>
                         <FlatList

@@ -141,8 +141,11 @@ export const ModalView = (props) => {
 
     function showAlert() {
         Alert.alert(
-            '',
-            `Are you sure you want to delete ${props.modalTitle}?`,
+            'Warning',
+            props.content != null ?
+                `Deleting ${props.modalTitle} will also delete its ${props.content}.Are you sure you want to delete ?`
+                :
+                `Are you sure you want to delete ${props.modalTitle}?`,
             [
                 {
                     text: 'Yes', onPress: () => {

@@ -68,6 +68,7 @@ export default {
             InputLabelStyle: { color: Colors.theme_color, fontSize: 14, fontWeight: 'bold' },
             inputStyle: { fontSize: 14, },
             itemStyle: { marginVertical: 5 },
+            category_sub: { fontSize: 16, color: Colors.theme_color, marginVertical: 10, },
             DropDown: {
                 dropdownViewStyle: { flexDirection: 'row', width: '100%', height: 50, borderBottomWidth: 0.8, borderBottomColor: '#c6c6ca', marginVertical: 5, },
                 dropDownStyle: { borderWidth: 0, width: '95%', height: '100%', justifyContent: 'center', },
@@ -129,8 +130,8 @@ export default {
         label_View: { flex: 0.7, flexDirection: 'row', alignItems: 'center', paddingLeft: '5%' },
         label_text: { marginLeft: 10, color: '#000', fontSize: 16, },
         PrivacyPolicy: {
-            textStyle:{fontSize:16,color:Colors.theme_color,textAlign:'justify',},
-            viewStyle:{ flex: 1,  borderWidth: 2, borderRadius: 10, borderColor: '#aa90dd',  }
+            textStyle: { fontSize: 16, color: Colors.theme_color, textAlign: 'justify', },
+            viewStyle: { flex: 1, borderWidth: 2, borderRadius: 10, borderColor: '#aa90dd', }
         }
 
     }

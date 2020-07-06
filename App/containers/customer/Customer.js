@@ -54,7 +54,6 @@ class Customer extends React.Component {
     }
 
     renderOrderList = (item) => {
-        console.log('items customer', item.item)
         const { prefixing_type, profile_pic, first_name, email, company_name, kvk_number, last_name } = item.item.get_customers
         // console.log('profile pic ', profile_pic);
         return (
@@ -255,6 +254,7 @@ class Customer extends React.Component {
                     onDeletePressed={() => this.onDeletePressed()}
                     modalTitle={`${currentSelectedItem.first_name} ${currentSelectedItem.last_name}`}
                     usertype={userType}
+                    content={null}
                 />
 
             </AppComponent>

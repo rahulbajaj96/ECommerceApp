@@ -48,7 +48,7 @@ class AddProduct extends React.Component {
         Page_id: 0,
         product_id: '',
 
-        SubCategory: 'Select a SubCategory',
+        SubCategory: '',
         SubCategory_id: '',
         colors_available: [],
         sizes_available: [],
@@ -71,7 +71,7 @@ class AddProduct extends React.Component {
         await this.get_product_color();
         await this.get_product_sizes();
         await this.setPropData(this.props.route.params)
-        this.get_Categories_Available();
+        // this.get_Categories_Available();
 
 
 
@@ -146,8 +146,9 @@ class AddProduct extends React.Component {
      */
     async setPropData(propData) {
         if (propData.id == 1) {
-            this.setState({ Page_id: propData.id })
-            await this.get_SubCategories_Available();
+            console.log('propdata  ....', propData.data)
+            this.setState({ Page_id: propData.id, Category: propData.data.category_name, SubCategory: propData.data.subCategory_name, Category_id: propData.data.category_id, SubCategory_id: propData.data.subCategory_id })
+            // await this.get_SubCategories_Available();
         }
         if (propData.id == 2) {
             let { multipleSelection, images_aaray, images_path_array } = this.state
@@ -184,7 +185,7 @@ class AddProduct extends React.Component {
             console.log('multiple Selection Data', multipleSelection);
             console.log('propData', propData.data);
 
-            await this.get_SubCategory(propData.data.category_id);
+            // await this.get_SubCategory(propData.data.category_id);
             this.setState({
                 Category_id: propData.data.category_id,
                 SubCategory_id: propData.data.subcategory_id,
@@ -621,7 +622,9 @@ class AddProduct extends React.Component {
 
                         </View>
                     </Modal>
-                    <DropDown
+                    <Text style={Style.Products.AddProduct.category_sub}>Category : <Text style={{ color: '#000' }}>{Category}</Text></Text>
+                    <Text style={Style.Products.AddProduct.category_sub}>Subcategory : <Text style={{ color: '#000' }}>{SubCategory}</Text> </Text>
+                    {/* <DropDown
                         options={categories_available}
                         defaultValue={Category != '' ? Category : 'Select any Category'}
                         onSelect={(index, value) => this.SelectCategory(index, value)}
@@ -630,7 +633,7 @@ class AddProduct extends React.Component {
                         options={subcategories_available}
                         defaultValue={SubCategory != '' ? SubCategory : 'Select any SubCategory'}
                         onSelect={(index, value) => this.SelectSubCategory(index, value)}
-                    />
+                    /> */}
                     <ProductInput
                         label='Product Name'
                         value={productName}

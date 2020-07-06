@@ -43,8 +43,8 @@ class SubCategories extends Component {
     handleListItemCicked = (item) => {
         const { navigation } = this.props
 
-        console.log('item clicked', item.item.category_id, item.item.id)
-        navigation.navigate('Productss', { category_id: item.item.category_id, subCategory_id: item.item.id });
+        console.log('item clicked', item)
+        navigation.navigate('Productss', { category_id: item.item.category_id, subCategory_id: item.item.id,category_name:item.item.category_detail.name,subCategory_name:item.item.name });
     }
     onAddPopUp = () => {
         const { navigation } = this.props
@@ -133,6 +133,7 @@ class SubCategories extends Component {
                         onDeletePressed={() => this.onDeletePressed()}
                         modalTitle={currentSelectedItem.name}
                         usertype={userType}
+                        content='Products'
                     />
 
                 </View>
