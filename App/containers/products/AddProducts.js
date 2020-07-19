@@ -60,7 +60,7 @@ class AddProduct extends React.Component {
         newSize_Color: '',
         current_size_color: 0,
 
-        discard: false
+        discard: false, initial_value: 0
 
     }
 
@@ -290,10 +290,10 @@ class AddProduct extends React.Component {
      * @method addMore adds a new object into main array
      */
     addMore() {
-        const { multipleSelection } = this.state
+        let { multipleSelection,initial_value } = this.state
         // console.log('multiple ', multipleSelection)
         multipleSelection[multipleSelection.length] = { product_color_id: '', size_id: '', quantity: '', product_color_name: '', size_name: '' }
-        this.setState({ multipleSelection })
+        this.setState({ multipleSelection,initial_value: ++ initial_value})
     }
     deleteMore(i) {
         const { multipleSelection } = this.state
@@ -558,6 +558,13 @@ class AddProduct extends React.Component {
             this.setState({ discard: true })
         }
     }
+    
+    checkInitialValue=()=>
+    {
+        const { initial_value} = this.state
+        if(initial_value != 0)
+        this.scroll.scrollToEnd({ animated: true })
+    }
     render() {
         const { productName, articlenum, purchasePrice, sellingPrice, multipleSelection, modalVisibility, selectedImage, selectedIndex, title, Category, SubCategory, colors_available, sizes_available, categories_available, subcategories_available, images_aaray, size_color_modal, newSize_Color, current_size_color, discard, SubCategory_id } = this.state
         const { navigation } = this.props
@@ -568,7 +575,12 @@ class AddProduct extends React.Component {
                 <Toolbar title={title} right={1} back={true} navigation={navigation} onSavePress={() => this.handleSaveProduct()}
                     customisedbackButton={discard}
                 />
-                <KeyboardAwareScrollView style={[Style.CommonStyles.fullFlex], { paddingHorizontal: '2%', paddingTop: '2%' }}>
+                <KeyboardAwareScrollView style={[Style.CommonStyles.fullFlex], { paddingHorizontal: '2%', paddingTop: '2%' }}
+                    innerRef={ref => {
+                        this.scroll = ref
+                    }}
+                    onContentSizeChange={() => this.checkInitialValue()}
+                >
 
                     <View style={Style.Products.AddProduct.ImagePickerView}>
                         <TouchableOpacity onPress={() => this.openCamera()}>
@@ -642,7 +654,7 @@ class AddProduct extends React.Component {
                         label='Article Number'
                         value={articlenum}
                         maxLength={8}
-                        keyboardType='numeric'
+                        // keyboardType='numeric'
                         onChangeText={articlenum => this.setState({ articlenum }, () => this.handleDiscard())} />
                     <View style={{ flexDirection: 'row', flex: 1, marginVertical: 10 }}>
                         <View style={{ flex: 0.5, paddingRight: '5%' }}>
@@ -732,7 +744,7 @@ class AddProduct extends React.Component {
                                 <Text style={{ fontSize: 24, color: Colors.theme_color, marginVertical: '4%', marginHorizontal: 10 }}>Add the {current_size_color == 1 ? 'color' : 'size'} you want to add </Text>
                                 <TextInput
                                     style={{ fontSize: 18, borderBottomWidth: 1, borderBottomColor: '#000', marginVertical: '2%', paddingBottom: 5, marginHorizontal: 10, }}
-                                    placeholder={'Name'}
+                                    placeholder={current_size_color == 1 ? 'color' : 'size'}
                                     value={newSize_Color}
                                     returnKeyType='done'
                                     onChangeText={newSize_Color => this.setState({ newSize_Color })}

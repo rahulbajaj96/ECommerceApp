@@ -12,6 +12,7 @@ import { getCustomerParamsFromName } from '../../helpers/GetCustomerValues';
 import { ApiCallPost } from '../../Services/ApiServices';
 import { BASE_URL, API_URL } from '../../config';
 import Toast from 'react-native-simple-toast';
+import { SPINNER_ON, SPINNER_OFF } from '../../constants/ReduxConstants';
 
 class Bill_Checkout extends React.Component {
     state = {
@@ -80,6 +81,8 @@ class Bill_Checkout extends React.Component {
         let selected_customer_params = await getCustomerParamsFromName(customerReducer.customer_list, selected_customer);
         console.log('checkoutarray', JSON.stringify(route.params.checkoutArray))
         let formdata = new FormData();
+        this.props.loader_On();
+
         formdata.append('carts', JSON.stringify(route.params.checkoutArray));
         formdata.append('customer_id', selected_customer_params.customer_id);
         formdata.append('company_bill_status', value ? 1 : 0);
@@ -91,6 +94,8 @@ class Bill_Checkout extends React.Component {
                 setTimeout(() => {
                     Toast.show('Order Created');
                 }, 500);
+                this.props.loader_Off();
+
                 Linking.openURL(order_response.data)
                 setTimeout(() => {
 
@@ -179,7 +184,9 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = (dispatch) => {
     return {
-        get_customer_list: () => dispatch(getCustomerList())
+        get_customer_list: () => dispatch(getCustomerList()),
+        loader_On: () => dispatch({ type: SPINNER_ON }),
+        loader_Off: () => dispatch({ type: SPINNER_OFF })
     }
 
 }

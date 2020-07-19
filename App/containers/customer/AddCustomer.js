@@ -236,7 +236,7 @@ function AddCustomer(props) {
                         setStreet('')
                         setdiscard(false)
 
-
+                        setImageUploaded(false)
                     }
                     else {
                         setTimeout(() => {
@@ -297,7 +297,7 @@ function AddCustomer(props) {
             navigation.navigate('Orders', {
                 screen: 'Bill_Checkout',
             });
-            
+
         }
         else { navigation.navigate('Customer'); }
 
@@ -316,6 +316,7 @@ function AddCustomer(props) {
         setcompany_name('')
         setStreet('')
         setdiscard(false)
+        setImageUploaded(false)
     }
     return (
         <AppComponent>
@@ -375,8 +376,13 @@ function AddCustomer(props) {
                     value={email}
                     keyboardType='email-address'
                     onChangeText={email => setemail(email)} />
-
-                <View style={{ flexDirection: 'row', flex: 1, marginVertical: 10 }}>
+                <ProductInput
+                    label='Phone number'
+                    value={phone}
+                    maxLength={10}
+                    keyboardType='number-pad'
+                    onChangeText={phone => setphone(phone)} />
+                {/* <View style={{ flexDirection: 'row', flex: 1, marginVertical: 10 }}>
                     <View style={{ flex: 0.5, paddingRight: '5%' }}>
                         <ProductInput
                             label='Phone number'
@@ -390,10 +396,11 @@ function AddCustomer(props) {
                             label='Last name'
                             value={last_name}
                             onChangeText={last_name => setlast_name(last_name)} /> */}
-                    </View>
-                </View>
+                {/* </View>
+                </View> */}
 
-                <Text style={{ color: '#000', fontSize: 16, marginTop: 20, fontWeight: 'bold', }}>Address</Text>
+                < Text style={{ color: '#000', fontSize: 16, marginTop: 20, fontWeight: 'bold', }
+                }> Address</Text >
 
                 <ProductInput
                     label='Street'
@@ -419,8 +426,8 @@ function AddCustomer(props) {
                 </View>
                 <View style={{ height: 50 }} />
 
-            </KeyboardAwareScrollView>
-        </AppComponent>
+            </KeyboardAwareScrollView >
+        </AppComponent >
     )
 
 

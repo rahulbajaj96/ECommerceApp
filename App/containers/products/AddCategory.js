@@ -303,13 +303,13 @@ function AddCategory(props) {
                                     <Image style={{ flex: 1 }} source={{ uri: category_image }} />
                                 </TouchableOpacity>
                                 :
-                                <View style={[Style.Products.AddCategory.addCategoryImageStyle,]}>
+                                <TouchableOpacity style={[Style.Products.AddCategory.addCategoryImageStyle,]} onPress={() => openImage()}>
                                     <View style={[Style.CommonStyles.fullFlex, Style.CommonStyles.centerStyle]}>
-                                        <Text style={[Style.Products.AddCategory.CategoryImageText, { fontSize: 30 }]} onPress={() => openImage()}>+</Text>
+                                        <Text style={[Style.Products.AddCategory.CategoryImageText, { fontSize: 30 }]} >+</Text>
 
                                         <Text style={Style.Products.AddCategory.CategoryImageText}>ADD IMAGE</Text>
                                     </View>
-                                </View>
+                                </TouchableOpacity>
                         }
 
 
@@ -335,7 +335,7 @@ function AddCategory(props) {
                             returnKeyType='done'
                             onChangeText={CategoryDescription => Category_desc(CategoryDescription)}
                             style={{ color: '#000', fontSize: 14, borderWidth: 1, borderColor: Colors.theme_color }}
-
+                            onSubmitEditing={() => Keyboard.dismiss()}
                         />
                         </View>
                     </TouchableWithoutFeedback>

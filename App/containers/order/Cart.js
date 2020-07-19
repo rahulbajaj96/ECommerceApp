@@ -43,7 +43,7 @@ class Cart extends React.Component {
             <View style={{ flex: 1, marginVertical: 2, marginHorizontal: 5, borderBottomWidth: 0.2, paddingVertical: 10, paddingHorizontal: 5, flexDirection: 'row' }}>
 
                 <View style={[{ flex: 0.30, }, Style.CommonStyles.centerStyle]}>
-                    <Image style={{ height: '80%', width: '100%', }} source={{ uri: product_images.length != 0 ? product_images[0].image : images_aaray[0] }} />
+                    <Image style={{ height: '80%', width: '100%', }} source={{ uri: product_images == null ?images_aaray[0] :product_images.length != 0 ? product_images[0].image : images_aaray[0] }} />
                 </View>
                 <View style={{ flex: 0.7, paddingHorizontal: 10 }}>
                     <Text style={Style.Cart.ProductName}>{product_name}</Text>

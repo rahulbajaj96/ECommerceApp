@@ -73,7 +73,7 @@ export default {
                 dropdownViewStyle: { flexDirection: 'row', width: '100%', height: 50, borderBottomWidth: 0.8, borderBottomColor: '#c6c6ca', marginVertical: 5, },
                 dropDownStyle: { borderWidth: 0, width: '95%', height: '100%', justifyContent: 'center', },
                 default_Value_text: { color: Colors.theme_color, paddingHorizontal: 5, fontSize: 14, },
-                dropdownItemStyle: { width: '80%', },
+                dropdownItemStyle: { width: '90%', },
                 dropdown_TextStyle: { color: '#000', fontSize: 16 },
             },
             ImagePickerView: { height: 100, width: '100%', borderWidth: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', },
@@ -113,7 +113,7 @@ export default {
         checkoutButton: { width: '60%', height: '10%', marginHorizontal: '20%', backgroundColor: Colors.theme_color, borderRadius: 20, marginVertical: '10%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: '2%' },
         checkoutText: { color: Colors.white, fontSize: 16, marginLeft: 10 },
         checkoutImage: { height: 30, width: 30 },
-        ProductName: { fontSize: 16, color: Colors.theme_color, marginVertical: 2, fontWeight: 'bold' },
+        ProductName: { fontSize: 16, color: Colors.theme_color, marginVertical: 2, fontWeight: 'bold' ,width:'95%'},
         ProductDetail: { fontSize: 12, color: '#000', },
         articlenumber: { fontSize: 16, color: '#000', marginVertical: 2 },
         price: { fontSize: 14, color: 'red', marginVertical: 2 }

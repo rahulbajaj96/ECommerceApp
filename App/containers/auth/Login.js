@@ -45,7 +45,7 @@ class Login extends Component {
         loginStatus: false,
         spinValue: new Animated.Value(0),
         flipped: false,
-        forgotPasswordEmail: ''
+        forgotPasswordEmail: '', password_show: false
     }
     handleAnimation(toValue) {
         Animated.timing(
@@ -132,7 +132,7 @@ class Login extends Component {
                 setTimeout(() => {
                     Toast.show(LoginReducer.response_from_login_Api.message);
                 }, 500);
-                this.setState({ email: '', password: '' })
+                this.setState({ email: '', password: '',password_show: false })
                 this.navigateFromLogin(LoginReducer.response_from_login_Api.data.user_type);
                 // this.props.navigation.navigate('Tabs', {
                 //     screen: 'Products'
@@ -194,7 +194,7 @@ class Login extends Component {
     render() {
 
 
-        const { email, password, spinValue, forgotPasswordEmail, flipped } = this.state
+        const { email, password, spinValue, forgotPasswordEmail, flipped, password_show } = this.state
         const svalue = spinValue.interpolate(
             {
                 inputRange: [0, 1],
@@ -255,14 +255,21 @@ class Login extends Component {
                                     </Item>
                                     <Item stackedLabel style={Style.LoginStyles.AuthItemStyle}>
                                         <Label style={Style.LoginStyles.AuthItemLabel}>PASSWORD</Label>
-                                        <Input
-                                            value={password}
-                                            style={Style.LoginStyles.AuthItemTextInput}
-                                            underlineColorAndroid='transparent'
-                                            secureTextEntry={true}
-                                            returnKeyType='done'
-                                            placeholder={'Enter your password'}
-                                            onChangeText={password => this.setState({ password })} />
+
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <Input
+                                                value={password}
+                                                style={Style.LoginStyles.AuthItemTextInput}
+                                                underlineColorAndroid='transparent'
+                                                secureTextEntry={password_show ? false : true}
+                                                returnKeyType='done'
+                                                placeholder={'Enter your password'}
+                                                onChangeText={password => this.setState({ password })} />
+
+                                            <TouchableOpacity style={[Style.CommonStyles.centerStyle, { marginBottom: 15, borderWidth: 0 }]} onPress={() => this.setState({ password_show: !password_show })}>
+                                                <Image style={{ height: 25, width: 25, }} source={password_show ? Images.eye_close : Images.eye} />
+                                            </TouchableOpacity>
+                                        </View>
                                     </Item>
 
                                     <TouchableOpacity style={[Style.LoginStyles.ButtonStyle, Style.CommonStyles.centerStyle]} onPress={() => this.checkLoginConditions()} >

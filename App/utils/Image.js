@@ -19,6 +19,7 @@ const Images = {
     dots: require('../app_assests/Images/AppMain/dots.png'),
     edit: require('../app_assests/Images/AppMain/edit.png'),
     eye: require('../app_assests/Images/AppMain/eye.png'),
+    eye_close: require('../app_assests/Images/AppMain/eye_close.png'),
     employee: require('../app_assests/Images/AppMain/Manage.png'),
     home: require('../app_assests/Images/AppMain/home.png'),
     empty_cart: require('../app_assests/Images/AppMain/emptycart.png'),
