@@ -51,53 +51,61 @@ export const Make_A_List = (props) => {
         var data = props.api ? items.item : ''
 
         return (
-            <TouchableOpacity style={Style.Products.categories.categoryItemView}
-                onPress={() => props.onItemClicked(items)}
-            >
-                <View style={[{ flex: 0.2, }, Style.CommonStyles.centerStyle]}>
-                    {
-                        props.api
-                            ?
-                            props.tag == 'Products'
+            <View>
+                <TouchableOpacity style={[Style.Products.categories.categoryItemView,{borderBottomWidth: items.index == (props.items.length - 1) ?1 :1}]}
+                    onPress={() => props.onItemClicked(items)}
+                >
+                    <View style={[{ flex: 0.2, }, Style.CommonStyles.centerStyle]}>
+                        {
+                            props.api
                                 ?
-                                <Image source={data.product_image.length != 0 ? { uri: data.product_image[0].image } : Images.appIcon} style={{ height: 50, width: 50, }} />
+                                props.tag == 'Products'
+                                    ?
+                                    <Image source={data.product_image.length != 0 ? { uri: data.product_image[0].image } : Images.appIcon} style={{ height: 50, width: 50, }} />
+                                    :
+                                    <Image source={data.image != '' ? { uri: data.image } : Images.appIcon} style={{ height: 50, width: 50, }} />
+
                                 :
-                                <Image source={data.image != '' ? { uri: data.image } : Images.appIcon} style={{ height: 50, width: 50, }} />
+                                <Image source={Images.appIcon} style={{ height: 50, width: 50, }} />
 
-                            :
-                            <Image source={Images.appIcon} style={{ height: 50, width: 50, }} />
+                        }
 
-                    }
+                    </View>
+                    <View style={{ flex: 0.7, justifyContent: 'center' }}>
+                        {
+                            props.api
+                                ?
+                                <Text style={{ fontSize: 16, color: '#000', marginLeft: 5 }}>{data.name}</Text>
+                                :
+                                <Text style={{ fontSize: 16, color: '#000', marginLeft: 5 }}>Product Name </Text>
 
-                </View>
-                <View style={{ flex: 0.7, justifyContent: 'center' }}>
+                        }
+
+                    </View>
                     {
-                        props.api
+                        props.crudValue == 1
                             ?
-                            <Text style={{ fontSize: 16, color: '#000', marginLeft: 5 }}>{data.name}</Text>
+                            <TouchableOpacity style={[{ flex: 0.1, }, Style.CommonStyles.centerStyle]}
+                                onPress={() => props.dotsClick(items)}
+                            >
+                                <Image source={Images.dots} style={{ height: 30, width: 30, }} />
+                            </TouchableOpacity>
                             :
-                            <Text style={{ fontSize: 16, color: '#000', marginLeft: 5 }}>Product Name </Text>
+                            <View style={[{ flex: 0.1, }, Style.CommonStyles.centerStyle]}>
+                                <Image source={Images.right_aarow} style={{ height: 15, width: 15, }} />
+                            </View>
 
                     }
 
-                </View>
+
+                </TouchableOpacity>
                 {
-                    props.crudValue == 1
+                    items.index == (props.items.length - 1)
                         ?
-                        <TouchableOpacity style={[{ flex: 0.1, }, Style.CommonStyles.centerStyle]}
-                            onPress={() => props.dotsClick(items)}
-                        >
-                            <Image source={Images.dots} style={{ height: 30, width: 30, }} />
-                        </TouchableOpacity>
-                        :
-                        <View style={[{ flex: 0.1, }, Style.CommonStyles.centerStyle]}>
-                            <Image source={Images.right_aarow} style={{ height: 15, width: 15, }} />
-                        </View>
-
+                        <View style={{height:50,backgroundColor:'#fff'}} />
+                        : null
                 }
-
-
-            </TouchableOpacity>
+            </View>
         )
 
     }
@@ -120,6 +128,7 @@ export const Make_A_List = (props) => {
                         renderItem={item => renderProducts(item)}
                         {...props}
                     />
+
             }
             {
                 props.addPopUp == false
@@ -130,7 +139,6 @@ export const Make_A_List = (props) => {
                         <Image source={Images.add_pop_up} style={Style.Products.categories.addPopUpImage} />
                     </TouchableOpacity>
             }
-
 
         </View>
     )

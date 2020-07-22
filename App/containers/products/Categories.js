@@ -30,7 +30,7 @@ class Categories extends Component {
     async getType() {
         let userType = await getUserType();
         console.log('userType', userType);
-        this.setState({userType})
+        this.setState({ userType })
     }
     async get_Categories() {
         await this.props.getCategories();
@@ -99,7 +99,7 @@ class Categories extends Component {
         }
     }
     render() {
-        const { searchValue, modalVisibility, currentSelectedItem, categoryList,userType } = this.state
+        const { searchValue, modalVisibility, currentSelectedItem, categoryList, userType } = this.state
         const { spinnerReducer } = this.props
         return (
             <AppComponent>
@@ -127,7 +127,7 @@ class Categories extends Component {
                         tag='Categories'
 
                     />
-
+                   
 
                     {/* <Modal
                         isVisible={modalVisibility}

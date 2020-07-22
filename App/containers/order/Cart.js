@@ -123,7 +123,7 @@ class Cart extends React.Component {
         const { cart } = this.state
         return (
             <AppComponent>
-                <Toolbar title='Cart' right={cart.length != 0 ? 1 : null} back={true} navigation={navigation} onSavePress={() => this.goToCheckout()} />
+                <Toolbar title='Cart' right={cart.length != 0 ? 2 : null} back={true} navigation={navigation} onSavePress={() => this.goToCheckout()} />
                 <View style={{ flex: 1 }}>
                     {
                         cart.length != 0

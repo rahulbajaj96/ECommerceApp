@@ -743,9 +743,10 @@ class AddProduct extends React.Component {
                             <View style={{ flex: 0.8, borderWidth: 0, paddingHorizontal: '5%', paddingTop: 10 }}>
                                 <Text style={{ fontSize: 24, color: Colors.theme_color, marginVertical: '4%', marginHorizontal: 10 }}>Add the {current_size_color == 1 ? 'color' : 'size'} you want to add </Text>
                                 <TextInput
-                                    style={{ fontSize: 18, borderBottomWidth: 1, borderBottomColor: '#000', marginVertical: '2%', paddingBottom: 5, marginHorizontal: 10, }}
+                                    style={{ fontSize: 18, borderBottomWidth: 1, borderBottomColor: '#000', marginVertical: '2%', paddingBottom: 5, marginHorizontal: 10, color:'#000'}}
                                     placeholder={current_size_color == 1 ? 'color' : 'size'}
                                     value={newSize_Color}
+                                    placeholderTextColor='grey'
                                     returnKeyType='done'
                                     onChangeText={newSize_Color => this.setState({ newSize_Color })}
 

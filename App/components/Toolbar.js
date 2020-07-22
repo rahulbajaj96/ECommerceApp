@@ -49,7 +49,17 @@ const Toolbar = (props) => {
                     props.right == 1
                         ?
                         <TouchableOpacity style={{ padding: 10 }} onPress={() => props.onSavePress()} >
-                            <Text style={Style.Toolbar.SaveButtonText}>SAVE</Text>
+                            <Text style={Style.Toolbar.SaveButtonText}>Save</Text>
+                        </TouchableOpacity>
+                        :
+                        null
+
+                }
+                {
+                    props.right == 2
+                        ?
+                        <TouchableOpacity style={{ padding: 10 }} onPress={() => props.onSavePress()} >
+                            <Text style={[Style.Toolbar.SaveButtonText,{fontSize:11}]}>Checkout</Text>
                         </TouchableOpacity>
                         :
                         null

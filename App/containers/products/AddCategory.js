@@ -325,8 +325,9 @@ function AddCategory(props) {
                         <TextInput
                             value={Category_name}
                             returnKeyType='done'
+                            placeholderTextColor='grey'
                             onChangeText={value => Category_names(value)}
-                            style={{ height: 50, borderWidth: 1, width: '80%', fontSize: 14, marginVertical: 20, borderColor: Colors.theme_color, paddingLeft: 10 }}
+                            style={{ height: 50, borderWidth: 1, width: '80%', fontSize: 14, marginVertical: 20, borderColor: Colors.theme_color, paddingLeft: 10,color: '#000' }}
                             placeholder={placeholder + ' Name'}
                         />
 

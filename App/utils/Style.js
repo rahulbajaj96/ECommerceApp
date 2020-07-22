@@ -43,9 +43,9 @@ export default {
             searchBarView: { flex: 0.15, paddingHorizontal: '5%', justifyContent: 'center' },
             searchBarItemView: { height: 50, width: '100%', borderWidth: 1, paddingHorizontal: 10, borderColor: Colors.theme_color },
             searchBarInput: { fontSize: 14, color: Colors.black, },
-            searchImage: { width: 17, height: 17 },
+            searchImage: { width: 20, height: 20 },
             categoriesListView: { flex: 0.85, backgroundColor: Colors.white, paddingHorizontal: 5, borderColor: Colors.theme_color },
-            AddPopUp: { position: 'absolute', height: 70, width: 70, right: '0%', bottom: '2%', borderWidth: 0 },
+            AddPopUp: { position: 'absolute', height: 70, width: 70, right: '0%', bottom: '1%', borderWidth: 0 },
             addPopUpImage: { height: 65, width: 65, },
             categoryItemView: { height: 70, flexDirection: 'row', width: '100%', marginVertical: 5, borderBottomColor: '#000', borderBottomWidth: 1 },
             categoriesModal: {

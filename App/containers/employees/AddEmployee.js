@@ -258,7 +258,7 @@ function AddEmployee(props) {
             <KeyboardAwareScrollView style={[Style.CommonStyles.fullFlex, { paddingHorizontal: '5%', paddingVertical: '5%' }]}>
                 <Spinner visible={spinner} />
                 <View style={[Style.Customers.AddCustomer.Customer_image_view_main]}>
-                    <View style={[Style.Customers.AddCustomer.Customer_image_view, Style.CommonStyles.centerStyle]}>
+                <TouchableOpacity style={[Style.Customers.AddCustomer.Customer_image_view, Style.CommonStyles.centerStyle]} onPress={() => goToImagePicker()}>
                         <Image source={ImageUploaded ? { uri: ImageUri } : Images.appIcon} style={Style.Customers.AddCustomer.Customer_imageStyle} />
                         <TouchableOpacity style={[{ height: 40, width: 40, position: 'absolute', right: -10, bottom: -5, borderWidth: 0, backgroundColor: '#F2F2F2' }, Style.CommonStyles.centerStyle]}
                             onPress={() => goToImagePicker()}
@@ -267,7 +267,7 @@ function AddEmployee(props) {
                         </TouchableOpacity>
 
 
-                    </View>
+                    </TouchableOpacity>
                 </View>
                 <DropDown
                     options={AANHEFArray}
