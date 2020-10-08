@@ -9,13 +9,14 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { get_From_AsyncStorage, save_To_AsyncStorage } from "../../Services/StorageService";
 import { ApiCallGet, ApiCallPost } from '../../Services/ApiServices';
 import AppComponent from '../../components/AppComponent'
-import { EmptyValidation, Get_Message, EmailValidation, SaveToken } from "../../helpers/InputValidations";
+import { EmptyValidation, Get_Message, EmailValidation, SaveToken, SavePassword, checkToRemovePassword } from "../../helpers/InputValidations";
 import { Email_VALIDATION_MESSAGE, BASE_URL } from "../../constants/AppConstants";
 import { connect } from "react-redux";
 import { loginaction } from "../../actions/loginactions";
 
 import Spinner from 'react-native-loading-spinner-overlay';
 import { forgotPassword } from "../../actions/forgotPasswordaction";
+import Colors from "../../utils/Colors";
 class Login extends Component {
     constructor() {
         super();
@@ -45,7 +46,8 @@ class Login extends Component {
         loginStatus: false,
         spinValue: new Animated.Value(0),
         flipped: false,
-        forgotPasswordEmail: '', password_show: false
+        forgotPasswordEmail: '', password_show: false,
+        rememberme: false
     }
     handleAnimation(toValue) {
         Animated.timing(
@@ -127,12 +129,11 @@ class Login extends Component {
 
             if (LoginReducer.response_from_login_Api.status == 1) {
 
-                await save_To_AsyncStorage('@login_auth_response', JSON.stringify(LoginReducer.response_from_login_Api.data));
-                SaveToken(LoginReducer.response_from_login_Api.data.token, LoginReducer.response_from_login_Api.data.user_type);
+                await this.saveDataTODevice(LoginReducer);
                 setTimeout(() => {
                     Toast.show(LoginReducer.response_from_login_Api.message);
                 }, 500);
-                this.setState({ email: '', password: '',password_show: false })
+                this.setState({ email: '', password: '', password_show: false, rememberme: false })
                 this.navigateFromLogin(LoginReducer.response_from_login_Api.data.user_type);
                 // this.props.navigation.navigate('Tabs', {
                 //     screen: 'Products'
@@ -149,7 +150,17 @@ class Login extends Component {
 
         }
     }
-
+    async saveDataTODevice(LoginReducer) {
+        save_To_AsyncStorage('@login_auth_response', JSON.stringify(LoginReducer.response_from_login_Api.data));
+        await SaveToken(LoginReducer.response_from_login_Api.data.token, LoginReducer.response_from_login_Api.data.user_type);
+        let { rememberme, email, password } = this.state
+        if (rememberme) {
+            await SavePassword(email, password);
+        }
+        else {
+            await checkToRemovePassword(email, password)
+        }
+    }
     async rediscoverPassword() {
         const { forgotPasswordEmail } = this.state
         if (EmptyValidation(forgotPasswordEmail) == false) {
@@ -190,11 +201,26 @@ class Login extends Component {
         this.handleAnimation(0)
 
     }
+    checkAlreadySavedPassword = async () => {
+        let { email } = this.state
+        get_From_AsyncStorage('@Save_Password_Array').then(data => {
+            console.log('data', data)
+            if (data != null) {
+                let pass_array = JSON.parse(data);
+                for (let i = 0; i < pass_array.length; i++) {
+                    if (pass_array[i].email == email) {
+                        this.setState({ password: pass_array[i].password, rememberme: true })
+                        break;
+                    }
+                }
+            }
 
+        })
+    }
     render() {
 
 
-        const { email, password, spinValue, forgotPasswordEmail, flipped, password_show } = this.state
+        const { email, password, spinValue, forgotPasswordEmail, flipped, password_show, rememberme } = this.state
         const svalue = spinValue.interpolate(
             {
                 inputRange: [0, 1],
@@ -218,14 +244,14 @@ class Login extends Component {
 
                 <LinearGradient colors={['#2e1786', '#5453C7']} style={[{ flex: 0.5, }, Style.CommonStyles.centerStyle]} start={{ x: 1, y: 0.1 }} end={{ x: 1, y: 1 }}>
                     <View style={[Style.LoginStyles.GradientImageStyle, Style.CommonStyles.centerStyle]}>
-                        <Animated.Image style={{ height: 50, width: 50, transform: [{ rotate: svalue }] }} source={Images.appIcon} />
+                        <Animated.Image style={{ height: 80, width: 80, transform: [{ rotate: svalue }] }} source={Images.appIcon} resizeMode='contain' />
 
                     </View>
 
                 </LinearGradient>
                 <Spinner visible={this.props.spinnerReducer.SpinnerVisibility} />
                 <View style={{
-                    flex: 0.5,
+                    flex: 0.45,
                 }}>
 
                     {
@@ -251,7 +277,9 @@ class Login extends Component {
                                             keyboardType='email-address'
                                             returnKeyType='done'
                                             placeholder={'Enter your email'}
-                                            onChangeText={email => this.setState({ email })} />
+                                            onChangeText={email => this.setState({ email })}
+                                            onSubmitEditing={() => this.checkAlreadySavedPassword()}
+                                        />
                                     </Item>
                                     <Item stackedLabel style={Style.LoginStyles.AuthItemStyle}>
                                         <Label style={Style.LoginStyles.AuthItemLabel}>PASSWORD</Label>
@@ -271,6 +299,14 @@ class Login extends Component {
                                             </TouchableOpacity>
                                         </View>
                                     </Item>
+
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 8 }}>
+                                        <TouchableOpacity style={{ height: 15, width: 15, borderWidth: 0, }} onPress={() => this.setState({ rememberme: !rememberme })}>
+                                            <Image source={rememberme ? Images.checkedBox : Images.uncheckedBox} style={{ height: rememberme ? 20 : 15, width: rememberme ? 20 : 15 }} />
+                                        </TouchableOpacity>
+                                        <Text style={{ color: Colors.theme_color, fontSize: 15, marginLeft: 15 }}>Remember me</Text>
+                                    </View>
+
 
                                     <TouchableOpacity style={[Style.LoginStyles.ButtonStyle, Style.CommonStyles.centerStyle]} onPress={() => this.checkLoginConditions()} >
                                         <Text style={{ color: '#000', fontSize: 14, color: '#fff' }}>Login</Text>

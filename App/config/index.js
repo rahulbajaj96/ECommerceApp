@@ -63,3 +63,11 @@ export const API_URL = {
     EmployeeSearch: 'workerSearch',
 
 }
+
+/*
+email - storeuser@yopmail.com
+password - CLf96XNH
+
+email - worker@yopmail.com
+pass- DoW9p98P 
+*/

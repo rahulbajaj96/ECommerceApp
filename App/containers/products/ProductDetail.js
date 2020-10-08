@@ -76,7 +76,7 @@ class ProductDetail extends React.Component {
         console.log('item', item)
         return (
             <View style={{ flex: 1, }} key={item.index}>
-                <Image style={Style.Products.ProductDetail.sliderStyles} source={{ uri: item.item }} />
+                <Image style={Style.Products.ProductDetail.sliderStyles} source={{ uri: item.item }} resizeMode='cover'/>
             </View>
         )
     }
@@ -242,6 +242,7 @@ class ProductDetail extends React.Component {
                                 renderItem={item => this.renderProductImage(item)}
                                 showNextButton={false}
                                 showDoneButton={false}
+                                dotStyle={{backgroundColor:'#b7b7b7',height:8,width:8,borderRadius:4}}
                             />
                         </View>
                         <Text style={Style.Products.ProductDetail.PropertiesStyle}>Category: {category_name}/{Subcategory_name}</Text>

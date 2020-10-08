@@ -17,7 +17,6 @@ import { BASE_URL, API_URL } from '../../config';
 import { SPINNER_ON, SPINNER_OFF } from '../../constants/ReduxConstants';
 import { getCustomerList } from '../../actions/customeractions';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { set } from 'react-native-reanimated';
 function AddCustomer(props) {
     const [first_name, setfirst_name] = useState('')
     const [last_name, setlast_name] = useState('')
@@ -94,6 +93,7 @@ function AddCustomer(props) {
                 skipBackup: true,
                 path: 'images',
             },
+            quality:0.4
         };
         ImagePicker.showImagePicker(options, (response) => {
             console.log('Response = ', response.uri);

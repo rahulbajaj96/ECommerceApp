@@ -24,6 +24,9 @@ const Images = {
     home: require('../app_assests/Images/AppMain/home.png'),
     empty_cart: require('../app_assests/Images/AppMain/emptycart.png'),
     cancel: require('../app_assests/Images/AppMain/cancel.png'),
+    uncheckedBox: require('../app_assests/Images/AppMain/uncheckedBox.png'),
+    checkedBox: require('../app_assests/Images/AppMain/checkedBox.png'),
+
 
     //tab_Images
     order_black: require('../app_assests/Images/TabImages/black_order.png'),

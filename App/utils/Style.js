@@ -3,9 +3,11 @@ import { STATUSBAR_HEIGHT, DEVICE_WIDTH, DEVICE_HEIGHT } from "../constants/AppC
 
 export default {
     CommonStyles: {
-        fullFlex: { flex: 1 },
+        fullFlex: { flex: 1 ,backgroundColor:'#fff'},
         centerStyle: { alignItems: 'center', justifyContent: 'center' },
-        SafeAreaStyle: { height: STATUSBAR_HEIGHT, backgroundColor: Colors.theme_color },
+        // SafeAreaStyle: { height: STATUSBAR_HEIGHT, backgroundColor: Colors.theme_color },
+        SafeAreaStyle: { flex:1, backgroundColor: Colors.theme_color ,paddingBottom:0},
+
         borderStyle: { borderWidth: 1, borderColor: Colors.black, opacity: 0.1, },
         paddingBottomStyle: { height: 30 },
         EmptyListTag: { color: Colors.theme_color, fontSize: 22, marginHorizontal: '15%', textAlign: 'center' }
@@ -18,15 +20,24 @@ export default {
         ButtonStyle: {
             height: 50, width: '80%', backgroundColor: Colors.theme_color, marginHorizontal: '10%', marginTop: '8%', borderRadius: 25,
         },
-        GradientImageStyle: { height: 100, width: 100, borderRadius: 50, backgroundColor: Colors.white, marginBottom: '15%' },
+        GradientImageStyle: { height: 120, width: 120, borderRadius: 60, backgroundColor: Colors.white, marginBottom: '15%' },
         AuthView: {
             //  width: '80%',height:DEVICE_HEIGHT*0.52, borderWidth: 0, marginHorizontal: '10%', zIndex: 1, marginTop: '-15%', backgroundColor: Colors.white, borderRadius: 10, elevation: 3, paddingHorizontal: '7%',position: 'absolute',
-            flex: 0.90, borderWidth: 0, marginHorizontal: '10%', zIndex: 1, marginTop: '-15%', backgroundColor: Colors.white, borderRadius: 10, elevation: 3,
+            flex: 0.90, borderWidth: 0, marginHorizontal: '10%', zIndex: 1, marginTop: '-15%', backgroundColor: Colors.white, borderRadius: 10, shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.5,
+            shadowRadius: 2,
+            elevation: 2,
         },
         ForgotPassView: {
-            width: '80%', height: DEVICE_HEIGHT * 0.4, borderWidth: 0, marginHorizontal: '10%', zIndex: 1, marginTop: '-15%', backgroundColor: Colors.white, borderRadius: 10, elevation: 3, position: 'absolute',
+            width: '80%', height: DEVICE_HEIGHT * 0.4, borderWidth: 0, marginHorizontal: '10%', zIndex: 1, marginTop: '-15%', backgroundColor: Colors.white, borderRadius: 10, position: 'absolute',
+            paddingVertical:10,
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.5,
+            shadowRadius: 2,
+            elevation: 2,
         },
-        forgotInst: { fontSize: 9, color: Colors.grey, marginTop: 10, marginBottom: 10 },
+        forgotInst: { fontSize:11, color: Colors.grey, marginTop: 10, marginBottom: 10 },
         AuthItemStyle: { width: '100%', height: 70, borderBottomColor: '#DEDEDE', borderWidth: 2, marginVertical: 5, },
         AuthItemLabel: { color: Colors.theme_color, marginVertical: 10, fontSize: 12, fontWeight: 'bold' },
         AuthItemTextInput: { borderColor: Colors.black, borderWidth: 0, fontSize: 14, marginLeft: -2, marginTop: -8, paddingBottom: 4, paddingLeft: 2 },
@@ -35,8 +46,8 @@ export default {
 
     },
     Toolbar: {
-        toolbarView: { height: 50, width: '100%', backgroundColor: Colors.theme_color, justifyContent: 'center', flexDirection: 'row' },
-        SaveButtonText: { color: Colors.white, fontSize: 12 }
+        toolbarView: { height: 60, width: '100%', backgroundColor: Colors.theme_color, justifyContent: 'center', flexDirection: 'row' },
+        SaveButtonText: { color: Colors.white, fontSize: 14 ,fontWeight: 'bold',}
     },
     Products: {
         categories: {

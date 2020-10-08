@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, Image, TouchableOpacity ,ScrollView} from 'react-native';
+import { Text, View, Image, TouchableOpacity, ScrollView } from 'react-native';
 import AppComponent from '../../components/AppComponent';
 import Toolbar from '../../components/Toolbar';
 import { useNavigation } from '@react-navigation/native';
@@ -11,17 +11,20 @@ function PrivacyPolicy() {
     return (
         <AppComponent>
             <Toolbar title='Privacy Policy' back={true} navigation={navigation} />
-            <View style={{ flex: 1,  padding: '5%' }}>
+            <View style={{ flex: 1, padding: '5%' }}>
                 <View style={Style.More.PrivacyPolicy.viewStyle}>
-                        <ScrollView style={{flex:1,paddingVertical: '5%',paddingHorizontal:10}}>
+                    <ScrollView style={{ flex: 1, paddingVertical: '5%', paddingHorizontal: 10 }}>
 
-                     
-                    <Text style={Style.More.PrivacyPolicy.textStyle}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eget maximus lacus. Phasellus finibus risus ac tincidunt interdum. Morbi elementum sed sem et volutpat. Phasellus id nulla dui. Aliquam erat volutpat. Etiam porttitor lacus eu placerat gravida. In porttitor faucibus libero ut euismod.
+
+                        <Text style={Style.More.PrivacyPolicy.textStyle}>
+                            At fiveriverscrown, accessible from https://apps.fiveriverscrown.com, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by fiveriverscrown and how we use it.
                         {"\n"}{"\n"}
-                        Donec sit amet nulla id velit tincidunt tincidunt nec interdum dui. Ut bibendum commodo lorem sed ornare. Proin vel rutrum ex. Phasellus ac tempus nulla. Nunc vulputate porttitor ex vitae sollicitudin. Mauris eu augue nibh. Aliquam sit amet maximus lacus, sit amet ultrices ligula. Praesent nec mauris eget purus congue posuere. Fusce a lectus at metus mattis imperdiet faucibus et enim.
+                            If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us.
                         {"\n"}{"\n"}
-                        Morbi in nisi sagittis, malesuada urna rhoncus, rutrum eros. Curabitur eu ultrices dolor. Cras non purus feugiat, venenatis tellus vitae, malesuada nisi. Donec odio dolor, pretium sed ultricies ut, ullamcorper et nisi. Praesent mi sapien, rutrum in vulputate eu, iaculis a sapien. Vivamus commodo quam a eros efficitur aliquam. Morbi tincidunt a ante a molestie. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                            This Privacy Policy applies only to our online activities and is valid for visitors to our website with regards to the information that they shared and/or collect in fiveriverscrown. This policy is not applicable to any information collected offline or via channels other than this website.
+                            The personal information that you are asked to provide, and the reasons why you are asked to provide it, will be made clear to you at the point we ask you to provide your personal information.
+                       If you contact us directly, we may receive additional information about you such as your name, email address, phone number, the contents of the message and/or attachments you may send us, and any other information you may choose to provide.
+                       When you register for an Account, we may ask for your contact information, including items such as name, company name, address, email address, and telephone number
                     </Text>
                     </ScrollView>
                 </View>

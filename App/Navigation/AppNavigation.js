@@ -14,7 +14,7 @@ import StoreOptions from '../containers/store/StoreOptions';
 import PrivacyPolicy from '../containers/more/PrivacyPolicy';
 import AboutUs from '../containers/more/AboutUs';
 
-
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 const Stack = createStackNavigator();
 
@@ -22,6 +22,7 @@ function AppNavigation() {
 
     return (
         <Provider store={store}>
+             <SafeAreaProvider>
             <NavigationContainer>
                 <Stack.Navigator initialRouteName='Login' headerMode='none'>
                     <Stack.Screen name='Login' component={Login} />
@@ -38,6 +39,7 @@ function AppNavigation() {
 
                 </Stack.Navigator>
             </NavigationContainer>
+            </SafeAreaProvider>
         </Provider>
     )
 }

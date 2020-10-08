@@ -30,6 +30,7 @@ const options = {
         skipBackup: true,
         path: 'images',
     },
+    quality:0.4
 };
 class AddProduct extends React.Component {
     state = {
@@ -653,7 +654,7 @@ class AddProduct extends React.Component {
                     <ProductInput
                         label='Article Number'
                         value={articlenum}
-                        maxLength={8}
+                        maxLength={25}
                         // keyboardType='numeric'
                         onChangeText={articlenum => this.setState({ articlenum }, () => this.handleDiscard())} />
                     <View style={{ flexDirection: 'row', flex: 1, marginVertical: 10 }}>

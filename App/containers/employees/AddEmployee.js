@@ -92,6 +92,7 @@ function AddEmployee(props) {
                 skipBackup: true,
                 path: 'images',
             },
+            quality:0.4
         };
         ImagePicker.showImagePicker(options, (response) => {
             console.log('Response = ', response.uri);

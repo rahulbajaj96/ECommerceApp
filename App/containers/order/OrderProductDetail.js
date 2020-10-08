@@ -271,6 +271,7 @@ class OrderProductDetail extends React.Component {
     }
     performYesCall(product_id) {
         this.scrollViewProductDetail.scrollTo({ x: 0, y: 0, animated: true })
+        this.setState({quantity_modal_value:0})
         this.get_product_detail(product_id);
     }
     doneButton = () => {
@@ -444,7 +445,7 @@ class OrderProductDetail extends React.Component {
                                 <View style={{ flex: 0.8, borderWidth: 0, paddingHorizontal: '5%', paddingTop: 10 }}>
                                     <Text style={{ fontSize: 24, color: Colors.theme_color, marginVertical: '4%', marginHorizontal: 10 }}>Please add the Quantity you want to have. </Text>
                                     <TextInput
-                                        style={{ fontSize: 18, borderBottomWidth: 1, borderBottomColor: '#000', marginVertical: '2%', paddingBottom: 5, marginHorizontal: 10, }}
+                                        style={{ fontSize: 18, borderBottomWidth: 1, borderBottomColor: '#000', marginVertical: '2%', paddingBottom: 5, marginHorizontal: 10,color:'#000' }}
                                         placeholder={'Quantity'}
                                         value={'' + quantity_modal_value}
                                         returnKeyType='done'

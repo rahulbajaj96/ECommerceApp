@@ -21,6 +21,8 @@ const TabBarImages = [
         inactiveImage: Images.more_black
     }
 ]
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+
 class TabBar extends React.Component {
     goToroutes(route, index) {
         if (index == 0) {
@@ -61,7 +63,7 @@ class TabBar extends React.Component {
                             >
 
                                 <Image source={index == i ? TabBarImages[i].activeImage : TabBarImages[i].inactiveImage} style={{ height: 35, width: 35, }} />
-                                <Text style={{ marginTop: -5, color: index == i ? '#fff' : '#000', fontSize: 10, marginTop: 1 }}>{routes.name}</Text>
+                                <Text style={{ marginTop: -5, color: index == i ? '#fff' : '#000', fontSize: 12, marginTop: 1 }}>{routes.name}</Text>
                             </TouchableOpacity>
 
                         ))

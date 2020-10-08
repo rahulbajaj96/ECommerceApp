@@ -111,11 +111,13 @@ function AddCategory(props) {
     function openImage() {
         console.log('open image Picker')
         const options = {
-            title: 'Select Avatar',
+            title: 'Select Image',
             storageOptions: {
                 skipBackup: true,
                 path: 'images',
+                
             },
+            quality:0.25
         };
         ImagePicker.showImagePicker(options, (response) => {
             // console.log('Response = ', response);
@@ -149,10 +151,10 @@ function AddCategory(props) {
             Toast.show(Get_Message('Name'));
             return;
         }
-        if (!EmptyValidation(CategoryDescription)) {
-            Toast.show(Get_Message('description'));
-            return;
-        }
+        // if (!EmptyValidation(CategoryDescription)) {
+        //     Toast.show(Get_Message('description'));
+        //     return;
+        // }
         else {
             Keyboard.dismiss();
             let formdata = new FormData();
