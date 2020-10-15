@@ -46,6 +46,10 @@ class OrderCategories extends Component {
         if (categoriesReducer.category_list_response.status == 1) {
             this.setState({ categoryList: categoriesReducer.category_list })
         }
+        else
+        {
+            this.setState({ categoryList:[] })
+        }
     }
     async searchCategories() {
         const { searchValue } = this.state

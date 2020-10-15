@@ -271,7 +271,7 @@ class OrderProductDetail extends React.Component {
     }
     performYesCall(product_id) {
         this.scrollViewProductDetail.scrollTo({ x: 0, y: 0, animated: true })
-        this.setState({quantity_modal_value:0})
+        this.setState({ quantity_modal_value: 0 })
         this.get_product_detail(product_id);
     }
     doneButton = () => {
@@ -322,7 +322,7 @@ class OrderProductDetail extends React.Component {
                         <View style={Style.CommonStyles.borderStyle} />
                         <Text style={Style.Products.ProductDetail.articleNum}>Article Number : <Text style={{ color: Colors.theme_color }}>{articleNum}</Text></Text>
                         <Text style={Style.Products.ProductDetail.articleNum}>Product Name : <Text style={{ color: Colors.theme_color }}>{product_name}</Text></Text>
-                        <Text style={Style.Products.ProductDetail.articleNum}>Product Price : <Text style={{ color: Colors.theme_color }}>${sale_price}</Text></Text>
+                        <Text style={Style.Products.ProductDetail.articleNum}>Product Price : <Text style={{ color: Colors.theme_color }}>€{sale_price}</Text></Text>
                         <View style={Style.CommonStyles.borderStyle} />
 
 
@@ -400,19 +400,19 @@ class OrderProductDetail extends React.Component {
                                 </TouchableOpacity>
                             </View>
 
-                            <View style={{ flex: 0.6, paddingHorizontal: '10%',alignItems:'center' }}>
+                            <View style={{ flex: 0.6, paddingHorizontal: '10%', alignItems: 'center' }}>
                                 <Text style={{ fontSize: 14, color: '#000', }}>
                                     Click on Quantity value
                                 </Text>
                                 <Text style={{ fontSize: 14, color: '#000', }}>
-                                   to add manually
+                                    to add manually
                                 </Text>
                             </View>
 
 
                         </View>
                         <Text style={[Style.Products.ProductDetail.PropertiesStyle, { fontSize: 18, marginTop: 10 }]}>Total Cost :<Text style={{ color: Colors.theme_color }}>
-                            ${quantity * sale_price}</Text></Text>
+                            €{quantity * sale_price}</Text></Text>
                         <View style={{ height: 50, width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 10 }}>
                             <TouchableOpacity style={[{ height: '100%', width: '45%', borderRadius: 50, backgroundColor: Colors.theme_color, opacity: quantity == 0 ? 0.2 : 1, }, Style.CommonStyles.centerStyle]}
                                 onPress={() => this.AddtoCart()}
@@ -445,7 +445,7 @@ class OrderProductDetail extends React.Component {
                                 <View style={{ flex: 0.8, borderWidth: 0, paddingHorizontal: '5%', paddingTop: 10 }}>
                                     <Text style={{ fontSize: 24, color: Colors.theme_color, marginVertical: '4%', marginHorizontal: 10 }}>Please add the Quantity you want to have. </Text>
                                     <TextInput
-                                        style={{ fontSize: 18, borderBottomWidth: 1, borderBottomColor: '#000', marginVertical: '2%', paddingBottom: 5, marginHorizontal: 10,color:'#000' }}
+                                        style={{ fontSize: 18, borderBottomWidth: 1, borderBottomColor: '#000', marginVertical: '2%', paddingBottom: 5, marginHorizontal: 10, color: '#000' }}
                                         placeholder={'Quantity'}
                                         value={'' + quantity_modal_value}
                                         returnKeyType='done'

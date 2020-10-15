@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, FlatList, Image, TouchableOpacity, Alert } from 'react-native'
+import { Text, View, FlatList, Image, TouchableOpacity, Alert,Keyboard,TouchableWithoutFeedback } from 'react-native'
 import AppComponent from '../../components/AppComponent'
 import Toolbar from '../../components/Toolbar'
 import { SearchBar } from '../../components/SearchBar'
@@ -54,6 +54,10 @@ class Order extends React.Component {
         console.log('OrderReducers', orderReducer.order_list_response)
         if (orderReducer.order_list_response.status == 1) {
             this.setState({ orders_array: orderReducer.order_list })
+        }
+        else
+        {
+            this.setState({ orders_array: [] })
         }
 
     }
@@ -172,6 +176,7 @@ class Order extends React.Component {
     }
     navigateToNewOrder = () => {
         const { navigation } = this.props
+        Keyboard.dismiss()
         navigation.navigate('OrderCategories')
     }
     render() {
@@ -217,9 +222,12 @@ class Order extends React.Component {
                 <View style={{ flex: 0.8, }}>
                     {
                         orders_array.length == 0 ?
-                            <View style={[Style.CommonStyles.fullFlex, Style.CommonStyles.centerStyle,]}>
+                            <TouchableWithoutFeedback style={[Style.CommonStyles.fullFlex, Style.CommonStyles.centerStyle,]} onPress={() => Keyboard.dismiss()}>
+                                <View style={[Style.CommonStyles.fullFlex, Style.CommonStyles.centerStyle,]}>
                                 <Text style={Style.CommonStyles.EmptyListTag}>{get_Empty_Tag('Orders')}</Text>
-                            </View>
+                                </View>
+                               
+                            </TouchableWithoutFeedback>
                             :
 
                             <FlatList

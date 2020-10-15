@@ -138,7 +138,7 @@ class ProductDetail extends React.Component {
 
         for (let i = color_current_Value; i < loopValue; i++) {
             views.push(
-                <View style={{ flex: 0.20, margin: 5, padding: 2, borderWidth: 0,justifyContent:'center' }}>
+                <View style={{ flex: 0.20, margin: 5, padding: 2, borderWidth: 0,justifyContent:'center' }} key={i}>
                     <TouchableOpacity style={{ flex: 1, backgroundColor: colors_available[i].hash_color == null ? '' + colors_available[i].color : colors_available[i].hash_color, borderWidth: current_selected_color == i ? 2 : 0, borderColor: current_selected_color == i ? Colors.theme_color : null, }} key={i} disabled={current_selected_color == i} onPress={() => this.colorSelected(i)} />
                     <Text style={{ marginVertical: 2, color: '#000', fontSize: 12 ,textAlign:'center'}}>{colors_available[i].color}</Text>
                 </View>
@@ -249,7 +249,7 @@ class ProductDetail extends React.Component {
                         <View style={Style.CommonStyles.borderStyle} />
                         <Text style={Style.Products.ProductDetail.articleNum}>Article Number : <Text style={{ color: Colors.theme_color }}>{articleNum}</Text></Text>
                         <Text style={Style.Products.ProductDetail.articleNum}>Product Name : <Text style={{ color: Colors.theme_color }}>{product_name}</Text></Text>
-                        <Text style={Style.Products.ProductDetail.articleNum}>Product Price : <Text style={{ color: Colors.theme_color }}>${sale_price}</Text></Text>
+                        <Text style={Style.Products.ProductDetail.articleNum}>Product Price : <Text style={{ color: Colors.theme_color }}>€{sale_price}</Text></Text>
                         <View style={Style.CommonStyles.borderStyle} />
 
 

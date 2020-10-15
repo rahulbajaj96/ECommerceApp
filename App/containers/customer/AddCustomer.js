@@ -323,7 +323,10 @@ function AddCustomer(props) {
             <Toolbar title={title} right={1} back={true} navigation={navigation} onSavePress={() => handleSaveCustomer()}
                 customisedbackButton={discard} customisedBackAction={() => handleback()} customBackAction={true}
             />
-            <KeyboardAwareScrollView style={[Style.CommonStyles.fullFlex, { paddingHorizontal: '5%', paddingVertical: '5%' }]}>
+            <KeyboardAwareScrollView 
+            contentContainerStyle={{paddingHorizontal:15}}
+            extraHeight={-64}
+            >
                 <Spinner visible={spinner} />
 
                 <View style={[Style.Customers.AddCustomer.Customer_image_view_main]}>

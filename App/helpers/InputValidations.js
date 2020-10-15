@@ -55,11 +55,21 @@ export const SavePassword = async (email, password) => {
             save_To_AsyncStorage('@Save_Password_Array', JSON.stringify(password_array));
         }
         else {
+            let oldUser = false
             console.log('we already have a password array ');
             let password_array = JSON.parse(data);
-            password_array.push({
-                email, password
-            });
+            for (let i = 0; i < password_array.length; i++) {
+                if (password_array[i].email == email) {
+                    oldUser = true;
+                    break;
+                }
+            }
+            if (oldUser == false) {
+                password_array.push({
+                    email, password
+                });
+            }
+
             save_To_AsyncStorage('@Save_Password_Array', JSON.stringify(password_array));
         }
     }

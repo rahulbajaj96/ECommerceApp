@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, FlatList, Image, TouchableOpacity, Keyboard } from 'react-native'
+import { Text, View, FlatList, Image, TouchableOpacity, Keyboard, TouchableWithoutFeedback } from 'react-native'
 import AppComponent from '../../components/AppComponent'
 import Toolbar from '../../components/Toolbar'
 import { SearchBar } from '../../components/SearchBar'
@@ -173,6 +173,7 @@ class Customer extends React.Component {
     }
     navigateToAddCustomer = () => {
         const { navigation } = this.props
+        Keyboard.dismiss();
         navigation.navigate('AddCustomer', { id: 1, title: 'Add Customer', data: {} });
     }
     async searchCustomers() {
@@ -241,9 +242,11 @@ class Customer extends React.Component {
                             />
 
                             :
-                            <View style={[Style.CommonStyles.fullFlex, Style.CommonStyles.centerStyle,]}>
-                                <Text style={Style.CommonStyles.EmptyListTag}>{get_Empty_Tag('Customers')}</Text>
-                            </View>
+                            <TouchableWithoutFeedback style={[Style.CommonStyles.fullFlex, Style.CommonStyles.centerStyle,]}
+                                onPress={() => Keyboard.dismiss()}>
+                                <View style={[Style.CommonStyles.fullFlex, Style.CommonStyles.centerStyle,]}>
+                                    <Text style={Style.CommonStyles.EmptyListTag}>{get_Empty_Tag('Customers')}</Text>
+                                </View></TouchableWithoutFeedback>
                     }
 
                 </View>

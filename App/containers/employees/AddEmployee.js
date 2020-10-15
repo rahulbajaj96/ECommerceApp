@@ -256,7 +256,11 @@ function AddEmployee(props) {
     return (
         <AppComponent>
             <Toolbar title={title} right={1} back={true} navigation={navigation} onSavePress={() => handleSaveCustomer()} customisedbackButton={discard} />
-            <KeyboardAwareScrollView style={[Style.CommonStyles.fullFlex, { paddingHorizontal: '5%', paddingVertical: '5%' }]}>
+            <KeyboardAwareScrollView
+            //  contentContainerStyle={[Style.CommonStyles.fullFlex, { paddingHorizontal: '5%', paddingVertical: '5%' }]}
+            contentContainerStyle={{paddingHorizontal:15}}
+            extraHeight={-64}
+            >
                 <Spinner visible={spinner} />
                 <View style={[Style.Customers.AddCustomer.Customer_image_view_main]}>
                 <TouchableOpacity style={[Style.Customers.AddCustomer.Customer_image_view, Style.CommonStyles.centerStyle]} onPress={() => goToImagePicker()}>

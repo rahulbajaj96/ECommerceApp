@@ -48,7 +48,7 @@ class TabBar extends React.Component {
 
         return (
 
-            <View style={{ flex: 0.1, flexDirection: 'row', borderColor: '#DAE0E5', borderTopWidth: 1 }}>
+            <View style={{ flex: 0.1, flexDirection: 'row', borderColor: '#DAE0E5', borderTopWidth: 1, }}>
                 {
                     routes.map((routes, i) =>
                         (

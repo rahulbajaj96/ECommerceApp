@@ -38,6 +38,10 @@ class SubCategories extends Component {
         if (subcategoriesReducer.subcategory_list_response.status == 1) {
             this.setState({ subcategoryList: subcategoriesReducer.subcategory_list })
         }
+        else
+        {
+            this.setState({ subcategoryList: [] })
+        }
 
     }
     handleListItemCicked = (item) => {

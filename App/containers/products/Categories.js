@@ -39,6 +39,10 @@ class Categories extends Component {
         if (categoriesReducer.category_list_response.status == 1) {
             this.setState({ categoryList: categoriesReducer.category_list })
         }
+        else
+        {
+            this.setState({ categoryList: [] })
+        }
     }
 
     handleListItemCicked = (item) => {

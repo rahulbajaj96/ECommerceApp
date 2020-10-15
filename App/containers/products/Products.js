@@ -46,6 +46,9 @@ class Products extends Component {
         if (productsReducer.products_api_response.status == 1) {
             this.setState({ productsList: productsReducer.products_List })
         }
+        else {
+            this.setState({ productsList: [] })
+        }
     }
     handleListItemCicked = (item) => {
         const { navigation } = this.props

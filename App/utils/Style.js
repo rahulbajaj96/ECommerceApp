@@ -23,7 +23,7 @@ export default {
         GradientImageStyle: { height: 120, width: 120, borderRadius: 60, backgroundColor: Colors.white, marginBottom: '15%' },
         AuthView: {
             //  width: '80%',height:DEVICE_HEIGHT*0.52, borderWidth: 0, marginHorizontal: '10%', zIndex: 1, marginTop: '-15%', backgroundColor: Colors.white, borderRadius: 10, elevation: 3, paddingHorizontal: '7%',position: 'absolute',
-            flex: 0.90, borderWidth: 0, marginHorizontal: '10%', zIndex: 1, marginTop: '-15%', backgroundColor: Colors.white, borderRadius: 10, shadowColor: '#000',
+            flex: 0.90, borderWidth: 0, marginHorizontal: '10%', zIndex: 1, marginTop: '-20%', backgroundColor: Colors.white, borderRadius: 10, shadowColor: '#000',
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.5,
             shadowRadius: 2,
@@ -39,7 +39,7 @@ export default {
         },
         forgotInst: { fontSize:11, color: Colors.grey, marginTop: 10, marginBottom: 10 },
         AuthItemStyle: { width: '100%', height: 70, borderBottomColor: '#DEDEDE', borderWidth: 2, marginVertical: 5, },
-        AuthItemLabel: { color: Colors.theme_color, marginVertical: 10, fontSize: 12, fontWeight: 'bold' },
+        AuthItemLabel: { color: Colors.theme_color, marginVertical: 10, fontSize: 14, fontWeight: 'bold' },
         AuthItemTextInput: { borderColor: Colors.black, borderWidth: 0, fontSize: 14, marginLeft: -2, marginTop: -8, paddingBottom: 4, paddingLeft: 2 },
         ForgotPasswordText: { color: Colors.grey, fontSize: 12, position: 'absolute', right: '5%', bottom: '-15%', zIndex: 1 },
         ForgotPasswordTextAndroid: { color: Colors.grey, fontSize: 12, position: 'absolute', right: '5%', bottom: '5%', zIndex: 1 }

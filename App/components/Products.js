@@ -6,7 +6,7 @@ import Images from '../utils/Image';
 import ModalDropdown from 'react-native-modal-dropdown';
 import Modal from "react-native-modal";
 
-import { Text, Image, TouchableOpacity, View, TextInput, ScrollView, FlatList, Alert } from 'react-native'
+import { Text, Image, TouchableOpacity, View, TextInput, ScrollView, FlatList, Alert, TouchableWithoutFeedback,Keyboard } from 'react-native'
 import { get_Empty_Tag } from '../helpers/InputValidations';
 
 export const ProductInput = (props) => {
@@ -52,7 +52,7 @@ export const Make_A_List = (props) => {
 
         return (
             <View>
-                <TouchableOpacity style={[Style.Products.categories.categoryItemView,{borderBottomWidth: items.index == (props.items.length - 1) ?1 :1}]}
+                <TouchableOpacity style={[Style.Products.categories.categoryItemView, { borderBottomWidth: items.index == (props.items.length - 1) ? 1 : 1 }]}
                     onPress={() => props.onItemClicked(items)}
                 >
                     <View style={[{ flex: 0.2, }, Style.CommonStyles.centerStyle]}>
@@ -102,7 +102,7 @@ export const Make_A_List = (props) => {
                 {
                     items.index == (props.items.length - 1)
                         ?
-                        <View style={{height:50,backgroundColor:'#fff'}} />
+                        <View style={{ height: 50, backgroundColor: '#fff' }} />
                         : null
                 }
             </View>
@@ -115,9 +115,11 @@ export const Make_A_List = (props) => {
             {
                 props.items.length == 0
                     ?
-                    <View style={[Style.CommonStyles.fullFlex, Style.CommonStyles.centerStyle,]}>
-                        <Text style={Style.CommonStyles.EmptyListTag}>{props.addPopUp == false ? `No ${props.tag} found` : get_Empty_Tag(props.tag)}</Text>
-                    </View>
+                    <TouchableWithoutFeedback style={[Style.CommonStyles.fullFlex, Style.CommonStyles.centerStyle,]} onPress={() => Keyboard.dismiss()}>
+                        <View style={[Style.CommonStyles.fullFlex, Style.CommonStyles.centerStyle,]}>
+                            <Text style={Style.CommonStyles.EmptyListTag}>{props.addPopUp == false ? `No ${props.tag} found` : get_Empty_Tag(props.tag)}</Text>
+                        </View>
+                    </TouchableWithoutFeedback>
                     :
 
 

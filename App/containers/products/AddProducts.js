@@ -30,7 +30,7 @@ const options = {
         skipBackup: true,
         path: 'images',
     },
-    quality:0.4
+    quality: 0.4
 };
 class AddProduct extends React.Component {
     state = {
@@ -291,10 +291,10 @@ class AddProduct extends React.Component {
      * @method addMore adds a new object into main array
      */
     addMore() {
-        let { multipleSelection,initial_value } = this.state
+        let { multipleSelection, initial_value } = this.state
         // console.log('multiple ', multipleSelection)
         multipleSelection[multipleSelection.length] = { product_color_id: '', size_id: '', quantity: '', product_color_name: '', size_name: '' }
-        this.setState({ multipleSelection,initial_value: ++ initial_value})
+        this.setState({ multipleSelection, initial_value: ++initial_value })
     }
     deleteMore(i) {
         const { multipleSelection } = this.state
@@ -559,12 +559,11 @@ class AddProduct extends React.Component {
             this.setState({ discard: true })
         }
     }
-    
-    checkInitialValue=()=>
-    {
-        const { initial_value} = this.state
-        if(initial_value != 0)
-        this.scroll.scrollToEnd({ animated: true })
+
+    checkInitialValue = () => {
+        const { initial_value } = this.state
+        if (initial_value != 0)
+            this.scroll.scrollToEnd({ animated: true })
     }
     render() {
         const { productName, articlenum, purchasePrice, sellingPrice, multipleSelection, modalVisibility, selectedImage, selectedIndex, title, Category, SubCategory, colors_available, sizes_available, categories_available, subcategories_available, images_aaray, size_color_modal, newSize_Color, current_size_color, discard, SubCategory_id } = this.state
@@ -576,10 +575,14 @@ class AddProduct extends React.Component {
                 <Toolbar title={title} right={1} back={true} navigation={navigation} onSavePress={() => this.handleSaveProduct()}
                     customisedbackButton={discard}
                 />
-                <KeyboardAwareScrollView style={[Style.CommonStyles.fullFlex], { paddingHorizontal: '2%', paddingTop: '2%' }}
+                <KeyboardAwareScrollView
+                    // style={[Style.CommonStyles.fullFlex], { paddingHorizontal: '2%', paddingTop: '2%' }}
+                    contentContainerStyle={{paddingHorizontal:10}}
                     innerRef={ref => {
                         this.scroll = ref
                     }}
+                    extraHeight={-64}
+
                     onContentSizeChange={() => this.checkInitialValue()}
                 >
 
@@ -744,7 +747,7 @@ class AddProduct extends React.Component {
                             <View style={{ flex: 0.8, borderWidth: 0, paddingHorizontal: '5%', paddingTop: 10 }}>
                                 <Text style={{ fontSize: 24, color: Colors.theme_color, marginVertical: '4%', marginHorizontal: 10 }}>Add the {current_size_color == 1 ? 'color' : 'size'} you want to add </Text>
                                 <TextInput
-                                    style={{ fontSize: 18, borderBottomWidth: 1, borderBottomColor: '#000', marginVertical: '2%', paddingBottom: 5, marginHorizontal: 10, color:'#000'}}
+                                    style={{ fontSize: 18, borderBottomWidth: 1, borderBottomColor: '#000', marginVertical: '2%', paddingBottom: 5, marginHorizontal: 10, color: '#000' }}
                                     placeholder={current_size_color == 1 ? 'color' : 'size'}
                                     value={newSize_Color}
                                     placeholderTextColor='grey'

@@ -205,13 +205,19 @@ class Login extends Component {
         let { email } = this.state
         get_From_AsyncStorage('@Save_Password_Array').then(data => {
             console.log('data', data)
+            let password_found = false
             if (data != null) {
                 let pass_array = JSON.parse(data);
                 for (let i = 0; i < pass_array.length; i++) {
-                    if (pass_array[i].email == email) {
+                    if (pass_array[i].email.toLowerCase() == email.toLowerCase()) {
                         this.setState({ password: pass_array[i].password, rememberme: true })
+                        password_found = true;
                         break;
                     }
+                }
+
+                if (password_found == false) {
+                    this.setState({ password: '', rememberme: false })
                 }
             }
 
@@ -265,7 +271,9 @@ class Login extends Component {
 
 
                             }]}>
-                                <KeyboardAwareScrollView style={{ flex: 1, paddingHorizontal: '7%', }}>
+                                <KeyboardAwareScrollView contentContainerStyle={{ flex: 1, paddingHorizontal: '7%', }}
+                                    extraHeight={-64}
+                                >
                                     <Animated.Text style={{ fontSize: 20, color: '#000', textAlign: 'center', marginTop: 10 }}>Login</Animated.Text>
 
                                     <Item stackedLabel style={Style.LoginStyles.AuthItemStyle}>
@@ -287,6 +295,7 @@ class Login extends Component {
                                         <View style={{ flexDirection: 'row' }}>
                                             <Input
                                                 value={password}
+                                                onFocus={() => this.checkAlreadySavedPassword()}
                                                 style={Style.LoginStyles.AuthItemTextInput}
                                                 underlineColorAndroid='transparent'
                                                 secureTextEntry={password_show ? false : true}

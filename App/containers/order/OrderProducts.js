@@ -44,13 +44,16 @@ class OrderProducts extends Component {
         if (productsReducer.products_api_response.status == 1) {
             this.setState({ productsList: productsReducer.products_List })
         }
+        else {
+            this.setState({ productsList: [] })
+        }
     }
     async searchProducts() {
-        const { searchValue ,Paramsinfo} = this.state
+        const { searchValue, Paramsinfo } = this.state
         let formdata = new FormData();
         formdata.append('search', searchValue);
-        formdata.append('category_id',Paramsinfo.category_id);
-        formdata.append('subcategory_id',Paramsinfo.subCategory_id);
+        formdata.append('category_id', Paramsinfo.category_id);
+        formdata.append('subcategory_id', Paramsinfo.subCategory_id);
 
         let result = await ApiCallPost(`${BASE_URL}${API_URL.Search_product}`, formdata);
         console.log('result ', JSON.stringify(result));
@@ -58,13 +61,13 @@ class OrderProducts extends Component {
             if (result.status == 1) {
                 this.setState({ productsList: result.data })
             }
-            else  this.setState({ productsList: [] })
-            
+            else this.setState({ productsList: [] })
+
         }
     }
 
     render() {
-        const { searchValue,productsList } = this.state
+        const { searchValue, productsList } = this.state
         const { navigation } = this.props
 
         return (

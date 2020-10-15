@@ -26,7 +26,7 @@ function AppNavigation() {
             <NavigationContainer>
                 <Stack.Navigator initialRouteName='Login' headerMode='none'>
                     <Stack.Screen name='Login' component={Login} />
-                    <Stack.Screen name='Tabs' component={TabNavigator} />
+                    <Stack.Screen name='Tabs' component={TabNavigator} options={{ gestureEnabled: false }}  />
                     <Stack.Screen name='AddEmployee' component={AddEmployee} />
                     <Stack.Screen name='Employee' component={Employee} />
                     <Stack.Screen name='StoreOptions' component={StoreOptions} />
