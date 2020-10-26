@@ -30,7 +30,7 @@ export default {
             elevation: 2,
         },
         ForgotPassView: {
-            width: '80%', height: DEVICE_HEIGHT * 0.4, borderWidth: 0, marginHorizontal: '10%', zIndex: 1, marginTop: '-15%', backgroundColor: Colors.white, borderRadius: 10, position: 'absolute',
+            width: '80%', height: DEVICE_HEIGHT * 0.5, borderWidth: 0, marginHorizontal: '10%', zIndex: 1, marginTop: '-20%', backgroundColor: Colors.white, borderRadius: 10, position: 'absolute',
             paddingVertical:10,
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.5,
@@ -41,7 +41,7 @@ export default {
         AuthItemStyle: { width: '100%', height: 70, borderBottomColor: '#DEDEDE', borderWidth: 2, marginVertical: 5, },
         AuthItemLabel: { color: Colors.theme_color, marginVertical: 10, fontSize: 14, fontWeight: 'bold' },
         AuthItemTextInput: { borderColor: Colors.black, borderWidth: 0, fontSize: 14, marginLeft: -2, marginTop: -8, paddingBottom: 4, paddingLeft: 2 },
-        ForgotPasswordText: { color: Colors.grey, fontSize: 12, position: 'absolute', right: '5%', bottom: '-15%', zIndex: 1 },
+        ForgotPasswordText: { color: Colors.grey, fontSize: 12, position: 'absolute', right: '5%', bottom: '15%', zIndex: 1 },
         ForgotPasswordTextAndroid: { color: Colors.grey, fontSize: 12, position: 'absolute', right: '5%', bottom: '5%', zIndex: 1 }
 
     },

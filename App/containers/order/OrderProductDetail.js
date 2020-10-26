@@ -239,7 +239,7 @@ class OrderProductDetail extends React.Component {
         cartformData.append('color_id', colors_available[current_selected_color].id);
         cartformData.append('size_id', sizes_available[size_initialSelected].size_id);
         cartformData.append('quantity', quantity);
-        cartformData.append('price', quantity * sale_price);
+        cartformData.append('price',  sale_price);
         cartformData.append('product_name', product_name);
         console.log('formdata of Add To cart ', cartformData);
 

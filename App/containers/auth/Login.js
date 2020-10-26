@@ -341,7 +341,10 @@ class Login extends Component {
 
 
                             }]}>
-                                <KeyboardAwareScrollView style={{ flex: 1, paddingHorizontal: '7%', }}>
+                                <KeyboardAwareScrollView contentContainerStyle={{ flex: 1, paddingHorizontal: '7%', }}
+                                    extraHeight={-64}
+                                    // scrollEnabled={false}
+                                >
                                     <Animated.Text style={{ fontSize: 20, color: '#000', textAlign: 'center', marginTop: 10 }}>Forgot Password</Animated.Text>
                                     <Text style={Style.LoginStyles.forgotInst}> * Enter a email on which new password wil be sent</Text>
                                     <Item stackedLabel style={Style.LoginStyles.AuthItemStyle}>
