@@ -57,13 +57,13 @@ class Employee extends React.Component {
                 </View>
                 <View style={{ flex: 0.6, paddingHorizontal: 10, marginVertical: 5 }}>
                     <Text style={{ marginVertical: 2, fontSize: 14, color: '#000' }}>Name: <Text style={{ color: Colors.theme_color }}> {prefixing_type} {first_name} {last_name}</Text></Text>
-                    <Text style={{ marginVertical: 2, fontSize: 14, color: '#000' }}>Company: <Text style={{ color: Colors.theme_color }}>{company_name}</Text></Text>
-                    <Text style={{ marginVertical: 2, fontSize: 14, color: '#000' }}>KVK : <Text style={{ color: Colors.theme_color }}> {kvk_number}</Text></Text>
+                    {/* <Text style={{ marginVertical: 2, fontSize: 14, color: '#000' }}>Company: <Text style={{ color: Colors.theme_color }}>{company_name}</Text></Text>
+                    <Text style={{ marginVertical: 2, fontSize: 14, color: '#000' }}>KVK : <Text style={{ color: Colors.theme_color }}> {kvk_number}</Text></Text> */}
                     <Text style={{ marginVertical: 2, fontSize: 12, color: Colors.theme_color }}>{email}</Text>
 
-                    {/* <Text style={{ marginVertical: 5, fontSize: 14, color: '#000' }}>Company Name</Text>
+                 <Text style={{ marginVertical: 5, fontSize: 14, color: '#000' }}></Text>
 
-                <Text style={{ marginVertical: 5, fontSize: 14, color: '#000' }}>Email</Text>
+                   {/* <Text style={{ marginVertical: 5, fontSize: 14, color: '#000' }}>Email</Text>
                 <Text style={{ marginVertical: 5, fontSize: 14, color: '#000' }}>Address</Text> */}
 
 

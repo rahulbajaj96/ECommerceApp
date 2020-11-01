@@ -126,27 +126,37 @@ class Login extends Component {
             await this.props.loginApi(email, password);
             const { LoginReducer } = this.props
             console.log('Login response', LoginReducer)
+            if (LoginReducer.response_from_login_Api)
 
-            if (LoginReducer.response_from_login_Api.status == 1) {
+                if (LoginReducer.response_from_login_Api.status == 1) {
+                    if (LoginReducer.response_from_login_Api.data.user_type == '1') {
+                        setTimeout(() => {
+                            Toast.show("Credentials donot match");
+                        }, 500);
+                        // this.setState({ email: '', password: '', password_show: false, rememberme: false })
+                    }
+                    else {
 
-                await this.saveDataTODevice(LoginReducer);
-                setTimeout(() => {
-                    Toast.show(LoginReducer.response_from_login_Api.message);
-                }, 500);
-                this.setState({ email: '', password: '', password_show: false, rememberme: false })
-                this.navigateFromLogin(LoginReducer.response_from_login_Api.data.user_type);
-                // this.props.navigation.navigate('Tabs', {
-                //     screen: 'Products'
-                //     // , params: {
-                //     //     screen: 'AddProduct'
-                //     // }
-                // });
-            }
-            else {
-                setTimeout(() => {
-                    Toast.show(LoginReducer.response_from_login_Api.message);
-                }, 500);
-            }
+                        await this.saveDataTODevice(LoginReducer);
+                        setTimeout(() => {
+                            Toast.show(LoginReducer.response_from_login_Api.message);
+                        }, 500);
+                        this.setState({ email: '', password: '', password_show: false, rememberme: false })
+                        this.navigateFromLogin(LoginReducer.response_from_login_Api.data.user_type);
+                        // this.props.navigation.navigate('Tabs', {
+                        //     screen: 'Products'
+                        //     // , params: {
+                        //     //     screen: 'AddProduct'
+                        //     // }
+                        // });
+                    }
+
+                }
+                else {
+                    setTimeout(() => {
+                        Toast.show(LoginReducer.response_from_login_Api.message);
+                    }, 500);
+                }
 
         }
     }
@@ -343,7 +353,7 @@ class Login extends Component {
                             }]}>
                                 <KeyboardAwareScrollView contentContainerStyle={{ flex: 1, paddingHorizontal: '7%', }}
                                     extraHeight={-64}
-                                    // scrollEnabled={false}
+                                // scrollEnabled={false}
                                 >
                                     <Animated.Text style={{ fontSize: 20, color: '#000', textAlign: 'center', marginTop: 10 }}>Forgot Password</Animated.Text>
                                     <Text style={Style.LoginStyles.forgotInst}> * Enter a email on which new password wil be sent</Text>

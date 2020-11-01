@@ -135,14 +135,14 @@ function AddEmployee(props) {
             Toast.show(Get_Message("Last Name"));
             return;
         }
-        if (!EmptyValidation(company_name)) {
-            Toast.show(Get_Message("Comapany Name"));
-            return;
-        }
-        if (!EmptyValidation(KVKNum)) {
-            Toast.show(Get_Message("KVK Number"));
-            return;
-        }
+        // if (!EmptyValidation(company_name)) {
+        //     Toast.show(Get_Message("Comapany Name"));
+        //     return;
+        // }
+        // if (!EmptyValidation(KVKNum)) {
+        //     Toast.show(Get_Message("KVK Number"));
+        //     return;
+        // }
         if (!EmptyValidation(email)) {
             Toast.show(Get_Message("Email"));
             return;
@@ -298,7 +298,7 @@ function AddEmployee(props) {
                     </View>
                 </View>
 
-                <ProductInput
+                {/* <ProductInput
                     label='Company name'
                     value={company_name}
                     onChangeText={company_name => setcompany_name(company_name)} />
@@ -308,7 +308,7 @@ function AddEmployee(props) {
                     value={KVKNum}
                     maxLength={8}
                     keyboardType='numeric'
-                    onChangeText={KVKNum => setKVKNum(KVKNum)} />
+                    onChangeText={KVKNum => setKVKNum(KVKNum)} /> */}
 
                 <ProductInput
                     label='Email'
