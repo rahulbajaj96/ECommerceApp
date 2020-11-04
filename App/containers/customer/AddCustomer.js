@@ -112,7 +112,7 @@ function AddCustomer(props) {
                 })
                 setImageUploaded(true);
                 setImageUri(response.uri);
-
+                setdiscard(true)
                 // You can also display the image using data:
                 // const source = { uri: 'data:image/jpeg;base64,' + response.data };
 
@@ -277,7 +277,7 @@ function AddCustomer(props) {
         }
     }
     useEffect(() => {
-        handleDiscard()
+        // handleDiscard()
     }, [ImageUploaded, AANHEF, first_name, last_name, company_name, KVKNum, email, phone, Street, Address, PostalCode, city])
     const handleDiscard = () => {
         if (ID == 1) {
@@ -344,7 +344,7 @@ function AddCustomer(props) {
                 <DropDown
                     options={AANHEFArray}
                     defaultValue={AANHEF == '' ? 'AANHEF' : AANHEF}
-                    onSelect={(index, value) => setAANHEF(value)}
+                    onSelect={(index, value) => {setAANHEF(value),setdiscard(true)}}
                 />
 
                 <View style={{ flexDirection: 'row', flex: 1, marginVertical: 10 }}>
@@ -352,39 +352,39 @@ function AddCustomer(props) {
                         <ProductInput
                             label='First name'
                             value={first_name}
-                            onChangeText={first_name => setfirst_name(first_name)} />
+                            onChangeText={first_name => {setfirst_name(first_name),setdiscard(true)}} />
                     </View>
                     <View style={{ flex: 0.5, paddingRight: '5%' }}>
                         <ProductInput
                             label='Last name'
                             value={last_name}
-                            onChangeText={last_name => setlast_name(last_name)} />
+                            onChangeText={last_name => {setlast_name(last_name),setdiscard(true)}} />
                     </View>
                 </View>
 
                 <ProductInput
                     label='Company name'
                     value={company_name}
-                    onChangeText={company_name => setcompany_name(company_name)} />
+                    onChangeText={company_name => {setcompany_name(company_name),setdiscard(true)}} />
 
                 <ProductInput
                     label='KVK number'
                     value={KVKNum}
                     maxLength={8}
                     keyboardType='number-pad'
-                    onChangeText={KVKNum => setKVKNum(KVKNum)} />
+                    onChangeText={KVKNum => {setKVKNum(KVKNum),setdiscard(true)}} />
 
                 <ProductInput
                     label='Email'
                     value={email}
                     keyboardType='email-address'
-                    onChangeText={email => setemail(email)} />
+                    onChangeText={email => {setemail(email),setdiscard(true)}} />
                 <ProductInput
                     label='Phone number'
                     value={phone}
                     maxLength={10}
                     keyboardType='number-pad'
-                    onChangeText={phone => setphone(phone)} />
+                    onChangeText={phone => {setphone(phone),setdiscard(true)}} />
                 {/* <View style={{ flexDirection: 'row', flex: 1, marginVertical: 10 }}>
                     <View style={{ flex: 0.5, paddingRight: '5%' }}>
                         <ProductInput
@@ -408,23 +408,23 @@ function AddCustomer(props) {
                 <ProductInput
                     label='Street'
                     value={Street}
-                    onChangeText={street => setStreet(street)} />
+                    onChangeText={street => {setStreet(street),setdiscard(true)}} />
                 <ProductInput
                     label='House no.'
                     value={Address}
-                    onChangeText={Address => setAddress(Address)} />
+                    onChangeText={Address => {setAddress(Address),setdiscard(true)}} />
                 <View style={{ flexDirection: 'row', flex: 1, marginVertical: 10 }}>
                     <View style={{ flex: 0.5, paddingRight: '5%' }}>
                         <ProductInput
                             label='Postal Code'
                             value={PostalCode}
-                            onChangeText={PostalCode => setPostalCode(PostalCode)} />
+                            onChangeText={PostalCode => {setPostalCode(PostalCode),setdiscard(true)}} />
                     </View>
                     <View style={{ flex: 0.5, paddingRight: '5%' }}>
                         <ProductInput
                             label='City'
                             value={city}
-                            onChangeText={city => setcity(city)} />
+                            onChangeText={city => {setcity(city),setdiscard(true)}} />
                     </View>
                 </View>
                 <View style={{ height: 50 }} />

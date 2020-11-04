@@ -239,7 +239,7 @@ class OrderProductDetail extends React.Component {
         cartformData.append('color_id', colors_available[current_selected_color].id);
         cartformData.append('size_id', sizes_available[size_initialSelected].size_id);
         cartformData.append('quantity', quantity);
-        cartformData.append('price',  sale_price);
+        cartformData.append('price', sale_price);
         cartformData.append('product_name', product_name);
         console.log('formdata of Add To cart ', cartformData);
 
@@ -296,9 +296,25 @@ class OrderProductDetail extends React.Component {
             this.setState({ quantity: parseInt(quantity_modal_value), quantity_modal: false })
         }
     }
+    calculatedumyPrice(euro_sale_price, quantity) {
+        // let euro_sale_price = '10.500,50';
+        // let quantity = 5;
+        var newStr = euro_sale_price.replace(',', '.').replace('.', ',');
+        console.log('mnew String', newStr)
+        var price = newStr.replace(/\,/g, '');
+        let new_price = parseFloat(price, 5) * quantity
+        console.log('value is ');
+        let new_euro_price = (new_price).toLocaleString('de-DE', {
+            style: 'currency',
+            currency: 'EUR',
+        });
+        return new_euro_price;
+    }
     render() {
         const { navigation } = this.props
         const { color_current_Value, size_initialValue, colors_Left_button_enabled, colors_Right_button_enabled, size_left_button_enabled, size_right_button_enabled, articleNum, product_name, product_images, category_name, Subcategory_name, pieces_available, sale_price, quantity, sizes_available, colors_available, cartButton, quantity_modal_value, quantity_modal } = this.state
+
+        let total_price = this.calculatedumyPrice(sale_price, quantity)
         return (
             <AppComponent>
                 <Toolbar title='Product Detail' back={true} navigation={navigation} />
@@ -412,7 +428,10 @@ class OrderProductDetail extends React.Component {
 
                         </View>
                         <Text style={[Style.Products.ProductDetail.PropertiesStyle, { fontSize: 18, marginTop: 10 }]}>Total Cost :<Text style={{ color: Colors.theme_color }}>
-                            €{quantity * sale_price}</Text></Text>
+                            {/* €{quantity * sale_price} */}
+                            {total_price}
+
+                        </Text></Text>
                         <View style={{ height: 50, width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 10 }}>
                             <TouchableOpacity style={[{ height: '100%', width: '45%', borderRadius: 50, backgroundColor: Colors.theme_color, opacity: quantity == 0 ? 0.2 : 1, }, Style.CommonStyles.centerStyle]}
                                 onPress={() => this.AddtoCart()}

@@ -13,15 +13,30 @@ let images_aaray = ['https://via.placeholder.com/600/66b7d2', 'https://via.place
 
 
 class Cart extends React.Component {
-    state = { cart: [] }
+    state = { cart: [] ,total_cart_price:''}
     componentDidMount() {
-        this.getCart();
+        const { navigation } = this.props
+        navigation.addListener('focus', () => {
+            // The screen is focused
+            console.log('when screen is focused');
+            // Call any action
+            this.getCart();
+
+        });
+       
+    }
+    componentWillUnmount() {
+        const { navigation } = this.props
+
+        console.log('componenet gone ')
+        navigation.removeListener('focus');
     }
     async getCart() {
         await this.props.get_Cart_List();
         const { cartReducer } = this.props
+        console.log('cart reducer,',cartReducer)
         if (cartReducer.cart_list_response.status == 1) {
-            this.setState({ cart: cartReducer.cart_list })
+            this.setState({ cart: cartReducer.cart_list ,total_cart_price:cartReducer.cart_list_response.sum_of_price})
         }
         else if (cartReducer.cart_list_response.status == 0) {
             this.setState({ cart: [] })
@@ -54,7 +69,7 @@ class Cart extends React.Component {
 
                     <Text style={Style.Cart.ProductDetail}>Size:{size}</Text>
 
-                    <Text style={Style.Cart.price}>Price:{total_amount}</Text>
+                    <Text style={Style.Cart.price}>Price: €{total_amount}</Text>
                 </View>
                 <TouchableOpacity style={[{ position: 'absolute', right: 0, top: 0, height: 40, width: 40, }, Style.CommonStyles.centerStyle]}
                     onPress={() => this.showAlert(item)}
@@ -107,16 +122,16 @@ class Cart extends React.Component {
     }
     goToCheckout() {
         const { navigation } = this.props
-        const { cart } = this.state
+        const { cart ,total_cart_price} = this.state
         let checkoutArray = [];
         let finalPrice = 0;
         for (let i = 0; i < cart.length; i++) {
             checkoutArray.push({ id: cart[i].id });
-            finalPrice += parseInt(cart[i].total_amount)
+            // finalPrice += parseInt(cart[i].total_amount)
         }
         console.log('checkout array', JSON.stringify(checkoutArray));
         console.log('finalPrice = ' + finalPrice);
-        navigation.navigate('Bill_Checkout', { checkoutArray: checkoutArray, total_price: finalPrice })
+        navigation.navigate('Bill_Checkout', { checkoutArray: checkoutArray, total_price: total_cart_price })
     }
     render() {
         const { navigation } = this.props

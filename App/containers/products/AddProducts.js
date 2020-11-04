@@ -20,6 +20,7 @@ import { ApiCallPost } from '../../Services/ApiServices'
 import { BASE_URL, API_URL } from '../../config'
 import { SPINNER_ON, SPINNER_OFF } from '../../constants/ReduxConstants'
 import { EmptyValidation, Get_Message } from '../../helpers/InputValidations'
+import { CURRENCY_REGEX } from '../../constants/AppConstants'
 const colors = ['red', 'green', 'yellow', 'orange']
 const sizes = ['Small', 'Medium', 'Large', 'X-Large']
 let images_aaray = ['https://via.placeholder.com/600/66b7d2', 'https://via.placeholder.com/600/51aa97', 'https://via.placeholder.com/600/51aa97']
@@ -395,6 +396,11 @@ class AddProduct extends React.Component {
     async handleSaveProduct() {
         const { productName, articlenum, purchasePrice, sellingPrice, Category_id, SubCategory_id, multipleSelection, images_path_array, Page_id, product_id } = this.state
         const { navigation } = this.props
+
+        console.log('CURRENCY_REGEX.test(purchasePrice)', CURRENCY_REGEX.test(purchasePrice))
+        console.log('CURRENCY_REGEX.test(sellingPrice)', CURRENCY_REGEX.test(sellingPrice))
+
+
         if (!EmptyValidation(Category_id)) {
             Toast.show('Please select a Category');
             return;
@@ -417,6 +423,14 @@ class AddProduct extends React.Component {
         }
         if (!EmptyValidation(sellingPrice)) {
             Toast.show(Get_Message('Selling Price'));
+            return;
+        }
+        if (CURRENCY_REGEX.test(purchasePrice) != true) {
+            Toast.show('Please enter a valid purchase price ');
+            return;
+        }
+        if (CURRENCY_REGEX.test(sellingPrice) != true) {
+            Toast.show('Please enter a valid Selling price ');
             return;
         }
         if (images_path_array.length == 0) {
@@ -577,7 +591,7 @@ class AddProduct extends React.Component {
                 />
                 <KeyboardAwareScrollView
                     // style={[Style.CommonStyles.fullFlex], { paddingHorizontal: '2%', paddingTop: '2%' }}
-                    contentContainerStyle={{paddingHorizontal:10}}
+                    contentContainerStyle={{ paddingHorizontal: 10 }}
                     innerRef={ref => {
                         this.scroll = ref
                     }}
@@ -666,7 +680,7 @@ class AddProduct extends React.Component {
                                 label='Purchase price'
                                 value={purchasePrice}
                                 maxLength={10}
-                                keyboardType='number-pad'
+                                keyboardType='default'
                                 onChangeText={purchasePrice => this.setState({ purchasePrice }, () => this.handleDiscard())} />
                         </View>
                         <View style={{ flex: 0.5, paddingRight: '5%' }}>
@@ -674,7 +688,7 @@ class AddProduct extends React.Component {
                                 label='Selling price'
                                 value={sellingPrice}
                                 maxLength={10}
-                                keyboardType='number-pad'
+                                keyboardType='default'
                                 onChangeText={sellingPrice => this.setState({ sellingPrice }, () => this.handleDiscard())} />
                         </View>
                     </View>

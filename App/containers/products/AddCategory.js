@@ -89,7 +89,7 @@ function AddCategory(props) {
         setCategory_name(data.name)
         setCategoryDescription(data.description);
         setCategory_ID(data.id)
-
+        setdiscard(false)
 
 
     }
@@ -104,7 +104,7 @@ function AddCategory(props) {
         setSubCategoryEnabled(true);
         setCategory_ID(data.category_id);
         setSubcategory_ID(data.id)
-
+        setdiscard(false)
 
 
     }
@@ -137,7 +137,7 @@ function AddCategory(props) {
                 })
                 setcategory_image(response.uri);
                 setimage_picked(true)
-
+                setdiscard(true)
                 // You can also display the image using data:
                 // const source = { uri: 'data:image/jpeg;base64,' + response.data };
 
@@ -273,19 +273,27 @@ function AddCategory(props) {
                 setdiscard(true)
         }
         else
+        {
             setdiscard(true)
+        }
+            
     }
     useEffect(() => {
-        handleDiscard()
+        // handleDiscard()
     }, [Category_name, CategoryDescription, category_image])
+
+    useEffect(() => {
+        // setdiscard(true)
+    }, [Category_name, CategoryDescription, category_image])
+
     const Category_names = (value) => {
         console.log(value.length)
         setCategory_name(value)
-        // handleDiscard();
+        handleDiscard();
     }
     const Category_desc = (value) => {
         setCategoryDescription(value)
-        // handleDiscard();
+        handleDiscard();
     }
     return (
         <AppComponent>

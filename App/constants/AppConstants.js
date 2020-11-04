@@ -9,5 +9,5 @@ export const EMPTY = " cannot be empty";
 export const Email_VALIDATION_MESSAGE = "Please enter a valid email";
 export const Internet_Connectivity_message = "Please check your Internet Connection";
 export const EMPTY_TAG = 'found.\n Click on + button to add ';
-
+export const CURRENCY_REGEX =/^(\d+|\d{1,3}(\.\d{3})*)(,\d+)?$/;
 // export const ProductsArray

@@ -128,7 +128,7 @@ class Bill_Checkout extends React.Component {
                     <View style={Style.CheckOut.checkoutView}>
                         <Text style={{ fontSize: 22, color: '#000', }}>Your Order Contains : </Text>
                         <Text style={{ fontSize: 18, color: '#000', marginVertical: 2 }}>Total Items : {route.params.checkoutArray.length}</Text>
-                        <Text style={{ fontSize: 18, color: '#000', }}>Total Price : ${route.params.total_price}</Text>
+                        <Text style={{ fontSize: 18, color: '#000', }}>Total Price : €{route.params.total_price}</Text>
                         {
                             viewChange ?
                                 <Text style={{ fontSize: 18, color: '#000', }}>Company Name : {selected_customer}</Text>
